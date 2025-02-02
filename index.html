@@ -4,30 +4,179 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucas Pfeiffer</title>
-    
     <style>
+        @font-face {
+            font-family: 'PP Neue Montreal';
+            src: url('fonts/OTF/PPNeueMontreal-Book.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'PP Neue Montreal';
+            src: url('fonts/OTF/PPNeueMontreal-Medium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'PP Neue Montreal';
+            src: url('fonts/OTF/PPNeueMontreal-Bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'PP Neue Montreal';
+            src: url('fonts/OTF/PPNeueMontreal-Italic.otf') format('opentype');
+            font-weight: normal;
+            font-style: italic;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: -apple-system;
+            font-family: 'PP Neue Montreal', -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            padding: 2rem;
             align-items: center;
         }
 
+        .content-wrapper {
+            text-align: left;
+            max-width: 100%;
+        }
+        
         h1 {
-            font-size: 2rem;
-            color: #333;
-            font-weight: 400;
+            font-size: 4rem;
+            color: #000;
+            font-weight: 500;  /* Using Medium weight */
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+
+        .hash {
+            font-size: 1rem;
+            color: #000;
+            margin-bottom: 3rem;
+            font-family: monospace;
+            word-wrap: break-word;
+        }
+
+        .countdown-container {
+            font-family: inherit;
+        }
+
+        .countdown-time {
+            font-size: 3rem;
+            color: #000;
+            font-weight: normal;  /* Using Book weight */
+            margin-bottom: 0.5rem;
+            font-family: monospace;
+        }
+
+        .countdown-message {
+            font-size: 1rem;
+            color: #666;
+            font-weight: normal;  /* Using Book weight */
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .hash {
+                font-size: 0.875rem;
+                margin-bottom: 2rem;
+            }
+
+            .countdown-time {
+                font-size: 2rem;
+            }
+
+            .countdown-message {
+                font-size: 0.875rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Lucas Pfeiffer</h1>
+    <div class="content-wrapper">
+        <h1>Lucas Pfeiffer</h1>
+        <div class="hash">npub1sunw47xw6e9pyhjv2fvtphfy6z734ck4ne844q9yl6f8cyhqczrqz3fjdk</div>
+        <div id="sun-countdown" class="countdown-container">
+            <div class="countdown-time"></div>
+            <div class="countdown-message"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
+    <script>
+        // San Francisco coordinates
+        const SF_LAT = 37.7749;
+        const SF_LONG = -122.4194;
+
+        function calculateSunTimes() {
+            const times = SunCalc.getTimes(new Date(), SF_LAT, SF_LONG);
+            return {
+                sunrise: times.sunrise,
+                sunset: times.sunset
+            };
+        }
+
+        function formatTimeRemaining(milliseconds) {
+            let seconds = Math.floor(milliseconds / 1000);
+            let hours = Math.floor(seconds / 3600);
+            seconds %= 3600;
+            let minutes = Math.floor(seconds / 60);
+            seconds %= 60;
+            
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const sunTimes = calculateSunTimes();
+            const timeElement = document.querySelector('.countdown-time');
+            const messageElement = document.querySelector('.countdown-message');
+            
+            let timeRemaining;
+            let message;
+            
+            if (now < sunTimes.sunrise) {
+                timeRemaining = sunTimes.sunrise - now;
+                message = 'San Francisco: time until sunrise';
+            } else if (now < sunTimes.sunset) {
+                timeRemaining = sunTimes.sunset - now;
+                message = 'San Francisco: time until sunset';
+            } else {
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const tomorrowTimes = SunCalc.getTimes(tomorrow, SF_LAT, SF_LONG);
+                timeRemaining = tomorrowTimes.sunrise - now;
+                message = 'San Francisco: time until sunrise';
+            }
+            
+            timeElement.textContent = formatTimeRemaining(timeRemaining);
+            messageElement.textContent = message;
+        }
+
+        // Update every second
+        setInterval(updateCountdown, 1000);
+
+        // Initial update
+        document.addEventListener('DOMContentLoaded', updateCountdown);
+    </script>
 </body>
 </html>
