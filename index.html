@@ -16,89 +16,153 @@
             font-family: 'Inter', -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
-            padding: 2rem;
+            padding: 32px;
             align-items: center;
+            justify-content: center;
         }
 
         .content-wrapper {
             text-align: left;
-            max-width: 100%;
+            width: 100%;
+            max-width: 890px;
+            display: flex;
+            flex-direction: column;
+            gap: 64px;
         }
         
-        h1 {
-            font-size: 4rem;
+        .title {
+            font-size: 64px;
             color: #000;
-            font-weight: 500;  /* Inter Medium weight */
-            margin-bottom: 0.5rem;
-            line-height: 1.1;
-        }
-
-        .hash {
-            font-size: 1rem;
-            color: #000;
-            margin-bottom: 3rem;
-            font-family: monospace;
-            word-wrap: break-word;
-        }
-
-        .countdown-container {
-            font-family: inherit;
-        }
-
-        .countdown-time {
-            font-size: 3rem;
-            color: #000;
-            font-weight: 400;  /* Inter Regular weight */
-            margin-bottom: 0.5rem;
+            font-weight: 600;
+            line-height: 1;
             font-family: 'Inter', -apple-system, sans-serif;
         }
 
+        .hash {
+            font-size: 24px;
+            color: #000;
+            font-family: 'Inter', -apple-system, sans-serif;
+            font-weight: 500;
+            word-wrap: break-word;
+            margin-bottom: 0;
+        }
+
+        .info-container {
+            display: flex;
+            flex-direction: column;
+            gap: 64px;
+        }
+
+        .countdown-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .countdown-time {
+            font-size: 2.75rem;
+            color: #000;
+            font-weight: 600;
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1;
+        }
+
         .countdown-message {
-            font-size: 1rem;
-            color: #666;
-            font-weight: 400;  /* Inter Regular weight */
+            font-size: 24px;
+            color: #494949;
+            font-weight: 500;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .weather-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 24px;
+            color: #000;
+            font-weight: 500;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .lucide {
+            width: 2rem;
+            height: 2rem;
+            stroke: #000;
+        }
+
+        /* Add new class for title group */
+        .title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;  /* 24px spacing between title and npub */
         }
 
         /* Mobile Styles */
-        @media (max-width: 768px) {
+        @media (max-width: 700px) {
             body {
-                padding: 1.5rem;
+                padding: 32px;
             }
 
-            h1 {
-                font-size: 2.5rem;
+            .title {
+                font-size: 32px;
+                font-weight: 600;
             }
 
             .hash {
-                font-size: 0.875rem;
-                margin-bottom: 2rem;
+                font-size: 15px;
             }
 
             .countdown-time {
                 font-size: 2rem;
             }
 
-            .countdown-message {
-                font-size: 0.875rem;
+            .countdown-message, .weather-container {
+                font-size: 15px;
+            }
+
+            .content-wrapper {
+                gap: 32px;  /* Changed from 64px */
+            }
+            
+            .title-group {
+                gap: 12px;  /* Changed from 16px */
+            }
+
+            .countdown-container {
+                gap: 12px;  /* Changed from 16px */
+            }
+
+            .info-container {
+                gap: 32px;  /* Changed from 64px */
             }
         }
     </style>
 </head>
 <body>
     <div class="content-wrapper">
-        <h1>Lucas Pfeiffer</h1>
-        <div class="hash">npub1sunw47xw6e9pyhjv2fvtphfy6z734ck4ne844q9yl6f8cyhqczrqz3fjdk</div>
-        <div id="sun-countdown" class="countdown-container">
-            <div class="countdown-time"></div>
-            <div class="countdown-message"></div>
+        <div class="title-group">
+            <div class="title">Lucas Pfeiffer</div>
+            <div class="hash">npub1sunw47xw6e9pyhjv2fvtphfy6z734ck4ne844q9yl6f8cyhqczrqz3fjdk</div>
+        </div>
+        <div class="info-container">
+            <div id="sun-countdown" class="countdown-container">
+                <div class="countdown-time"></div>
+                <div class="countdown-message"></div>
+            </div>
+            <div class="weather-container">
+                <i data-lucide="sun" class="weather-icon"></i>
+                <span class="weather-text"></span>
+            </div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
-        // San Francisco coordinates
-        const SF_LAT = 37.7749;
-        const SF_LONG = -122.4194;
+        // North Beach, San Francisco coordinates
+        const SF_LAT = 37.8001;
+        const SF_LONG = -122.4075;
 
         function calculateSunTimes() {
             const times = SunCalc.getTimes(new Date(), SF_LAT, SF_LONG);
@@ -129,27 +193,73 @@
             
             if (now < sunTimes.sunrise) {
                 timeRemaining = sunTimes.sunrise - now;
-                message = 'San Francisco: time until sunrise';
+                message = 'san francisco time to sunrise';
             } else if (now < sunTimes.sunset) {
                 timeRemaining = sunTimes.sunset - now;
-                message = 'San Francisco: time until sunset';
+                message = 'san francisco time to sunset';
             } else {
                 const tomorrow = new Date();
                 tomorrow.setDate(tomorrow.getDate() + 1);
                 const tomorrowTimes = SunCalc.getTimes(tomorrow, SF_LAT, SF_LONG);
                 timeRemaining = tomorrowTimes.sunrise - now;
-                message = 'San Francisco: time until sunrise';
+                message = 'san francisco time to sunrise';
             }
             
             timeElement.textContent = formatTimeRemaining(timeRemaining);
             messageElement.textContent = message;
         }
 
-        // Update every second
-        setInterval(updateCountdown, 1000);
+        async function updateWeather() {
+            try {
+                const response = await fetch(
+                    `https://api.open-meteo.com/v1/forecast?latitude=${SF_LAT}&longitude=${SF_LONG}&current=weather_code&timezone=America/Los_Angeles`
+                );
+                const data = await response.json();
+                const weatherCode = data.current.weather_code;
+                
+                const weatherMap = {
+                    0: { icon: 'sun', text: 'clear' },
+                    1: { icon: 'sun', text: 'mostly clear' },
+                    2: { icon: 'cloud-sun', text: 'partly cloudy' },
+                    3: { icon: 'cloud', text: 'cloudy' },
+                    45: { icon: 'cloud-fog', text: 'foggy' },
+                    48: { icon: 'cloud-fog', text: 'foggy' },
+                    51: { icon: 'cloud-drizzle', text: 'light drizzle' },
+                    53: { icon: 'cloud-drizzle', text: 'drizzle' },
+                    55: { icon: 'cloud-drizzle', text: 'heavy drizzle' },
+                    61: { icon: 'cloud-rain', text: 'light rain' },
+                    63: { icon: 'cloud-rain', text: 'rain' },
+                    65: { icon: 'cloud-rain', text: 'heavy rain' },
+                    71: { icon: 'cloud-snow', text: 'snow' },
+                    77: { icon: 'cloud-snow', text: 'snow' },
+                    95: { icon: 'cloud-lightning', text: 'thunderstorm' }
+                };
 
-        // Initial update
-        document.addEventListener('DOMContentLoaded', updateCountdown);
+                const weather = weatherMap[weatherCode] || { icon: 'cloud', text: 'cloudy' };
+
+                // Update icon using data-lucide attribute
+                const iconElement = document.querySelector('.weather-icon');
+                iconElement.setAttribute('data-lucide', weather.icon);
+                lucide.createIcons(); // This will update all Lucide icons on the page
+
+                // Update text
+                document.querySelector('.weather-text').textContent = weather.text;
+            } catch (error) {
+                console.error('Error fetching weather:', error);
+                document.querySelector('.weather-text').textContent = 'weather unavailable';
+            }
+        }
+
+        // Initial updates
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCountdown();
+            updateWeather();
+            lucide.createIcons(); // Initialize all icons
+        });
+
+        // Update intervals
+        setInterval(updateCountdown, 1000);
+        setInterval(updateWeather, 5 * 60 * 1000);
     </script>
 </body>
 </html>
