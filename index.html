@@ -121,19 +121,15 @@
             }
 
             .content-wrapper {
-                gap: 32px;  /* Changed from 64px */
+                gap: 32px;
             }
             
             .title-group {
-                gap: 12px;  /* Changed from 16px */
+                gap: 16px;  /* Changed from 24px */
             }
 
             .countdown-container {
-                gap: 12px;  /* Changed from 16px */
-            }
-
-            .info-container {
-                gap: 32px;  /* Changed from 64px */
+                gap: 16px;  /* Changed from 24px */
             }
         }
     </style>
@@ -151,7 +147,7 @@
             </div>
             <div class="weather-container">
                 <i data-lucide="sun" class="weather-icon"></i>
-                <span class="weather-text">loading weather...</span>
+                <span class="weather-text"></span>
             </div>
         </div>
     </div>
@@ -209,70 +205,75 @@
             messageElement.textContent = message;
         }
 
-        async function updateWeather() {
-            // Show loading state immediately
-            const weatherTextElement = document.querySelector('.weather-text');
-            const iconElement = document.querySelector('.weather-icon');
-            
-            // Cache the weather data
-            try {
-                const cacheKey = 'weatherData';
-                const cacheExpiry = 'weatherExpiry';
-                const currentTime = new Date().getTime();
-                
-                // Check if we have cached data that's less than 5 minutes old
-                const cachedData = localStorage.getItem(cacheKey);
-                const expiry = localStorage.getItem(cacheExpiry);
-                
-                if (cachedData && expiry && currentTime < parseInt(expiry)) {
-                    const data = JSON.parse(cachedData);
-                    updateWeatherUI(data.current.weather_code);
-                    return;
+        // Add cache functions
+        function getCachedWeather() {
+            const cached = localStorage.getItem('weatherData');
+            if (cached) {
+                const { data, timestamp } = JSON.parse(cached);
+                // Cache valid for 30 minutes
+                if (Date.now() - timestamp < 30 * 60 * 1000) {
+                    return data;
                 }
+            }
+            return null;
+        }
 
+        function cacheWeather(data) {
+            localStorage.setItem('weatherData', JSON.stringify({
+                data,
+                timestamp: Date.now()
+            }));
+        }
+
+        async function updateWeather() {
+            // Show cached weather immediately if available
+            const cached = getCachedWeather();
+            if (cached) {
+                updateWeatherUI(cached);
+            }
+
+            try {
                 const response = await fetch(
                     `https://api.open-meteo.com/v1/forecast?latitude=${SF_LAT}&longitude=${SF_LONG}&current=weather_code&timezone=America/Los_Angeles`
                 );
                 const data = await response.json();
+                const weatherCode = data.current.weather_code;
                 
-                // Cache the new data
-                localStorage.setItem(cacheKey, JSON.stringify(data));
-                localStorage.setItem(cacheExpiry, (currentTime + 5 * 60 * 1000).toString());
+                const weatherMap = {
+                    0: { icon: 'sun', text: 'clear' },
+                    1: { icon: 'sun', text: 'mostly clear' },
+                    2: { icon: 'cloud-sun', text: 'partly cloudy' },
+                    3: { icon: 'cloud', text: 'cloudy' },
+                    45: { icon: 'cloud-fog', text: 'foggy' },
+                    48: { icon: 'cloud-fog', text: 'foggy' },
+                    51: { icon: 'cloud-drizzle', text: 'light drizzle' },
+                    53: { icon: 'cloud-drizzle', text: 'drizzle' },
+                    55: { icon: 'cloud-drizzle', text: 'heavy drizzle' },
+                    61: { icon: 'cloud-rain', text: 'light rain' },
+                    63: { icon: 'cloud-rain', text: 'rain' },
+                    65: { icon: 'cloud-rain', text: 'heavy rain' },
+                    71: { icon: 'cloud-snow', text: 'snow' },
+                    77: { icon: 'cloud-snow', text: 'snow' },
+                    95: { icon: 'cloud-lightning', text: 'thunderstorm' }
+                };
+
+                const weather = weatherMap[weatherCode] || { icon: 'cloud', text: 'cloudy' };
                 
-                updateWeatherUI(data.current.weather_code);
+                // Cache the weather data
+                cacheWeather(weather);
+                // Update the UI
+                updateWeatherUI(weather);
             } catch (error) {
                 console.error('Error fetching weather:', error);
-                weatherTextElement.textContent = 'weather unavailable';
+                document.querySelector('.weather-text').textContent = 'weather unavailable';
             }
         }
 
-        function updateWeatherUI(weatherCode) {
-            const weatherMap = {
-                0: { icon: 'sun', text: 'clear' },
-                1: { icon: 'sun', text: 'mostly clear' },
-                2: { icon: 'cloud-sun', text: 'partly cloudy' },
-                3: { icon: 'cloud', text: 'cloudy' },
-                45: { icon: 'cloud-fog', text: 'foggy' },
-                48: { icon: 'cloud-fog', text: 'foggy' },
-                51: { icon: 'cloud-drizzle', text: 'light drizzle' },
-                53: { icon: 'cloud-drizzle', text: 'drizzle' },
-                55: { icon: 'cloud-drizzle', text: 'heavy drizzle' },
-                61: { icon: 'cloud-rain', text: 'light rain' },
-                63: { icon: 'cloud-rain', text: 'rain' },
-                65: { icon: 'cloud-rain', text: 'heavy rain' },
-                71: { icon: 'cloud-snow', text: 'snow' },
-                77: { icon: 'cloud-snow', text: 'snow' },
-                95: { icon: 'cloud-lightning', text: 'thunderstorm' }
-            };
-
-            const weather = weatherMap[weatherCode] || { icon: 'cloud', text: 'cloudy' };
-
-            // Update icon using data-lucide attribute
+        // Separate UI update function
+        function updateWeatherUI(weather) {
             const iconElement = document.querySelector('.weather-icon');
             iconElement.setAttribute('data-lucide', weather.icon);
             lucide.createIcons();
-
-            // Update text
             document.querySelector('.weather-text').textContent = weather.text;
         }
 
@@ -280,7 +281,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             updateCountdown();
             updateWeather();
-            lucide.createIcons(); // Initialize all icons
+            lucide.createIcons();
         });
 
         // Update intervals
