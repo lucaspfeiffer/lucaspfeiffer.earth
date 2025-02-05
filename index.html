@@ -107,6 +107,11 @@
 
         /* Mobile Styles */
         @media (max-width: 700px) {
+            html {
+                overflow: hidden;
+                height: 100%;
+            }
+
             body {
                 padding: 108px 32px 32px 32px;
                 align-items: flex-start;
@@ -120,6 +125,11 @@
                 height: auto;
                 overflow-y: auto;
                 min-height: 100dvh;
+            }
+
+            html.needs-scroll {
+                overflow: auto;
+                height: auto;
             }
 
             .content-wrapper {
@@ -364,8 +374,10 @@
                 
                 if (content.offsetHeight + 148 > viewportHeight) { // 108px top + 40px bottom
                     document.body.classList.add('needs-scroll');
+                    document.documentElement.classList.add('needs-scroll');
                 } else {
                     document.body.classList.remove('needs-scroll');
+                    document.documentElement.classList.remove('needs-scroll');
                 }
             }
 
