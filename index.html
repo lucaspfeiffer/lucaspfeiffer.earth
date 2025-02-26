@@ -19,7 +19,7 @@
             min-height: 100vh;
             display: flex;
             padding: 32px;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             transform-origin: center;
             transform: translateY(0);
@@ -35,7 +35,7 @@
             gap: 64px;
             transform-origin: center;
             transform: translateY(0);
-            margin-bottom: 32px;
+            margin-bottom: 164px;
         }
         
         .title {
@@ -105,6 +105,48 @@
             gap: 24px;  /* 24px spacing between title and npub */
         }
 
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 164px;  /* Increased from 64px to 164px */
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;  /* Changed from 64px to 32px */
+        }
+
+        .section-title {
+            font-size: 48px;
+            color: #000;
+            font-weight: 600;
+            line-height: 1;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .link {
+            font-size: 24px;
+            color: #000;
+            font-weight: 500;
+            text-decoration: underline;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .hero-section {
+            min-height: calc(100vh - 64px);
+            display: flex;
+            flex-direction: column;
+            gap: 64px;
+            justify-content: center;
+        }
+
         /* Mobile Styles */
         @media (max-width: 700px) {
             html {
@@ -113,12 +155,9 @@
             }
 
             body {
-                padding: 108px 32px 32px 32px;
-                align-items: flex-start;
-                transform: translateY(0);
-                height: 100dvh;
-                overflow-y: hidden;
-                padding-bottom: 40px;
+                padding: 32px;
+                height: auto;
+                overflow-y: auto;
             }
 
             body.needs-scroll {
@@ -133,7 +172,7 @@
             }
 
             .content-wrapper {
-                margin-bottom: 0;
+                margin-bottom: 80px;
             }
 
             .title {
@@ -169,6 +208,35 @@
 
             .info-container {
                 gap: 41px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .link {
+                font-size: 17px;
+            }
+
+            .links-container {
+                gap: 41px;  /* Maintain existing mobile spacing */
+            }
+
+            .section {
+                gap: 24px;  /* Maintaining 24px on mobile */
+            }
+
+            .links-list {
+                gap: 20px;  /* Changed from 24px to 16px */
+            }
+
+            .links-container {
+                gap: 80px;  /* Maintaining 80px between sections */
+            }
+
+            .hero-section {
+                min-height: calc(100dvh - 64px);
+                padding-top: 0px;  /* Changed from 76px to 128px */
             }
         }
 
@@ -211,23 +279,68 @@
                 transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                             transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
+
+            .section-title {
+                transition: font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .link {
+                transition: font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .links-container,
+            .section {
+                transition: gap 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
         }
     </style>
 </head>
 <body>
     <div class="content-wrapper">
-        <div class="title-group">
-            <div class="title">Lucas Pfeiffer</div>
-            <div class="hash">npub1sunw47xw6e9pyhjv2fvtphfy6z734ck4ne844q9yl6f8cyhqczrqz3fjdk</div>
-        </div>
-        <div class="info-container">
-            <div id="sun-countdown" class="countdown-container">
-                <div class="countdown-time"></div>
-                <div class="countdown-message"></div>
+        <div class="hero-section">
+            <div class="title-group">
+                <div class="title">Lucas Pfeiffer</div>
+                <div class="hash">npub1sunw47xw6e9pyhjv2fvtphfy6z734ck4ne844q9yl6f8cyhqczrqz3fjdk</div>
             </div>
-            <div class="weather-container">
-                <i data-lucide="sun" class="weather-icon"></i>
-                <span class="weather-text"></span>
+            <div class="info-container">
+                <div id="sun-countdown" class="countdown-container">
+                    <div class="countdown-time"></div>
+                    <div class="countdown-message"></div>
+                </div>
+                <div class="weather-container">
+                    <i data-lucide="sun" class="weather-icon"></i>
+                    <span class="weather-text"></span>
+                </div>
+            </div>
+        </div>
+        <div class="links-container">
+            <div class="section">
+                <h2 class="section-title">Tools a cowboy would use</h2>
+                <div class="links-list">
+                    <a href="#" class="link" target="_blank">01 Dawn and Dusk</a>
+                </div>
+            </div>
+            <div class="section">
+                <h2 class="section-title">Writing</h2>
+                <div class="links-list">
+                    <a href="https://www.kaletopia.com/p/the-social-event-network-rough-draft" class="link" target="_blank">Social (event) market</a>
+                    <a href="https://www.kaletopia.com/p/morning-walk-to-work-10182023" class="link" target="_blank">Morning walk to work</a>
+                </div>
+            </div>
+            <div class="section">
+                <h2 class="section-title">More</h2>
+                <div class="links-list">
+                    <a href="https://youtu.be/efwLNtCGx2c" class="link" target="_blank">Interview with Melody Kim</a>
+                </div>
+            </div>
+            <div class="section">
+                <h2 class="section-title">Contact</h2>
+                <div class="links-list">
+                    <a href="mailto:outline.tepees.1b@icloud.com" class="link" target="_blank">Email</a>
+                </div>
             </div>
         </div>
     </div>
