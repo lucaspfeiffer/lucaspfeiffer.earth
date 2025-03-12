@@ -32,7 +32,7 @@
             max-width: 890px;
             display: flex;
             flex-direction: column;
-            gap: 64px;
+            gap: 40px;
             transform-origin: center;
             transform: translateY(0);
             margin-bottom: 164px;
@@ -194,7 +194,7 @@
             }
 
             .content-wrapper {
-                gap: 41px;
+                gap: 40px;
                 transform: translateY(0);
             }
             
@@ -203,11 +203,13 @@
             }
 
             .countdown-container {
-                gap: 16px;
+                margin: 0;  /* Reset any margins */
+                padding: 0;  /* Reset any padding */
             }
 
             .info-container {
-                gap: 41px;
+                column-gap: 40px;  /* Found it - let's change this to 40px */
+                gap: 64px;  /* Also updating this if it exists */
             }
 
             .section-title {
@@ -219,7 +221,7 @@
             }
 
             .links-container {
-                gap: 41px;  /* Maintain existing mobile spacing */
+                gap: 40px;  /* Maintain existing mobile spacing */
             }
 
             .section {
@@ -235,8 +237,24 @@
             }
 
             .hero-section {
-                min-height: calc(100dvh - 64px);
+                min-height: calc(100dvh - 40px);
                 padding-top: 0px;  /* Changed from 76px to 128px */
+            }
+
+            .dic-info-container {
+                gap: 40px;  /* Changed from 64px to match other spacings */
+            }
+
+            .weather-container {
+                margin-bottom: 40px;  /* Changed from 64px */
+            }
+
+            .dic-info-text {
+                margin-bottom: 0;  /* Removed 16px margin */
+            }
+
+            .title-container {
+                margin-bottom: 40px;  /* Changed from 64px to match other spacings */
             }
         }
 
@@ -318,7 +336,7 @@
         </div>
         <div class="links-container">
             <div class="section">
-                <h2 class="section-title">Tools a cowboy would use</h2>
+                <h2 class="section-title"><a href="https://toolsacowboywoulduse.substack.com" style="text-decoration: none; color: inherit;" target="_blank">Tools a cowboy would use</a></h2>
                 <div class="links-list">
                     <a href="https://x.com/lucaspfeiffer01/status/1894021635679855103" class="link" target="_blank">01 Dawn and Dusk</a>
                 </div>
