@@ -37,6 +37,7 @@
             flex-direction: column;
             flex: 1;
             padding: 0;
+            padding-bottom: 120px;
         }
 
         .sticky-header {
@@ -51,6 +52,90 @@
             max-width: 890px;
             margin: 0 auto;
             width: 100%;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .view-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            color: #000;
+            font-weight: 500;
+            font-family: 'Inter', -apple-system, sans-serif;
+            user-select: none;
+        }
+
+        .toggle-option {
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .toggle-option.active {
+            background: #000;
+            color: #fff;
+        }
+
+        .table-view {
+            display: none;
+            padding: 0 32px;
+            margin-bottom: 80px;
+        }
+
+        .table-view.active {
+            display: block;
+        }
+
+        .timeline-view.hidden {
+            display: none;
+        }
+
+        .projects-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 32px;
+        }
+
+        .projects-table th {
+            text-align: left;
+            padding: 16px;
+            border-bottom: 1px solid #000;
+            font-size: 16px;
+            font-weight: 500;
+            color: #000;
+        }
+
+        .projects-table td {
+            padding: 24px 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            font-size: 17px;
+            color: #494949;
+        }
+
+        .projects-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-project-title {
+            font-weight: 500;
+            color: #000;
+        }
+
+        .table-project-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .table-project-link {
+            color: #000;
+            text-decoration: underline;
+            font-weight: 500;
         }
 
         .sticky-header-wrapper {
@@ -91,7 +176,13 @@
 
         .year-section {
             padding: 0;
-            margin-bottom: 80px;
+            margin-bottom: 120px;
+            position: relative;
+        }
+
+        .year-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 120px;
         }
 
         .year-title {
@@ -101,12 +192,17 @@
             line-height: 1;
             font-family: 'Inter', -apple-system, sans-serif;
             margin-bottom: 80px;
+            position: relative;
+            z-index: 1;
+            padding-top: 32px;
         }
 
         .project {
             display: flex;
             flex-direction: column;
             gap: 24px;
+            position: relative;
+            z-index: 2;
         }
 
         .project-title {
@@ -211,7 +307,11 @@
             }
 
             .year-section {
-                margin-bottom: 48px;
+                margin-bottom: 80px;
+            }
+
+            .year-section:last-child {
+                padding-bottom: 80px;
             }
 
             .project {
@@ -230,6 +330,20 @@
             .current-year {
                 font-size: 17px;
             }
+
+            .projects-table th {
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            .projects-table td {
+                font-size: 14px;
+                padding: 16px 12px;
+            }
+
+            .view-toggle {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -237,32 +351,75 @@
     <div class="page-wrapper">
         <div class="sticky-header-wrapper">
             <div class="sticky-header">
-                <div class="current-year">2024</div>
+                <div class="header-left">
+                    <div class="current-year">2024</div>
+                    <div class="view-toggle">
+                        <div class="toggle-option active" data-view="timeline">Timeline</div>
+                        <div class="toggle-option" data-view="table">Table</div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="content-wrapper">
             <div class="main-content">
-                <div id="2024" class="year-section">
-                    <h2 class="year-title">2024</h2>
-                    <div class="project">
-                        <h2 class="project-title">Tools a cowboy would use</h2>
-                        <p class="project-description">A collection of tools and practices that embody the spirit of the American cowboy: simple, reliable, and built to last.</p>
-                        <div class="project-links">
-                            <a href="https://toolsacowboywoulduse.com" class="project-link" target="_blank">Website</a>
-                            <a href="https://blog.toolsacowboywoulduse.com" class="project-link" target="_blank">Blog</a>
+                <div class="timeline-view">
+                    <div id="2024" class="year-section">
+                        <h2 class="year-title">2024</h2>
+                        <div class="project">
+                            <h2 class="project-title">Tools a cowboy would use</h2>
+                            <p class="project-description">A collection of tools and practices that embody the spirit of the American cowboy: simple, reliable, and built to last.</p>
+                            <div class="project-links">
+                                <a href="https://toolsacowboywoulduse.com" class="project-link" target="_blank">Website</a>
+                                <a href="https://blog.toolsacowboywoulduse.com" class="project-link" target="_blank">Blog</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="2023" class="year-section">
+                        <h2 class="year-title">2023</h2>
+                        <div class="project">
+                            <h2 class="project-title">Kaletopia</h2>
+                            <p class="project-description">A collection of essays and thoughts on technology, society, and the future.</p>
+                            <div class="project-links">
+                                <a href="https://www.kaletopia.com" class="project-link" target="_blank">Read essays</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div id="2023" class="year-section">
-                    <h2 class="year-title">2023</h2>
-                    <div class="project">
-                        <h2 class="project-title">Kaletopia</h2>
-                        <p class="project-description">A collection of essays and thoughts on technology, society, and the future.</p>
-                        <div class="project-links">
-                            <a href="https://www.kaletopia.com" class="project-link" target="_blank">Read essays</a>
-                        </div>
-                    </div>
+                <div class="table-view">
+                    <table class="projects-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Project</th>
+                                <th>Description</th>
+                                <th>Links</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024</td>
+                                <td class="table-project-title">Tools a cowboy would use</td>
+                                <td>A collection of tools and practices that embody the spirit of the American cowboy: simple, reliable, and built to last.</td>
+                                <td>
+                                    <div class="table-project-links">
+                                        <a href="https://toolsacowboywoulduse.com" class="table-project-link" target="_blank">Website</a>
+                                        <a href="https://blog.toolsacowboywoulduse.com" class="table-project-link" target="_blank">Blog</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2023</td>
+                                <td class="table-project-title">Kaletopia</td>
+                                <td>A collection of essays and thoughts on technology, society, and the future.</td>
+                                <td>
+                                    <div class="table-project-links">
+                                        <a href="https://www.kaletopia.com" class="table-project-link" target="_blank">Read essays</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -311,10 +468,17 @@
 
             // Update current year based on scroll position
             let currentYear = null;
+            const headerHeight = header.offsetHeight;
+            const triggerOffset = headerHeight;
+
             yearSections.forEach(section => {
                 const rect = section.getBoundingClientRect();
-                if (rect.top <= headerRect.bottom) {
-                    currentYear = section.querySelector('.year-title').textContent;
+                const yearTitle = section.querySelector('.year-title');
+                const yearTitleRect = yearTitle.getBoundingClientRect();
+                
+                // Update the current year when the year title reaches the header
+                if (yearTitleRect.top <= triggerOffset) {
+                    currentYear = yearTitle.textContent;
                 }
             });
             
@@ -324,18 +488,59 @@
             }
         }
 
+        // View toggle functionality
+        const toggleOptions = document.querySelectorAll('.toggle-option');
+        const timelineView = document.querySelector('.timeline-view');
+        const tableView = document.querySelector('.table-view');
+
+        toggleOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const view = this.getAttribute('data-view');
+                
+                // Update toggle buttons
+                toggleOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update view
+                if (view === 'timeline') {
+                    timelineView.classList.remove('hidden');
+                    tableView.classList.remove('active');
+                } else {
+                    timelineView.classList.add('hidden');
+                    tableView.classList.add('active');
+                }
+            });
+        });
+
         // Add click handler for the current year
         document.querySelector('.current-year').addEventListener('click', function() {
             const year = this.getAttribute('data-year');
             const yearSection = document.getElementById(year);
             if (yearSection) {
                 const headerHeight = document.querySelector('.sticky-header-wrapper').offsetHeight;
-                const targetPosition = yearSection.getBoundingClientRect().top + window.scrollY - headerHeight;
+                // Calculate position to place the year title right at the header bottom
+                const targetPosition = yearSection.offsetTop;
                 window.scrollTo({
                     top: targetPosition,
                     behavior: 'smooth'
                 });
             }
+        });
+
+        // Handle bottom nav clicks
+        document.querySelectorAll('.year-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const year = this.textContent;
+                const yearSection = document.getElementById(year);
+                if (yearSection) {
+                    const targetPosition = yearSection.offsetTop;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
         });
 
         // Update on scroll and resize
