@@ -37,6 +37,7 @@
             flex-direction: column;
             flex: 1;
             padding: 0;
+            padding-top: 24px;
             padding-bottom: 120px;
         }
 
@@ -183,10 +184,13 @@
         }
 
         .year-section {
-            padding: 0;
+            padding: 32px 0 0 0;
             margin-bottom: 120px;
             position: relative;
+            scroll-margin-top: 80px; /* Adjust based on your header height */
         }
+        
+        /* Year heading removed */
 
         .year-section:last-child {
             margin-bottom: 0;
@@ -194,27 +198,38 @@
         }
 
         .project {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
             position: relative;
             z-index: 2;
+            cursor: pointer;
+            margin-bottom: 24px;
         }
 
         .project-image {
             width: 100%;
-            aspect-ratio: 16/10;
-            background: #f5f5f5;
-            margin-bottom: 24px;
+            display: inline-flex;
+            justify-content: center;
             border-radius: 12px;
-            overflow: hidden;
+            overflow: visible;
+            padding: 24px 12px 24px 12px;
+            margin: -24px -12px -24px -12px;
+        }
+
+        .timeline-view .project:hover .project-image img {
+            transform: scale(1.03);
         }
 
         .project-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            max-width: 100%;
+            max-height: 500px;
+            object-fit: contain;
             display: block;
+            border-radius: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        /* Hide project content in main view */
+        .timeline-view .project-content {
+            display: none;
         }
 
         .project-content {
@@ -367,6 +382,12 @@
                 margin-bottom: 16px;
                 border-radius: 8px;
             }
+
+            .timeline-view {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 0 16px;
+            }
         }
 
         .modal {
@@ -377,13 +398,17 @@
             bottom: 0;
             background: #fff;
             z-index: 2000;
-            display: none;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
             overflow: hidden; /* Prevent body scroll bleed */
         }
 
         .modal.active {
-            display: flex;
-            flex-direction: column;
+            opacity: 1;
+            visibility: visible;
         }
 
         .modal-nav {
@@ -392,18 +417,50 @@
             padding: 32px;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: space-between;
             border-bottom: 1px solid #000;
             background: #fff;
             z-index: 10;
             flex-shrink: 0;
-            height: 96px; /* Fixed height for nav */
+            height: 96px;
             box-sizing: border-box;
         }
 
+        .modal-nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .modal-nav-button, .modal-close {
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            width: 52px;
+            height: 52px;
+        }
+
+        /* No hover state */
+
+        .modal-nav-button.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000;
+            margin-right: auto;
+        }
+
         .modal-close {
-            width: 32px;
-            height: 32px;
+            width: 52px;
+            height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -435,12 +492,22 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            cursor: default;
         }
 
         .modal .project-image {
             margin: 0;
             flex-shrink: 0;
-            max-height: 50vh;
+            display: flex;
+            justify-content: center;
+            overflow: visible;
+            padding: 0;
+            width: 100%;
+            height: 480px; /* Fixed height */
+        }
+
+        .modal .project:hover .project-image img {
+            transform: none;
         }
 
         .modal .project-content {
@@ -455,6 +522,13 @@
             flex-shrink: 0;
         }
 
+        .modal .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
         /* Desktop layout - image on right */
         @media (min-width: 768px) {
             .modal .project {
@@ -466,8 +540,6 @@
             .modal .project-image {
                 order: 2;
                 width: 45%;
-                max-height: calc(100vh - 128px); /* Viewport height minus nav height and some padding */
-                height: auto;
                 position: sticky;
                 top: 112px; /* Nav height + some padding */
                 align-self: flex-start;
@@ -476,10 +548,11 @@
             }
             
             .modal .project-image img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
+                max-width: 100%;
+                max-height: calc(70vh - 96px); /* Reduced by 48px from original 70vh - 48px */
+                object-fit: contain;
                 display: block;
+                border-radius: 8px;
             }
             
             .modal .project-content {
@@ -497,6 +570,12 @@
         @media (max-width: 700px) {
             .modal-nav {
                 padding: 24px;
+                height: 80px; /* Reduce nav height on mobile */
+            }
+
+            .modal-content {
+                height: calc(100vh - 80px); /* Adjust for smaller nav */
+                overflow-y: auto;
             }
 
             .modal-content-inner {
@@ -504,12 +583,36 @@
             }
 
             .modal .project {
-                gap: 24px;
+                gap: 16px;
             }
 
             .modal .project-content {
-                gap: 24px;
+                gap: 16px;
             }
+            
+            .modal .project-image img {
+                max-height: calc(40vh - 48px); /* Reduced by 48px from original 40vh */
+                margin-bottom: 8px;
+            }
+            
+            .modal .project-title {
+                font-size: 18px;
+                margin-bottom: 8px;
+            }
+            
+            .modal .project-description {
+                font-size: 18px;
+                margin-bottom: 16px;
+            }
+
+            .modal .project-image {
+                height: 320px; /* Smaller fixed height for mobile */
+            }
+        }
+
+        /* Update timeline view spacing */
+        .timeline-view {
+            padding: 0 32px;
         }
     </style>
 </head>
@@ -529,36 +632,7 @@
         <div class="content-wrapper">
             <div class="main-content">
                 <div class="timeline-view">
-                    <div id="2024" class="year-section">
-                        <div class="project">
-                            <div class="project-image">
-                                <img src="https://placehold.co/1600x1000" alt="Tools a cowboy would use" />
-                            </div>
-                            <div class="project-content">
-                                <h2 class="project-title">Tools a cowboy would use</h2>
-                                <p class="project-description">A collection of tools and practices that embody the spirit of the American cowboy: simple, reliable, and built to last.</p>
-                                <div class="project-links">
-                                    <a href="https://toolsacowboywoulduse.com" class="project-link" target="_blank">Website</a>
-                                    <a href="https://blog.toolsacowboywoulduse.com" class="project-link" target="_blank">Blog</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="2023" class="year-section">
-                        <div class="project">
-                            <div class="project-image">
-                                <img src="https://placehold.co/1600x1000" alt="Kaletopia" />
-                            </div>
-                            <div class="project-content">
-                                <h2 class="project-title">Kaletopia</h2>
-                                <p class="project-description">A collection of essays and thoughts on technology, society, and the future.</p>
-                                <div class="project-links">
-                                    <a href="https://www.kaletopia.com" class="project-link" target="_blank">Read essays</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Projects will be dynamically inserted here -->
                 </div>
                 <div class="table-view">
                     <table class="projects-table">
@@ -571,27 +645,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>2024</td>
-                                <td class="table-project-title">Tools a cowboy would use</td>
-                                <td>A collection of tools and practices that embody the spirit of the American cowboy: simple, reliable, and built to last.</td>
-                                <td>
-                                    <div class="table-project-links">
-                                        <a href="https://toolsacowboywoulduse.com" class="table-project-link" target="_blank">Website</a>
-                                        <a href="https://blog.toolsacowboywoulduse.com" class="table-project-link" target="_blank">Blog</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2023</td>
-                                <td class="table-project-title">Kaletopia</td>
-                                <td>A collection of essays and thoughts on technology, society, and the future.</td>
-                                <td>
-                                    <div class="table-project-links">
-                                        <a href="https://www.kaletopia.com" class="table-project-link" target="_blank">Read essays</a>
-                                    </div>
-                                </td>
-                            </tr>
+                            <!-- Table rows will be dynamically inserted here -->
                         </tbody>
                     </table>
                 </div>
@@ -600,21 +654,38 @@
 
         <nav class="bottom-nav">
             <div class="bottom-nav-inner">
-                <a href="#2024" class="year-link">2024</a>
-                <a href="#2023" class="year-link">2023</a>
+                <!-- Year links will be dynamically generated -->
             </div>
         </nav>
     </div>
 
     <div class="modal">
         <nav class="modal-nav">
-            <div class="modal-close">✕</div>
+            <div class="modal-title"></div>
+            <div class="modal-nav-controls">
+                <div class="modal-nav-button prev-project">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="modal-nav-button next-project">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 18L15 12L9 6" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="modal-nav-button modal-close">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
         </nav>
         <div class="modal-content">
             <div class="modal-content-inner"></div>
         </div>
     </div>
 
+    <script src="projects.js"></script>
     <script>
         function updateHeaderAndShadows() {
             const nav = document.querySelector('.bottom-nav');
@@ -666,123 +737,211 @@
             }
         }
 
-        // View toggle functionality
-        const toggleOptions = document.querySelectorAll('.toggle-option');
-        const timelineView = document.querySelector('.timeline-view');
-        const tableView = document.querySelector('.table-view');
-
-        toggleOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                const view = this.getAttribute('data-view');
-                
-                // Update toggle buttons
-                toggleOptions.forEach(opt => opt.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Update view
-                if (view === 'timeline') {
-                    timelineView.classList.remove('hidden');
-                    tableView.classList.remove('active');
-                } else {
-                    timelineView.classList.add('hidden');
-                    tableView.classList.add('active');
-                }
+        function renderProjects() {
+            const timelineView = document.querySelector('.timeline-view');
+            const tableBody = document.querySelector('.projects-table tbody');
+            const bottomNav = document.querySelector('.bottom-nav-inner');
+            
+            // Clear existing content
+            timelineView.innerHTML = '';
+            tableBody.innerHTML = '';
+            bottomNav.innerHTML = '';
+            
+            // Get unique years and sort them in descending order
+            const years = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a);
+            
+            // Render year links in bottom nav
+            years.forEach(year => {
+                bottomNav.innerHTML += `<a href="#${year}" class="year-link">${year}</a>`;
             });
-        });
 
-        // Add click handler for the current year
-        document.querySelector('.current-year').addEventListener('click', function() {
-            const year = this.getAttribute('data-year');
-            const yearSection = document.getElementById(year);
-            if (yearSection) {
-                const headerHeight = document.querySelector('.sticky-header-wrapper').offsetHeight;
-                // Calculate position to place the year title right at the header bottom
-                const targetPosition = yearSection.offsetTop;
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
+            // Group projects by year
+            const projectsByYear = {};
+            years.forEach(year => {
+                projectsByYear[year] = projects.filter(project => project.year === year);
+            });
+            
+            // Render projects by year in timeline view
+            years.forEach(year => {
+                // Create year section
+                const yearSection = document.createElement('div');
+                yearSection.id = year;
+                yearSection.className = 'year-section';
+                
+                // Year section without visible heading - preserve for navigation
+                
+                // Create year container for projects
+                const yearProjectsContainer = document.createElement('div');
+                yearProjectsContainer.className = 'year-projects';
+                yearProjectsContainer.style.display = 'grid';
+                yearProjectsContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(400px, 1fr))';
+                yearProjectsContainer.style.gap = '24px';
+                
+                // Add projects for this year
+                projectsByYear[year].forEach(project => {
+                    const projectElement = document.createElement('div');
+                    projectElement.id = `${project.year}-${project.id}`;
+                    projectElement.className = 'project';
+                    projectElement.innerHTML = `
+                        <div class="project-image">
+                            <img src="${project.image}" alt="${project.title}" />
+                        </div>
+                        <div class="project-content">
+                            <h2 class="project-title">${project.title}</h2>
+                            <p class="project-description">${project.description}</p>
+                            <div class="project-links">
+                                ${project.links.map(link => `
+                                    <a href="${link.url}" class="project-link" target="_blank">${link.text}</a>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    yearProjectsContainer.appendChild(projectElement);
                 });
-            }
-        });
-
-        // Handle bottom nav clicks
-        document.querySelectorAll('.year-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const year = this.textContent;
-                const yearSection = document.getElementById(year);
-                if (yearSection) {
-                    const targetPosition = yearSection.offsetTop;
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
+                
+                // Add year projects to year section
+                yearSection.appendChild(yearProjectsContainer);
+                
+                // Add year section to timeline view
+                timelineView.appendChild(yearSection);
             });
+            
+            // Render projects in table view
+            projects.forEach(project => {
+                const tableRow = document.createElement('tr');
+                tableRow.innerHTML = `
+                    <td>${project.year}</td>
+                    <td class="table-project-title">${project.title}</td>
+                    <td>${project.description}</td>
+                    <td>
+                        <div class="table-project-links">
+                            ${project.links.map(link => `
+                                <a href="${link.url}" class="table-project-link" target="_blank">${link.text}</a>
+                            `).join('')}
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(tableRow);
+            });
+
+            // Reattach event listeners
+            attachEventListeners();
+        }
+
+        function attachEventListeners() {
+            // View toggle
+            document.querySelectorAll('.toggle-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const view = this.getAttribute('data-view');
+                    document.querySelectorAll('.toggle-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    if (view === 'timeline') {
+                        document.querySelector('.timeline-view').classList.remove('hidden');
+                        document.querySelector('.table-view').classList.remove('active');
+                    } else {
+                        document.querySelector('.timeline-view').classList.add('hidden');
+                        document.querySelector('.table-view').classList.add('active');
+                    }
+                });
+            });
+
+            // Project click handlers
+            document.querySelectorAll('.project').forEach(project => {
+                project.addEventListener('click', (e) => {
+                    if (e.target.closest('.project-link')) return;
+                    openModal(project);
+                });
+            });
+
+            // Year link handlers
+            document.querySelectorAll('.year-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const year = this.textContent;
+                    const yearSection = document.getElementById(year);
+                    if (yearSection) {
+                        yearSection.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProjects();
+            updateHeaderAndShadows();
         });
 
-        // Update on scroll and resize
-        window.addEventListener('scroll', updateHeaderAndShadows);
-        window.addEventListener('resize', updateHeaderAndShadows);
-        
-        // Initial check
-        updateHeaderAndShadows();
-
-        // Variable to store the scroll position
-        let savedScrollPosition = 0;
-        
         // Modal functionality
-        function openModal(projectData) {
+        function openModal(projectElement) {
             const modal = document.querySelector('.modal');
             const modalContent = modal.querySelector('.modal-content-inner');
+            const modalTitle = modal.querySelector('.modal-title');
+            const prevButton = modal.querySelector('.prev-project');
+            const nextButton = modal.querySelector('.next-project');
             
             // Save current scroll position before opening modal
             savedScrollPosition = window.scrollY;
             
-            // First, position the modal offscreen while we set it up
-            modal.style.visibility = 'hidden';
-            modal.classList.add('active');
-            
             // Clone the project content
-            const projectClone = projectData.cloneNode(true);
+            const projectClone = projectElement.cloneNode(true);
+            
+            // Set the modal title
+            const projectTitle = projectClone.querySelector('.project-title');
+            if (projectTitle) {
+                modalTitle.textContent = projectTitle.textContent;
+                projectTitle.remove();
+            }
             
             // Clear previous content and add new content
             modalContent.innerHTML = '';
             modalContent.appendChild(projectClone);
             
-            // Reset modal scroll position and window scroll
+            // Update navigation buttons
+            const allProjects = Array.from(document.querySelectorAll('.project'));
+            const currentIndex = allProjects.indexOf(projectElement);
+            
+            prevButton.classList.toggle('disabled', currentIndex === 0);
+            nextButton.classList.toggle('disabled', currentIndex === allProjects.length - 1);
+            
+            prevButton.onclick = () => {
+                if (currentIndex > 0) {
+                    openModal(allProjects[currentIndex - 1]);
+                }
+            };
+            
+            nextButton.onclick = () => {
+                if (currentIndex < allProjects.length - 1) {
+                    openModal(allProjects[currentIndex + 1]);
+                }
+            };
+            
+            // Reset modal scroll position
             const modalContentElement = modal.querySelector('.modal-content');
             modalContentElement.scrollTop = 0;
-            window.scrollTo(0, 0);
             
-            // Reset overflow and make modal visible
+            // Prevent body scrolling
             document.body.style.overflow = 'hidden';
-            modal.style.visibility = '';
             
-            // Force layout recalculation to ensure proper scrolling behavior
-            setTimeout(() => {
-                const modalContentInnerElement = modal.querySelector('.modal-content-inner');
-                
-                // Add scroll only if content is taller than the viewport minus nav
-                const navHeight = 96; // Fixed nav height as defined in CSS
-                const availableHeight = window.innerHeight - navHeight;
-                const contentHeight = modalContentInnerElement.offsetHeight;
-                
-                if (contentHeight > availableHeight) {
-                    modalContentElement.style.overflowY = 'auto';
-                } else {
-                    modalContentElement.style.overflowY = 'hidden';
-                }
-            }, 10);
+            // Activate modal with transition
+            modal.classList.add('active');
         }
 
         function closeModal() {
             const modal = document.querySelector('.modal');
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
             
-            // Restore the previous scroll position
+            // Start transition
+            modal.classList.remove('active');
+            
+            // Wait for transition to complete before restoring scroll
             setTimeout(() => {
+                document.body.style.overflow = '';
+                
+                // Restore the previous scroll position
                 try {
                     // First try with instant behavior (not supported in all browsers)
                     window.scrollTo({
@@ -793,43 +952,18 @@
                     // Fallback for browsers that don't support 'instant'
                     window.scrollTo(0, savedScrollPosition);
                 }
-            }, 10);
+            }, 300); // Match the transition duration
         }
 
-        // Add click handlers for projects
-        document.querySelectorAll('.project').forEach(project => {
-            project.addEventListener('click', (e) => {
-                if (e.target.closest('.project-link')) return;
-                openModal(project);
-            });
-        });
+        // Add savedScrollPosition variable
+        let savedScrollPosition = 0;
 
-        // Add click handler for modal close
+        // Existing event listeners
+        window.addEventListener('scroll', updateHeaderAndShadows);
+        window.addEventListener('resize', updateHeaderAndShadows);
         document.querySelector('.modal-close').addEventListener('click', closeModal);
-
-        // Close modal on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeModal();
-        });
-        
-        // Update modal scroll behavior on resize
-        window.addEventListener('resize', () => {
-            const modal = document.querySelector('.modal');
-            if (modal.classList.contains('active')) {
-                const modalContentElement = modal.querySelector('.modal-content');
-                const modalContentInnerElement = modal.querySelector('.modal-content-inner');
-                
-                // Add scroll only if content is taller than the viewport minus nav
-                const navHeight = modal.querySelector('.modal-nav').offsetHeight;
-                const availableHeight = window.innerHeight - navHeight;
-                const contentHeight = modalContentInnerElement.offsetHeight;
-                
-                if (contentHeight > availableHeight) {
-                    modalContentElement.style.overflowY = 'auto';
-                } else {
-                    modalContentElement.style.overflowY = 'hidden';
-                }
-            }
         });
     </script>
 </body>
