@@ -17,7 +17,6 @@
         body {
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
-            padding: 32px 0 0 0;
             transform-origin: center;
             transform: translateY(0);
             scroll-behavior: smooth;
@@ -36,33 +35,67 @@
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 40px;
-            padding: 0 32px;
             flex: 1;
+            padding: 0;
         }
-        
-        .title {
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 100;
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 890px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .sticky-header-wrapper {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            background: #fff;
+            z-index: 100;
+            transition: box-shadow 0.2s ease, border-bottom 0.2s ease;
+        }
+
+        .sticky-header-wrapper.border {
+            border-bottom: 1px solid #000;
+        }
+
+        .sticky-header-wrapper.shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .main-content {
+            padding: 0 32px;
+        }
+
+        .back-link {
+            font-size: 24px;
+            color: #000;
+            font-weight: 500;
+            text-decoration: underline;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .year-section {
+            padding: 0;
+            margin-bottom: 80px;
+        }
+
+        .year-title {
             font-size: 64px;
             color: #000;
             font-weight: 600;
             line-height: 1;
             font-family: 'Inter', -apple-system, sans-serif;
-        }
-
-        .year-section {
-            display: flex;
-            flex-direction: column;
-            gap: 80px;
             margin-bottom: 80px;
-        }
-
-        .year-title {
-            font-size: 48px;
-            color: #000;
-            font-weight: 600;
-            line-height: 1;
-            font-family: 'Inter', -apple-system, sans-serif;
-            padding-top: 80px;
         }
 
         .project {
@@ -98,15 +131,6 @@
             font-weight: 500;
             text-decoration: underline;
             font-family: 'Inter', -apple-system, sans-serif;
-        }
-
-        .back-link {
-            font-size: 24px;
-            color: #000;
-            font-weight: 500;
-            text-decoration: underline;
-            font-family: 'Inter', -apple-system, sans-serif;
-            margin-bottom: 40px;
         }
 
         .bottom-nav {
@@ -156,25 +180,17 @@
         }
 
         @media (max-width: 700px) {
-            body {
-                padding: 32px 0 0 0;
+            .sticky-header {
+                padding: 32px;
             }
 
-            .content-wrapper {
+            .year-section {
                 padding: 0 32px;
             }
 
-            .bottom-nav {
-                height: 40px;
-            }
-
-            .title {
-                font-size: 32px;
-            }
-
             .year-title {
-                font-size: 24px;
-                padding-top: 40px;
+                font-size: 32px;
+                margin-bottom: 48px;
             }
 
             .project-title {
@@ -191,16 +207,18 @@
 
             .back-link {
                 font-size: 17px;
-                margin-bottom: 24px;
             }
 
             .year-section {
-                gap: 48px;
                 margin-bottom: 48px;
             }
 
             .project {
                 gap: 16px;
+            }
+
+            .bottom-nav {
+                height: 40px;
             }
 
             .year-link {
@@ -212,29 +230,33 @@
 </head>
 <body>
     <div class="page-wrapper">
+        <div class="sticky-header-wrapper">
+            <div class="sticky-header">
+                <a href="/" class="back-link">← Back</a>
+            </div>
+        </div>
         <div class="content-wrapper">
-            <a href="/" class="back-link">← Back</a>
-            <h1 class="title">Projects</h1>
-            
-            <div id="2024" class="year-section">
-                <h2 class="year-title">2024</h2>
-                <div class="project">
-                    <h2 class="project-title">Tools a cowboy would use</h2>
-                    <p class="project-description">A collection of tools and practices that embody the spirit of the American cowboy: simple, reliable, and built to last.</p>
-                    <div class="project-links">
-                        <a href="https://toolsacowboywoulduse.com" class="project-link" target="_blank">Website</a>
-                        <a href="https://blog.toolsacowboywoulduse.com" class="project-link" target="_blank">Blog</a>
+            <div class="main-content">
+                <div id="2024" class="year-section">
+                    <h2 class="year-title">2024</h2>
+                    <div class="project">
+                        <h2 class="project-title">Tools a cowboy would use</h2>
+                        <p class="project-description">A collection of tools and practices that embody the spirit of the American cowboy: simple, reliable, and built to last.</p>
+                        <div class="project-links">
+                            <a href="https://toolsacowboywoulduse.com" class="project-link" target="_blank">Website</a>
+                            <a href="https://blog.toolsacowboywoulduse.com" class="project-link" target="_blank">Blog</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="2023" class="year-section">
-                <h2 class="year-title">2023</h2>
-                <div class="project">
-                    <h2 class="project-title">Kaletopia</h2>
-                    <p class="project-description">A collection of essays and thoughts on technology, society, and the future.</p>
-                    <div class="project-links">
-                        <a href="https://www.kaletopia.com" class="project-link" target="_blank">Read essays</a>
+                <div id="2023" class="year-section">
+                    <h2 class="year-title">2023</h2>
+                    <div class="project">
+                        <h2 class="project-title">Kaletopia</h2>
+                        <p class="project-description">A collection of essays and thoughts on technology, society, and the future.</p>
+                        <div class="project-links">
+                            <a href="https://www.kaletopia.com" class="project-link" target="_blank">Read essays</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -249,15 +271,44 @@
     </div>
 
     <script>
-        // Add shadow when page is scrolled
-        window.addEventListener('scroll', () => {
+        function updateShadows() {
             const nav = document.querySelector('.bottom-nav');
-            if (window.scrollY > 10) {
+            const header = document.querySelector('.sticky-header-wrapper');
+            const mainContent = document.querySelector('.main-content');
+            
+            // Get the rectangles for position calculations
+            const headerRect = header.getBoundingClientRect();
+            const navRect = nav.getBoundingClientRect();
+            const contentRect = mainContent.getBoundingClientRect();
+            
+            // Check if there's content below the header
+            const contentBelowHeader = contentRect.top < headerRect.bottom;
+            
+            // Check if there's content above the bottom nav
+            const contentAboveNav = contentRect.bottom > navRect.top;
+            
+            // Add/remove shadows and border based on content position
+            if (contentBelowHeader && window.scrollY > 0) {
+                header.classList.add('shadow');
+                header.classList.add('border');
+            } else {
+                header.classList.remove('shadow');
+                header.classList.remove('border');
+            }
+            
+            if (contentAboveNav && contentRect.bottom > window.innerHeight) {
                 nav.classList.add('shadow');
             } else {
                 nav.classList.remove('shadow');
             }
-        });
+        }
+
+        // Update shadows on scroll and resize
+        window.addEventListener('scroll', updateShadows);
+        window.addEventListener('resize', updateShadows);
+        
+        // Initial check
+        updateShadows();
     </script>
 </body>
 </html> 
