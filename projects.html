@@ -76,12 +76,17 @@
             padding: 0 32px;
         }
 
-        .back-link {
+        .current-year {
             font-size: 24px;
             color: #000;
             font-weight: 500;
-            text-decoration: underline;
             font-family: 'Inter', -apple-system, sans-serif;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .current-year:hover {
+            text-decoration: underline;
         }
 
         .year-section {
@@ -205,10 +210,6 @@
                 font-size: 17px;
             }
 
-            .back-link {
-                font-size: 17px;
-            }
-
             .year-section {
                 margin-bottom: 48px;
             }
@@ -225,6 +226,10 @@
                 font-size: 14px;
                 padding: 4px;
             }
+
+            .current-year {
+                font-size: 17px;
+            }
         }
     </style>
 </head>
@@ -232,7 +237,7 @@
     <div class="page-wrapper">
         <div class="sticky-header-wrapper">
             <div class="sticky-header">
-                <a href="/" class="back-link">← Back</a>
+                <div class="current-year">2024</div>
             </div>
         </div>
         <div class="content-wrapper">
@@ -271,10 +276,12 @@
     </div>
 
     <script>
-        function updateShadows() {
+        function updateHeaderAndShadows() {
             const nav = document.querySelector('.bottom-nav');
             const header = document.querySelector('.sticky-header-wrapper');
             const mainContent = document.querySelector('.main-content');
+            const currentYearElement = document.querySelector('.current-year');
+            const yearSections = document.querySelectorAll('.year-section');
             
             // Get the rectangles for position calculations
             const headerRect = header.getBoundingClientRect();
@@ -301,14 +308,42 @@
             } else {
                 nav.classList.remove('shadow');
             }
+
+            // Update current year based on scroll position
+            let currentYear = null;
+            yearSections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= headerRect.bottom) {
+                    currentYear = section.querySelector('.year-title').textContent;
+                }
+            });
+            
+            if (currentYear) {
+                currentYearElement.textContent = currentYear;
+                currentYearElement.setAttribute('data-year', currentYear);
+            }
         }
 
-        // Update shadows on scroll and resize
-        window.addEventListener('scroll', updateShadows);
-        window.addEventListener('resize', updateShadows);
+        // Add click handler for the current year
+        document.querySelector('.current-year').addEventListener('click', function() {
+            const year = this.getAttribute('data-year');
+            const yearSection = document.getElementById(year);
+            if (yearSection) {
+                const headerHeight = document.querySelector('.sticky-header-wrapper').offsetHeight;
+                const targetPosition = yearSection.getBoundingClientRect().top + window.scrollY - headerHeight;
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        // Update on scroll and resize
+        window.addEventListener('scroll', updateHeaderAndShadows);
+        window.addEventListener('resize', updateHeaderAndShadows);
         
         // Initial check
-        updateShadows();
+        updateHeaderAndShadows();
     </script>
 </body>
 </html> 
