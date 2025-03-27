@@ -69,17 +69,25 @@
             font-weight: 500;
             font-family: 'Inter', -apple-system, sans-serif;
             user-select: none;
+            background: #f5f5f5;
+            padding: 4px;
+            border-radius: 100px;
         }
 
         .toggle-option {
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 6px 12px;
+            border-radius: 100px;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
 
         .toggle-option.active {
             background: #000;
             color: #fff;
+        }
+
+        .toggle-option:not(.active):hover {
+            background: rgba(0, 0, 0, 0.05);
         }
 
         .table-view {
@@ -185,24 +193,34 @@
             padding-bottom: 120px;
         }
 
-        .year-title {
-            font-size: 64px;
-            color: #000;
-            font-weight: 600;
-            line-height: 1;
-            font-family: 'Inter', -apple-system, sans-serif;
-            margin-bottom: 80px;
-            position: relative;
-            z-index: 1;
-            padding-top: 32px;
-        }
-
         .project {
             display: flex;
             flex-direction: column;
             gap: 24px;
             position: relative;
             z-index: 2;
+        }
+
+        .project-image {
+            width: 100%;
+            aspect-ratio: 16/10;
+            background: #f5f5f5;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .project-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
 
         .project-title {
@@ -344,6 +362,154 @@
             .view-toggle {
                 font-size: 14px;
             }
+
+            .project-image {
+                margin-bottom: 16px;
+                border-radius: 8px;
+            }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            z-index: 2000;
+            display: none;
+            overflow: hidden; /* Prevent body scroll bleed */
+        }
+
+        .modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-nav {
+            position: sticky;
+            top: 0;
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            border-bottom: 1px solid #000;
+            background: #fff;
+            z-index: 10;
+            flex-shrink: 0;
+            height: 96px; /* Fixed height for nav */
+            box-sizing: border-box;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .modal-content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+            height: calc(100vh - 96px); /* Viewport height minus nav height */
+        }
+
+        .modal-content-inner {
+            max-width: 890px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Override project styles when in modal */
+        .modal .project {
+            margin: 0;
+            padding: 0;
+            gap: 32px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal .project-image {
+            margin: 0;
+            flex-shrink: 0;
+            max-height: 50vh;
+        }
+
+        .modal .project-content {
+            gap: 32px;
+            flex-grow: 1;
+        }
+        
+        /* Hero section should be fully visible without scrolling initially */
+        .modal .project-title,
+        .modal .project-description,
+        .modal .project-links {
+            flex-shrink: 0;
+        }
+
+        /* Desktop layout - image on right */
+        @media (min-width: 768px) {
+            .modal .project {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 48px;
+            }
+            
+            .modal .project-image {
+                order: 2;
+                width: 45%;
+                max-height: calc(100vh - 128px); /* Viewport height minus nav height and some padding */
+                height: auto;
+                position: sticky;
+                top: 112px; /* Nav height + some padding */
+                align-self: flex-start;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            
+            .modal .project-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+            
+            .modal .project-content {
+                order: 1;
+                width: 55%;
+                padding-bottom: 64px;
+            }
+            
+            .modal-content-inner {
+                padding: 48px 32px;
+                max-width: 1080px; /* Slightly wider for side-by-side layout */
+            }
+        }
+
+        @media (max-width: 700px) {
+            .modal-nav {
+                padding: 24px;
+            }
+
+            .modal-content-inner {
+                padding: 24px;
+            }
+
+            .modal .project {
+                gap: 24px;
+            }
+
+            .modal .project-content {
+                gap: 24px;
+            }
         }
     </style>
 </head>
@@ -364,24 +530,32 @@
             <div class="main-content">
                 <div class="timeline-view">
                     <div id="2024" class="year-section">
-                        <h2 class="year-title">2024</h2>
                         <div class="project">
-                            <h2 class="project-title">Tools a cowboy would use</h2>
-                            <p class="project-description">A collection of tools and practices that embody the spirit of the American cowboy: simple, reliable, and built to last.</p>
-                            <div class="project-links">
-                                <a href="https://toolsacowboywoulduse.com" class="project-link" target="_blank">Website</a>
-                                <a href="https://blog.toolsacowboywoulduse.com" class="project-link" target="_blank">Blog</a>
+                            <div class="project-image">
+                                <img src="https://placehold.co/1600x1000" alt="Tools a cowboy would use" />
+                            </div>
+                            <div class="project-content">
+                                <h2 class="project-title">Tools a cowboy would use</h2>
+                                <p class="project-description">A collection of tools and practices that embody the spirit of the American cowboy: simple, reliable, and built to last.</p>
+                                <div class="project-links">
+                                    <a href="https://toolsacowboywoulduse.com" class="project-link" target="_blank">Website</a>
+                                    <a href="https://blog.toolsacowboywoulduse.com" class="project-link" target="_blank">Blog</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div id="2023" class="year-section">
-                        <h2 class="year-title">2023</h2>
                         <div class="project">
-                            <h2 class="project-title">Kaletopia</h2>
-                            <p class="project-description">A collection of essays and thoughts on technology, society, and the future.</p>
-                            <div class="project-links">
-                                <a href="https://www.kaletopia.com" class="project-link" target="_blank">Read essays</a>
+                            <div class="project-image">
+                                <img src="https://placehold.co/1600x1000" alt="Kaletopia" />
+                            </div>
+                            <div class="project-content">
+                                <h2 class="project-title">Kaletopia</h2>
+                                <p class="project-description">A collection of essays and thoughts on technology, society, and the future.</p>
+                                <div class="project-links">
+                                    <a href="https://www.kaletopia.com" class="project-link" target="_blank">Read essays</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -432,6 +606,15 @@
         </nav>
     </div>
 
+    <div class="modal">
+        <nav class="modal-nav">
+            <div class="modal-close">✕</div>
+        </nav>
+        <div class="modal-content">
+            <div class="modal-content-inner"></div>
+        </div>
+    </div>
+
     <script>
         function updateHeaderAndShadows() {
             const nav = document.querySelector('.bottom-nav');
@@ -469,16 +652,11 @@
             // Update current year based on scroll position
             let currentYear = null;
             const headerHeight = header.offsetHeight;
-            const triggerOffset = headerHeight;
-
+            
             yearSections.forEach(section => {
                 const rect = section.getBoundingClientRect();
-                const yearTitle = section.querySelector('.year-title');
-                const yearTitleRect = yearTitle.getBoundingClientRect();
-                
-                // Update the current year when the year title reaches the header
-                if (yearTitleRect.top <= triggerOffset) {
-                    currentYear = yearTitle.textContent;
+                if (rect.top <= headerHeight) {
+                    currentYear = section.id;
                 }
             });
             
@@ -549,6 +727,110 @@
         
         // Initial check
         updateHeaderAndShadows();
+
+        // Variable to store the scroll position
+        let savedScrollPosition = 0;
+        
+        // Modal functionality
+        function openModal(projectData) {
+            const modal = document.querySelector('.modal');
+            const modalContent = modal.querySelector('.modal-content-inner');
+            
+            // Save current scroll position before opening modal
+            savedScrollPosition = window.scrollY;
+            
+            // First, position the modal offscreen while we set it up
+            modal.style.visibility = 'hidden';
+            modal.classList.add('active');
+            
+            // Clone the project content
+            const projectClone = projectData.cloneNode(true);
+            
+            // Clear previous content and add new content
+            modalContent.innerHTML = '';
+            modalContent.appendChild(projectClone);
+            
+            // Reset modal scroll position and window scroll
+            const modalContentElement = modal.querySelector('.modal-content');
+            modalContentElement.scrollTop = 0;
+            window.scrollTo(0, 0);
+            
+            // Reset overflow and make modal visible
+            document.body.style.overflow = 'hidden';
+            modal.style.visibility = '';
+            
+            // Force layout recalculation to ensure proper scrolling behavior
+            setTimeout(() => {
+                const modalContentInnerElement = modal.querySelector('.modal-content-inner');
+                
+                // Add scroll only if content is taller than the viewport minus nav
+                const navHeight = 96; // Fixed nav height as defined in CSS
+                const availableHeight = window.innerHeight - navHeight;
+                const contentHeight = modalContentInnerElement.offsetHeight;
+                
+                if (contentHeight > availableHeight) {
+                    modalContentElement.style.overflowY = 'auto';
+                } else {
+                    modalContentElement.style.overflowY = 'hidden';
+                }
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('.modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Restore the previous scroll position
+            setTimeout(() => {
+                try {
+                    // First try with instant behavior (not supported in all browsers)
+                    window.scrollTo({
+                        top: savedScrollPosition,
+                        behavior: 'instant'
+                    });
+                } catch (e) {
+                    // Fallback for browsers that don't support 'instant'
+                    window.scrollTo(0, savedScrollPosition);
+                }
+            }, 10);
+        }
+
+        // Add click handlers for projects
+        document.querySelectorAll('.project').forEach(project => {
+            project.addEventListener('click', (e) => {
+                if (e.target.closest('.project-link')) return;
+                openModal(project);
+            });
+        });
+
+        // Add click handler for modal close
+        document.querySelector('.modal-close').addEventListener('click', closeModal);
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+        
+        // Update modal scroll behavior on resize
+        window.addEventListener('resize', () => {
+            const modal = document.querySelector('.modal');
+            if (modal.classList.contains('active')) {
+                const modalContentElement = modal.querySelector('.modal-content');
+                const modalContentInnerElement = modal.querySelector('.modal-content-inner');
+                
+                // Add scroll only if content is taller than the viewport minus nav
+                const navHeight = modal.querySelector('.modal-nav').offsetHeight;
+                const availableHeight = window.innerHeight - navHeight;
+                const contentHeight = modalContentInnerElement.offsetHeight;
+                
+                if (contentHeight > availableHeight) {
+                    modalContentElement.style.overflowY = 'auto';
+                } else {
+                    modalContentElement.style.overflowY = 'hidden';
+                }
+            }
+        });
     </script>
 </body>
 </html> 
