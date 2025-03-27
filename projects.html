@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Lucas Pfeiffer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            padding: 32px 0 0 0;
+            transform-origin: center;
+            transform: translateY(0);
+            scroll-behavior: smooth;
+        }
+
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .content-wrapper {
+            text-align: left;
+            width: 100%;
+            max-width: 890px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding: 0 32px;
+            flex: 1;
+        }
+        
+        .title {
+            font-size: 64px;
+            color: #000;
+            font-weight: 600;
+            line-height: 1;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .year-section {
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+            margin-bottom: 80px;
+        }
+
+        .year-title {
+            font-size: 48px;
+            color: #000;
+            font-weight: 600;
+            line-height: 1;
+            font-family: 'Inter', -apple-system, sans-serif;
+            padding-top: 80px;
+        }
+
+        .project {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .project-title {
+            font-size: 48px;
+            color: #000;
+            font-weight: 600;
+            line-height: 1;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .project-description {
+            font-size: 24px;
+            color: #494949;
+            font-weight: 500;
+            line-height: 1.4;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .project-link {
+            font-size: 24px;
+            color: #000;
+            font-weight: 500;
+            text-decoration: underline;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .back-link {
+            font-size: 24px;
+            color: #000;
+            font-weight: 500;
+            text-decoration: underline;
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin-bottom: 40px;
+        }
+
+        .bottom-nav {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 48px;
+            background: #fff;
+            border-top: 1px solid #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: box-shadow 0.2s ease;
+            z-index: 1000;
+            margin-top: auto;
+        }
+
+        .bottom-nav.shadow {
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .bottom-nav-inner {
+            width: 100%;
+            max-width: 890px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            padding: 0 32px;
+            height: 100%;
+        }
+
+        .year-link {
+            font-size: 16px;
+            color: #000;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .year-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 32px 0 0 0;
+            }
+
+            .content-wrapper {
+                padding: 0 32px;
+            }
+
+            .bottom-nav {
+                height: 40px;
+            }
+
+            .title {
+                font-size: 32px;
+            }
+
+            .year-title {
+                font-size: 24px;
+                padding-top: 40px;
+            }
+
+            .project-title {
+                font-size: 24px;
+            }
+
+            .project-description {
+                font-size: 17px;
+            }
+
+            .project-link {
+                font-size: 17px;
+            }
+
+            .back-link {
+                font-size: 17px;
+                margin-bottom: 24px;
+            }
+
+            .year-section {
+                gap: 48px;
+                margin-bottom: 48px;
+            }
+
+            .project {
+                gap: 16px;
+            }
+
+            .year-link {
+                font-size: 14px;
+                padding: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="content-wrapper">
+            <a href="/" class="back-link">← Back</a>
+            <h1 class="title">Projects</h1>
+            
+            <div id="2024" class="year-section">
+                <h2 class="year-title">2024</h2>
+                <div class="project">
+                    <h2 class="project-title">Tools a cowboy would use</h2>
+                    <p class="project-description">A collection of tools and practices that embody the spirit of the American cowboy: simple, reliable, and built to last.</p>
+                    <div class="project-links">
+                        <a href="https://toolsacowboywoulduse.com" class="project-link" target="_blank">Website</a>
+                        <a href="https://blog.toolsacowboywoulduse.com" class="project-link" target="_blank">Blog</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="2023" class="year-section">
+                <h2 class="year-title">2023</h2>
+                <div class="project">
+                    <h2 class="project-title">Kaletopia</h2>
+                    <p class="project-description">A collection of essays and thoughts on technology, society, and the future.</p>
+                    <div class="project-links">
+                        <a href="https://www.kaletopia.com" class="project-link" target="_blank">Read essays</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <div class="bottom-nav-inner">
+                <a href="#2024" class="year-link">2024</a>
+                <a href="#2023" class="year-link">2023</a>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        // Add shadow when page is scrolled
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.bottom-nav');
+            if (window.scrollY > 10) {
+                nav.classList.add('shadow');
+            } else {
+                nav.classList.remove('shadow');
+            }
+        });
+    </script>
+</body>
+</html> 
