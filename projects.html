@@ -35,10 +35,10 @@
             flex-direction: column;
             flex: 1;
             padding: 0;
-            padding-top: 24px;
-            padding-bottom: 80px; /* Reduced bottom padding */
-            height: calc(100vh - 130px); /* Full height minus header and footer */
-            overflow: hidden; /* Hide all overflow */
+            padding-top: 0;
+            padding-bottom: 0;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .sticky-header {
@@ -64,7 +64,18 @@
         }
 
         .timeline-view {
-            display: block;
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+            height: 100%;
+            padding: 0 32px 144px 96px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            align-items: center;
+            justify-content: center;
         }
 
         .sticky-header-wrapper {
@@ -101,38 +112,44 @@
         .year-section {
             flex: 0 0 auto;
             width: auto;
-            min-width: 60%; /* Reduced width to show more content */
-            padding: 32px 0;
             position: relative;
-            height: auto; /* Fill available space */
-            overflow-y: hidden; /* Disable vertical scrolling within each year section */
-            margin-right: 8px; /* Reduced space between year sections */
+            height: auto;
+            overflow: visible;
+            margin: 0;
+            padding: 0;
+        }
+
+        .year-projects {
+            display: flex;
+            flex-direction: row;
+            gap: 32px;
+            padding: 0;
+            align-items: center;
+            justify-content: center;
+            min-width: min-content;
         }
 
         .project {
+            flex: 0 0 auto;
             position: relative;
-            z-index: 2;
             cursor: pointer;
-            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .project-image {
-            width: 100%;
-            display: inline-flex;
+            display: flex;
             justify-content: center;
+            align-items: center;
             border-radius: 12px;
             overflow: visible;
-            padding: 24px 12px 24px 12px;
-            margin: -24px -12px -24px -12px;
-        }
-
-        .timeline-view .project:hover .project-image img {
-            transform: scale(1.03);
         }
 
         .project-image img {
-            max-width: 100%;
-            max-height: 280px; /* Even smaller image height */
+            height: auto;
+            max-height: 70vh;
             object-fit: contain;
             display: block;
             border-radius: 12px;
@@ -247,19 +264,16 @@
             }
             
             .timeline-view {
-                padding: 0 16px;
+                padding: 0 24px 120px 48px;
             }
             
             .year-section {
-                padding: 24px 16px;
+                padding: 0 16px;
             }
             
-            /* Apply mobile spacing for project grids */
-            .year-projects {
-                gap: 8px !important; /* Reduced spacing by 2x for mobile */
-                padding: 16px 0 !important;
+            .project {
+                width: 66.67vw;
             }
-
 
             .project-title {
                 font-size: 24px;
@@ -274,11 +288,11 @@
             }
 
             .year-section {
-                margin-bottom: 80px;
+                margin-bottom: 0;
             }
 
             .year-section:last-child {
-                padding-bottom: 80px;
+                padding-bottom: 0;
             }
 
             .project {
@@ -308,16 +322,18 @@
                 padding: 16px 12px;
             }
 
-
-            .project-image {
-                margin-bottom: 16px;
-                border-radius: 8px;
-            }
-
             .timeline-view {
                 grid-template-columns: 1fr;
                 gap: 16px;
                 padding: 0 16px;
+            }
+
+            .project-image img {
+                max-height: 60vh;
+            }
+
+            .year-projects {
+                gap: 24px;
             }
         }
 
@@ -444,13 +460,15 @@
             justify-content: center;
             overflow: visible;
             padding: 0;
-            width: 100%;
+            width: auto;
             height: 480px; /* Fixed height */
+            margin: 0 auto;
         }
 
         .modal-project-image img {
-            width: 100%;
+            width: auto;
             height: 100%;
+            max-width: 100%;
             object-fit: contain;
             border-radius: 8px;
         }
@@ -492,6 +510,17 @@
             font-family: 'Inter', -apple-system, sans-serif;
         }
 
+        /* Tablet landscape (iPad) specific adjustments */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            .project {
+                width: 75vw;
+            }
+            
+            .project-image img {
+                max-height: 60vh;
+            }
+        }
+        
         /* Desktop layout - image on right */
         @media (min-width: 768px) {
             .modal-project {
@@ -514,15 +543,17 @@
             
             .modal-project-image {
                 order: 2;
-                width: 45%;
+                width: auto;
                 position: sticky;
                 top: 112px; /* Nav height + some padding */
                 align-self: flex-start;
                 border-radius: 8px;
                 overflow: hidden;
+                margin-left: auto;
             }
             
             .modal-project-image img {
+                width: auto;
                 max-width: 100%;
                 max-height: calc(70vh - 96px);
                 object-fit: contain;
@@ -597,11 +628,12 @@
             -webkit-overflow-scrolling: touch;
             width: 100%;
             height: 100%; /* Full height */
-            padding: 0 32px;
+            padding: 0 32px 0 128px;
             flex: 1;
             scrollbar-width: none; /* Hide scrollbar in Firefox */
             overscroll-behavior-x: contain; /* Prevent overscroll on mobile */
             cursor: grab; /* Show grab cursor to indicate scrollable */
+            gap: 0; /* Ensure no gap between year sections */
         }
         
         /* When actively scrolling */
@@ -670,40 +702,41 @@
             const nav = document.querySelector('.bottom-nav');
             const timelineView = document.querySelector('.timeline-view');
             const currentYearElement = document.querySelector('.current-year');
-            const yearSections = document.querySelectorAll('.year-section');
+            const yearMarkers = document.querySelectorAll('[id^="20"]'); // Get all elements with IDs starting with year numbers
             
             // Add shadow to nav
             nav.classList.add('shadow');
             
             // Update current year based on scroll position
-            if (yearSections.length > 0) {
-                // Calculate the center point of the viewport
-                const viewportCenter = window.innerWidth / 2;
+            if (yearMarkers.length > 0) {
+                // Calculate the left edge of the viewport plus a small offset
+                const viewportLeft = 32; // Match the left padding
                 
-                // Find the section closest to the center
-                let closestSection = yearSections[0];
+                // Find the marker closest to the left edge
+                let closestMarker = null;
                 let minDistance = Infinity;
                 
-                yearSections.forEach(section => {
-                    const rect = section.getBoundingClientRect();
-                    const sectionCenter = rect.left + (rect.width / 2);
-                    const distance = Math.abs(sectionCenter - viewportCenter);
+                yearMarkers.forEach(marker => {
+                    // Skip if not a year marker (has additional parts in the ID)
+                    if (marker.id.includes('-')) return;
+                    
+                    const rect = marker.getBoundingClientRect();
+                    const distance = Math.abs(rect.left - viewportLeft);
                     
                     if (distance < minDistance) {
                         minDistance = distance;
-                        closestSection = section;
+                        closestMarker = marker;
                     }
                 });
                 
-                // Update current year if it changed
-                const currentYear = closestSection.id;
-                if (currentYear && currentYearElement.textContent !== currentYear) {
-                    currentYearElement.textContent = currentYear;
-                    currentYearElement.setAttribute('data-year', currentYear);
+                // Update current year if it changed and a marker was found
+                if (closestMarker && closestMarker.id && currentYearElement.textContent !== closestMarker.id) {
+                    currentYearElement.textContent = closestMarker.id;
+                    currentYearElement.setAttribute('data-year', closestMarker.id);
                     
                     // Update active class on year links
                     document.querySelectorAll('.year-link').forEach(link => {
-                        if (link.textContent === currentYear) {
+                        if (link.textContent === closestMarker.id) {
                             link.classList.add('active');
                         } else {
                             link.classList.remove('active');
@@ -730,61 +763,64 @@
                 const isActive = index === 0 ? 'active' : '';
                 bottomNav.innerHTML += `<a href="#${year}" class="year-link ${isActive}">${year}</a>`;
             });
-
-            // Group projects by year
-            const projectsByYear = {};
-            years.forEach(year => {
-                projectsByYear[year] = projects.filter(project => project.year === year);
+            
+            // Create a single container for all projects
+            const projectsContainer = document.createElement('div');
+            projectsContainer.className = 'year-projects';
+            projectsContainer.style.display = 'flex';
+            projectsContainer.style.flexDirection = 'row';
+            projectsContainer.style.gap = window.innerWidth <= 700 ? '24px' : '32px';
+            projectsContainer.style.width = '100%';
+            
+            // Sort all projects by year (descending) and then by month (descending)
+            const sortedProjects = [...projects].sort((a, b) => {
+                if (a.year !== b.year) return b.year - a.year;
+                return b.month - a.month;
             });
             
-            // Render projects by year in timeline view
-            years.forEach(year => {
-                // Create year section
-                const yearSection = document.createElement('div');
-                yearSection.id = year;
-                yearSection.className = 'year-section';
+            // Add year markers for navigation
+            let currentYear = null;
+            
+            sortedProjects.forEach((project, index) => {
+                // If this is a new year, add a hidden year marker for navigation
+                if (project.year !== currentYear) {
+                    currentYear = project.year;
+                    
+                    // Create an invisible year marker div for navigation
+                    const yearMarker = document.createElement('div');
+                    yearMarker.id = project.year;
+                    yearMarker.style.position = 'absolute';
+                    yearMarker.style.opacity = '0';
+                    yearMarker.style.pointerEvents = 'none';
+                    yearMarker.style.left = `${index * (window.innerWidth <= 1024 ? 80 : 100) + index * (window.innerWidth <= 700 ? 24 : 32)}vw`;
+                    projectsContainer.appendChild(yearMarker);
+                }
                 
-                // Year section without visible heading - preserve for navigation
-                
-                // No year title display
-                
-                // Create year container for projects
-                const yearProjectsContainer = document.createElement('div');
-                yearProjectsContainer.className = 'year-projects';
-                yearProjectsContainer.style.display = 'grid';
-                yearProjectsContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(220px, 1fr))'; // Even smaller card size
-                yearProjectsContainer.style.gap = '12px'; // Reduced spacing between projects by 2x
-                yearProjectsContainer.style.padding = '24px 0';
-                
-                // Add projects for this year
-                projectsByYear[year].forEach(project => {
-                    const projectElement = document.createElement('div');
-                    projectElement.id = `${project.year}-${project.id}`;
-                    projectElement.className = 'project';
-                    projectElement.innerHTML = `
-                        <div class="project-image">
-                            <img src="${project.image}" alt="${project.title}" />
+                // Create project element
+                const projectElement = document.createElement('div');
+                projectElement.id = `${project.year}-${project.id}`;
+                projectElement.className = 'project';
+                projectElement.innerHTML = `
+                    <div class="project-image">
+                        <img src="${project.image}" alt="${project.title}" />
+                    </div>
+                    <div class="project-content">
+                        <h2 class="project-title">${project.title}</h2>
+                        <p class="project-description">${project.description}</p>
+                        <div class="project-links">
+                            ${project.links.map(link => `
+                                <a href="${link.url}" class="project-link" target="_blank">${link.text}</a>
+                            `).join('')}
                         </div>
-                        <div class="project-content">
-                            <h2 class="project-title">${project.title}</h2>
-                            <p class="project-description">${project.description}</p>
-                            <div class="project-links">
-                                ${project.links.map(link => `
-                                    <a href="${link.url}" class="project-link" target="_blank">${link.text}</a>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
-                    yearProjectsContainer.appendChild(projectElement);
-                });
+                    </div>
+                `;
                 
-                // Add year projects to year section
-                yearSection.appendChild(yearProjectsContainer);
-                
-                // Add year section to timeline view
-                timelineView.appendChild(yearSection);
+                projectsContainer.appendChild(projectElement);
             });
-
+            
+            // Add all projects to timeline view
+            timelineView.appendChild(projectsContainer);
+            
             // Reattach event listeners
             attachEventListeners();
         }
@@ -804,17 +840,17 @@
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const year = this.textContent;
-                    const yearSection = document.getElementById(year);
-                    if (yearSection) {
-                        // Get the center point of the section
+                    const yearMarker = document.getElementById(year);
+                    if (yearMarker) {
+                        // Get the center point of the marker
                         const timelineView = document.querySelector('.timeline-view');
-                        const sectionRect = yearSection.getBoundingClientRect();
+                        const markerRect = yearMarker.getBoundingClientRect();
                         const viewportWidth = window.innerWidth;
                         
-                        // Calculate the target scroll position that will center the section
-                        const targetScrollLeft = timelineView.scrollLeft + sectionRect.left - (viewportWidth / 2) + (sectionRect.width / 2);
+                        // Calculate the target scroll position
+                        const targetScrollLeft = timelineView.scrollLeft + markerRect.left - 32; // Adjust for padding
                         
-                        // Scroll to center the year section
+                        // Scroll to the first project of that year
                         timelineView.scrollTo({
                             left: targetScrollLeft,
                             behavior: 'smooth'
@@ -822,6 +858,15 @@
                         
                         // Update the current year
                         document.querySelector('.current-year').textContent = year;
+                        
+                        // Update active class on year links
+                        document.querySelectorAll('.year-link').forEach(link => {
+                            if (link.textContent === year) {
+                                link.classList.add('active');
+                            } else {
+                                link.classList.remove('active');
+                            }
+                        });
                     }
                 });
             });
@@ -852,19 +897,18 @@
             
             // Make current year clickable to open a menu on mobile
             document.querySelector('.current-year').addEventListener('click', function() {
-                // Scroll to the year section
+                // Scroll to the year marker
                 const year = this.textContent;
-                const yearSection = document.getElementById(year);
-                if (yearSection) {
-                    // Get the center point of the section
+                const yearMarker = document.getElementById(year);
+                if (yearMarker) {
+                    // Get the marker position
                     const timelineView = document.querySelector('.timeline-view');
-                    const sectionRect = yearSection.getBoundingClientRect();
-                    const viewportWidth = window.innerWidth;
+                    const markerRect = yearMarker.getBoundingClientRect();
                     
-                    // Calculate the target scroll position that will center the section
-                    const targetScrollLeft = timelineView.scrollLeft + sectionRect.left - (viewportWidth / 2) + (sectionRect.width / 2);
+                    // Calculate the target scroll position
+                    const targetScrollLeft = timelineView.scrollLeft + markerRect.left - 32; // Adjust for padding
                     
-                    // Scroll to center the year section
+                    // Scroll to the first project of that year
                     timelineView.scrollTo({
                         left: targetScrollLeft,
                         behavior: 'smooth'
@@ -1050,7 +1094,21 @@
 
         // Existing event listeners
         document.querySelector('.timeline-view').addEventListener('scroll', updateHeaderAndShadows);
-        window.addEventListener('resize', updateHeaderAndShadows);
+        
+        // Handle resize events
+        window.addEventListener('resize', () => {
+            updateHeaderAndShadows();
+            
+            // Update project widths on resize
+            document.querySelectorAll('.project').forEach(project => {
+                project.style.width = window.innerWidth <= 1024 ? '80vw' : '1000px';
+            });
+            
+            // Update gaps in year projects containers
+            document.querySelectorAll('.year-projects').forEach(container => {
+                container.style.gap = window.innerWidth <= 700 ? '24px' : '32px';
+            });
+        });
         
         // Remove the vertical-to-horizontal scroll conversion for better stability
         document.getElementById('modal-close-btn').addEventListener('click', closeModal);

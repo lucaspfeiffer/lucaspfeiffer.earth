@@ -2,6 +2,7 @@ const projects = [
     {
         id: 'dawn-and-dusk',
         year: 2025,
+        month: 3,
         title: 'Dawn and Dusk',
         description: 'Sync your soul with the sun',
         image: './images/1.1b bezel.png',
@@ -17,32 +18,48 @@ const projects = [
         ]
     },
     {
-        id: 'tools-cowboy',
+        id: 'local-kitchens',
         year: 2024,
-        title: 'Tools a cowboy would use',
-        description: 'A collection of tools and practices that embody the spirit of the American cowboy: simple, reliable, and built to last.',
-        image: './images/tools-cowboy.jpg',
+        month: 11,
+        title: 'Local Kitchens',
+        description: 'A food tech platform bringing multiple restaurant concepts together under one roof',
+        image: './images/LocalKitchensMobileLanding.png',
         links: [
             {
                 text: 'Website',
-                url: 'https://toolsacowboywoulduse.com'
+                url: 'https://www.localkitchens.com'
             },
             {
-                text: 'Blog',
-                url: 'https://blog.toolsacowboywoulduse.com'
+                text: 'Download App',
+                url: 'https://apps.apple.com/us/app/local-kitchens/id1548693549'
             }
         ]
     },
     {
-        id: 'kaletopia',
-        year: 2023,
-        title: 'Kaletopia',
-        description: 'A collection of essays and thoughts on technology, society, and the future.',
-        image: 'https://placehold.co/1600x1000',
+        id: 'flavor-trippin',
+        year: 2024,
+        month: 7,
+        title: 'Flavor Trippin\'',
+        description: 'Digital ordering experience for a micro food-hall platform',
+        image: './images/iPad Pro 12.9 - Space Gray - Landscape.png',
         links: [
             {
-                text: 'Read essays',
-                url: 'https://www.kaletopia.com'
+                text: 'Order Online',
+                url: 'https://www.flavortrippin.com'
+            }
+        ]
+    },
+    {
+        id: 'kds-training',
+        year: 2023,
+        month: 5,
+        title: 'KDS Training App',
+        description: 'Interactive training tool for restaurant kitchen staff',
+        image: './images/kdstraining.png',
+        links: [
+            {
+                text: 'Case Study',
+                url: 'https://www.kdstraining.com'
             }
         ]
     }
