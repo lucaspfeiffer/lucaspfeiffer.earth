@@ -31,14 +31,14 @@
         .content-wrapper {
             text-align: left;
             width: 100%;
-            max-width: 890px;
-            margin: 0 auto;
             display: flex;
             flex-direction: column;
             flex: 1;
             padding: 0;
             padding-top: 24px;
-            padding-bottom: 120px;
+            padding-bottom: 80px; /* Reduced bottom padding */
+            height: calc(100vh - 130px); /* Full height minus header and footer */
+            overflow: hidden; /* Hide all overflow */
         }
 
         .sticky-header {
@@ -50,101 +50,21 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            max-width: 890px;
-            margin: 0 auto;
             width: 100%;
+            border-bottom: 1px solid #000;
+            height: 96px;
+            box-sizing: border-box;
         }
 
         .header-left {
             display: flex;
             align-items: center;
             gap: 16px;
+            margin-right: auto; /* Push to the left like modal-title */
         }
 
-        .view-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 16px;
-            color: #000;
-            font-weight: 500;
-            font-family: 'Inter', -apple-system, sans-serif;
-            user-select: none;
-            background: #f5f5f5;
-            padding: 4px;
-            border-radius: 100px;
-        }
-
-        .toggle-option {
-            padding: 6px 12px;
-            border-radius: 100px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .toggle-option.active {
-            background: #000;
-            color: #fff;
-        }
-
-        .toggle-option:not(.active):hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        .table-view {
-            display: none;
-            padding: 0 32px;
-            margin-bottom: 80px;
-        }
-
-        .table-view.active {
+        .timeline-view {
             display: block;
-        }
-
-        .timeline-view.hidden {
-            display: none;
-        }
-
-        .projects-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 32px;
-        }
-
-        .projects-table th {
-            text-align: left;
-            padding: 16px;
-            border-bottom: 1px solid #000;
-            font-size: 16px;
-            font-weight: 500;
-            color: #000;
-        }
-
-        .projects-table td {
-            padding: 24px 16px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            font-size: 17px;
-            color: #494949;
-        }
-
-        .projects-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .table-project-title {
-            font-weight: 500;
-            color: #000;
-        }
-
-        .table-project-links {
-            display: flex;
-            gap: 16px;
-        }
-
-        .table-project-link {
-            color: #000;
-            text-decoration: underline;
-            font-weight: 500;
         }
 
         .sticky-header-wrapper {
@@ -155,25 +75,20 @@
             width: 100%;
             background: #fff;
             z-index: 100;
-            transition: box-shadow 0.2s ease, border-bottom 0.2s ease;
-        }
-
-        .sticky-header-wrapper.border {
-            border-bottom: 1px solid #000;
-        }
-
-        .sticky-header-wrapper.shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .main-content {
-            padding: 0 32px;
+            padding: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .current-year {
             font-size: 24px;
             color: #000;
-            font-weight: 500;
+            font-weight: 600; /* Match modal-title font weight */
             font-family: 'Inter', -apple-system, sans-serif;
             cursor: pointer;
             user-select: none;
@@ -184,17 +99,14 @@
         }
 
         .year-section {
-            padding: 32px 0 0 0;
-            margin-bottom: 120px;
+            flex: 0 0 auto;
+            width: auto;
+            min-width: 60%; /* Reduced width to show more content */
+            padding: 32px 0;
             position: relative;
-            scroll-margin-top: 80px; /* Adjust based on your header height */
-        }
-        
-        /* Year heading removed */
-
-        .year-section:last-child {
-            margin-bottom: 0;
-            padding-bottom: 120px;
+            height: auto; /* Fill available space */
+            overflow-y: hidden; /* Disable vertical scrolling within each year section */
+            margin-right: 8px; /* Reduced space between year sections */
         }
 
         .project {
@@ -220,7 +132,7 @@
 
         .project-image img {
             max-width: 100%;
-            max-height: 500px;
+            max-height: 280px; /* Even smaller image height */
             object-fit: contain;
             display: block;
             border-radius: 12px;
@@ -307,25 +219,47 @@
             padding: 8px;
             min-width: 24px;
             text-align: center;
+            position: relative;
         }
 
         .year-link:hover {
             text-decoration: underline;
         }
+        
+        .year-link.active {
+            font-weight: 600;
+        }
+        
+        .year-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 8px;
+            right: 8px;
+            height: 2px;
+            background: #000;
+        }
 
         @media (max-width: 700px) {
             .sticky-header {
-                padding: 32px;
+                padding: 24px;
+                height: 80px; /* Match modal-nav height on mobile */
             }
-
+            
+            .timeline-view {
+                padding: 0 16px;
+            }
+            
             .year-section {
-                padding: 0 32px;
+                padding: 24px 16px;
+            }
+            
+            /* Apply mobile spacing for project grids */
+            .year-projects {
+                gap: 8px !important; /* Reduced spacing by 2x for mobile */
+                padding: 16px 0 !important;
             }
 
-            .year-title {
-                font-size: 32px;
-                margin-bottom: 48px;
-            }
 
             .project-title {
                 font-size: 24px;
@@ -374,9 +308,6 @@
                 padding: 16px 12px;
             }
 
-            .view-toggle {
-                font-size: 14px;
-            }
 
             .project-image {
                 margin-bottom: 16px;
@@ -398,22 +329,26 @@
             bottom: 0;
             background: #fff;
             z-index: 2000;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, visibility 0.3s;
             display: flex;
             flex-direction: column;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            overflow: hidden; /* Prevent body scroll bleed */
+            overflow: hidden; /* Essential - prevent body scroll bleed */
         }
 
         .modal.active {
-            opacity: 1;
             visibility: visible;
+            opacity: 1;
+            pointer-events: all;
         }
 
         .modal-nav {
             position: sticky;
             top: 0;
+            left: 0;
+            right: 0;
             padding: 32px;
             display: flex;
             align-items: center;
@@ -424,6 +359,7 @@
             flex-shrink: 0;
             height: 96px;
             box-sizing: border-box;
+            width: 100%;
         }
 
         .modal-nav-controls {
@@ -441,9 +377,14 @@
             color: #000;
             width: 52px;
             height: 52px;
+            background: transparent;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
         }
 
-        /* No hover state */
+        .modal-nav-button:hover, .modal-close:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
 
         .modal-nav-button.disabled {
             opacity: 0.3;
@@ -473,6 +414,7 @@
             -webkit-overflow-scrolling: touch;
             position: relative;
             height: calc(100vh - 96px); /* Viewport height minus nav height */
+            scroll-behavior: smooth;
         }
 
         .modal-content-inner {
@@ -485,7 +427,7 @@
         }
 
         /* Override project styles when in modal */
-        .modal .project {
+        .modal-project {
             margin: 0;
             padding: 0;
             gap: 32px;
@@ -495,7 +437,7 @@
             cursor: default;
         }
 
-        .modal .project-image {
+        .modal-project-image {
             margin: 0;
             flex-shrink: 0;
             display: flex;
@@ -506,38 +448,71 @@
             height: 480px; /* Fixed height */
         }
 
-        .modal .project:hover .project-image img {
-            transform: none;
-        }
-
-        .modal .project-content {
-            gap: 32px;
-            flex-grow: 1;
-        }
-        
-        /* Hero section should be fully visible without scrolling initially */
-        .modal .project-title,
-        .modal .project-description,
-        .modal .project-links {
-            flex-shrink: 0;
-        }
-
-        .modal .project-image img {
+        .modal-project-image img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             border-radius: 8px;
         }
 
+        .modal-project-title {
+            font-size: 48px;
+            color: #000;
+            font-weight: 600;
+            line-height: 1;
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin-bottom: 32px;
+        }
+        
+        .modal-project-content {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            flex-grow: 1;
+        }
+        
+        .modal-project-description {
+            font-size: 24px;
+            color: #494949;
+            font-weight: 500;
+            line-height: 1.4;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+        
+        .modal-project-links {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .modal-project-link {
+            font-size: 24px;
+            color: #000;
+            font-weight: 500;
+            text-decoration: underline;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
         /* Desktop layout - image on right */
         @media (min-width: 768px) {
-            .modal .project {
-                flex-direction: row;
+            .modal-project {
+                flex-direction: column;
                 align-items: flex-start;
+                gap: 32px;
+            }
+            
+            .modal-project-title {
+                width: 100%;
+                margin-bottom: 24px;
+            }
+            
+            .modal-project-content-wrapper {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
                 gap: 48px;
             }
             
-            .modal .project-image {
+            .modal-project-image {
                 order: 2;
                 width: 45%;
                 position: sticky;
@@ -547,15 +522,15 @@
                 overflow: hidden;
             }
             
-            .modal .project-image img {
+            .modal-project-image img {
                 max-width: 100%;
-                max-height: calc(70vh - 96px); /* Reduced by 48px from original 70vh - 48px */
+                max-height: calc(70vh - 96px);
                 object-fit: contain;
                 display: block;
                 border-radius: 8px;
             }
             
-            .modal .project-content {
+            .modal-project-content {
                 order: 1;
                 width: 55%;
                 padding-bottom: 64px;
@@ -575,44 +550,67 @@
 
             .modal-content {
                 height: calc(100vh - 80px); /* Adjust for smaller nav */
-                overflow-y: auto;
             }
 
             .modal-content-inner {
                 padding: 24px;
             }
 
-            .modal .project {
+            .modal-project {
                 gap: 16px;
             }
 
-            .modal .project-content {
+            .modal-project-content {
                 gap: 16px;
             }
             
-            .modal .project-image img {
-                max-height: calc(40vh - 48px); /* Reduced by 48px from original 40vh */
+            .modal-project-image img {
+                max-height: calc(40vh - 48px);
                 margin-bottom: 8px;
             }
             
-            .modal .project-title {
-                font-size: 18px;
-                margin-bottom: 8px;
+            .modal-project-title {
+                font-size: 32px;
+                margin-bottom: 24px;
             }
             
-            .modal .project-description {
+            .modal-project-description {
                 font-size: 18px;
                 margin-bottom: 16px;
             }
 
-            .modal .project-image {
+            .modal-project-image {
                 height: 320px; /* Smaller fixed height for mobile */
+            }
+            
+            .modal-project-link {
+                font-size: 18px;
             }
         }
 
-        /* Update timeline view spacing */
+        /* Horizontal scrolling timeline */
         .timeline-view {
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+            height: 100%; /* Full height */
             padding: 0 32px;
+            flex: 1;
+            scrollbar-width: none; /* Hide scrollbar in Firefox */
+            overscroll-behavior-x: contain; /* Prevent overscroll on mobile */
+            cursor: grab; /* Show grab cursor to indicate scrollable */
+        }
+        
+        /* When actively scrolling */
+        .timeline-view:active {
+            cursor: grabbing;
+        }
+        
+        .timeline-view::-webkit-scrollbar {
+            display: none; /* Hide scrollbar in Chrome/Safari/Edge */
         }
     </style>
 </head>
@@ -622,10 +620,6 @@
             <div class="sticky-header">
                 <div class="header-left">
                     <div class="current-year">2024</div>
-                    <div class="view-toggle">
-                        <div class="toggle-option active" data-view="timeline">Timeline</div>
-                        <div class="toggle-option" data-view="table">Table</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -633,21 +627,6 @@
             <div class="main-content">
                 <div class="timeline-view">
                     <!-- Projects will be dynamically inserted here -->
-                </div>
-                <div class="table-view">
-                    <table class="projects-table">
-                        <thead>
-                            <tr>
-                                <th>Year</th>
-                                <th>Project</th>
-                                <th>Description</th>
-                                <th>Links</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Table rows will be dynamically inserted here -->
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
@@ -659,21 +638,21 @@
         </nav>
     </div>
 
-    <div class="modal">
+    <div class="modal" id="project-modal">
         <nav class="modal-nav">
             <div class="modal-title"></div>
             <div class="modal-nav-controls">
-                <div class="modal-nav-button prev-project">
+                <div class="modal-nav-button prev-project" id="prev-project-btn">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 18L9 12L15 6" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
-                <div class="modal-nav-button next-project">
+                <div class="modal-nav-button next-project" id="next-project-btn">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 18L15 12L9 6" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
-                <div class="modal-nav-button modal-close">
+                <div class="modal-nav-button modal-close" id="modal-close-btn">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M18 6L6 18M6 6L18 18" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -689,70 +668,67 @@
     <script>
         function updateHeaderAndShadows() {
             const nav = document.querySelector('.bottom-nav');
-            const header = document.querySelector('.sticky-header-wrapper');
-            const mainContent = document.querySelector('.main-content');
+            const timelineView = document.querySelector('.timeline-view');
             const currentYearElement = document.querySelector('.current-year');
             const yearSections = document.querySelectorAll('.year-section');
             
-            // Get the rectangles for position calculations
-            const headerRect = header.getBoundingClientRect();
-            const navRect = nav.getBoundingClientRect();
-            const contentRect = mainContent.getBoundingClientRect();
+            // Add shadow to nav
+            nav.classList.add('shadow');
             
-            // Check if there's content below the header
-            const contentBelowHeader = contentRect.top < headerRect.bottom;
-            
-            // Check if there's content above the bottom nav
-            const contentAboveNav = contentRect.bottom > navRect.top;
-            
-            // Add/remove shadows and border based on content position
-            if (contentBelowHeader && window.scrollY > 0) {
-                header.classList.add('shadow');
-                header.classList.add('border');
-            } else {
-                header.classList.remove('shadow');
-                header.classList.remove('border');
-            }
-            
-            if (contentAboveNav && contentRect.bottom > window.innerHeight) {
-                nav.classList.add('shadow');
-            } else {
-                nav.classList.remove('shadow');
-            }
-
             // Update current year based on scroll position
-            let currentYear = null;
-            const headerHeight = header.offsetHeight;
-            
-            yearSections.forEach(section => {
-                const rect = section.getBoundingClientRect();
-                if (rect.top <= headerHeight) {
-                    currentYear = section.id;
+            if (yearSections.length > 0) {
+                // Calculate the center point of the viewport
+                const viewportCenter = window.innerWidth / 2;
+                
+                // Find the section closest to the center
+                let closestSection = yearSections[0];
+                let minDistance = Infinity;
+                
+                yearSections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    const sectionCenter = rect.left + (rect.width / 2);
+                    const distance = Math.abs(sectionCenter - viewportCenter);
+                    
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestSection = section;
+                    }
+                });
+                
+                // Update current year if it changed
+                const currentYear = closestSection.id;
+                if (currentYear && currentYearElement.textContent !== currentYear) {
+                    currentYearElement.textContent = currentYear;
+                    currentYearElement.setAttribute('data-year', currentYear);
+                    
+                    // Update active class on year links
+                    document.querySelectorAll('.year-link').forEach(link => {
+                        if (link.textContent === currentYear) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
                 }
-            });
-            
-            if (currentYear) {
-                currentYearElement.textContent = currentYear;
-                currentYearElement.setAttribute('data-year', currentYear);
             }
         }
 
         function renderProjects() {
             const timelineView = document.querySelector('.timeline-view');
-            const tableBody = document.querySelector('.projects-table tbody');
             const bottomNav = document.querySelector('.bottom-nav-inner');
             
             // Clear existing content
             timelineView.innerHTML = '';
-            tableBody.innerHTML = '';
             bottomNav.innerHTML = '';
             
             // Get unique years and sort them in descending order
             const years = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a);
             
             // Render year links in bottom nav
-            years.forEach(year => {
-                bottomNav.innerHTML += `<a href="#${year}" class="year-link">${year}</a>`;
+            years.forEach((year, index) => {
+                // Add active class to first year
+                const isActive = index === 0 ? 'active' : '';
+                bottomNav.innerHTML += `<a href="#${year}" class="year-link ${isActive}">${year}</a>`;
             });
 
             // Group projects by year
@@ -770,12 +746,15 @@
                 
                 // Year section without visible heading - preserve for navigation
                 
+                // No year title display
+                
                 // Create year container for projects
                 const yearProjectsContainer = document.createElement('div');
                 yearProjectsContainer.className = 'year-projects';
                 yearProjectsContainer.style.display = 'grid';
-                yearProjectsContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(400px, 1fr))';
-                yearProjectsContainer.style.gap = '24px';
+                yearProjectsContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(220px, 1fr))'; // Even smaller card size
+                yearProjectsContainer.style.gap = '12px'; // Reduced spacing between projects by 2x
+                yearProjectsContainer.style.padding = '24px 0';
                 
                 // Add projects for this year
                 projectsByYear[year].forEach(project => {
@@ -805,51 +784,17 @@
                 // Add year section to timeline view
                 timelineView.appendChild(yearSection);
             });
-            
-            // Render projects in table view
-            projects.forEach(project => {
-                const tableRow = document.createElement('tr');
-                tableRow.innerHTML = `
-                    <td>${project.year}</td>
-                    <td class="table-project-title">${project.title}</td>
-                    <td>${project.description}</td>
-                    <td>
-                        <div class="table-project-links">
-                            ${project.links.map(link => `
-                                <a href="${link.url}" class="table-project-link" target="_blank">${link.text}</a>
-                            `).join('')}
-                        </div>
-                    </td>
-                `;
-                tableBody.appendChild(tableRow);
-            });
 
             // Reattach event listeners
             attachEventListeners();
         }
 
         function attachEventListeners() {
-            // View toggle
-            document.querySelectorAll('.toggle-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    const view = this.getAttribute('data-view');
-                    document.querySelectorAll('.toggle-option').forEach(opt => opt.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    if (view === 'timeline') {
-                        document.querySelector('.timeline-view').classList.remove('hidden');
-                        document.querySelector('.table-view').classList.remove('active');
-                    } else {
-                        document.querySelector('.timeline-view').classList.add('hidden');
-                        document.querySelector('.table-view').classList.add('active');
-                    }
-                });
-            });
-
             // Project click handlers
             document.querySelectorAll('.project').forEach(project => {
                 project.addEventListener('click', (e) => {
                     if (e.target.closest('.project-link')) return;
+                    console.log('Project clicked:', project.id);
                     openModal(project);
                 });
             });
@@ -861,10 +806,22 @@
                     const year = this.textContent;
                     const yearSection = document.getElementById(year);
                     if (yearSection) {
-                        yearSection.scrollIntoView({ 
-                            behavior: 'smooth',
-                            block: 'start'
+                        // Get the center point of the section
+                        const timelineView = document.querySelector('.timeline-view');
+                        const sectionRect = yearSection.getBoundingClientRect();
+                        const viewportWidth = window.innerWidth;
+                        
+                        // Calculate the target scroll position that will center the section
+                        const targetScrollLeft = timelineView.scrollLeft + sectionRect.left - (viewportWidth / 2) + (sectionRect.width / 2);
+                        
+                        // Scroll to center the year section
+                        timelineView.scrollTo({
+                            left: targetScrollLeft,
+                            behavior: 'smooth'
                         });
+                        
+                        // Update the current year
+                        document.querySelector('.current-year').textContent = year;
                     }
                 });
             });
@@ -873,41 +830,176 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             renderProjects();
-            updateHeaderAndShadows();
+            
+            // Set initial current year to most recent year (first in the list)
+            const years = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a);
+            if (years.length > 0) {
+                document.querySelector('.current-year').textContent = years[0];
+                
+                // Auto-scroll to first year section (slight delay to let rendering complete)
+                setTimeout(() => {
+                    const firstYearSection = document.getElementById(years[0]);
+                    if (firstYearSection) {
+                        const timelineView = document.querySelector('.timeline-view');
+                        timelineView.scrollTo({
+                            left: 0,
+                            behavior: 'auto'
+                        });
+                    }
+                    updateHeaderAndShadows();
+                }, 100);
+            }
+            
+            // Make current year clickable to open a menu on mobile
+            document.querySelector('.current-year').addEventListener('click', function() {
+                // Scroll to the year section
+                const year = this.textContent;
+                const yearSection = document.getElementById(year);
+                if (yearSection) {
+                    // Get the center point of the section
+                    const timelineView = document.querySelector('.timeline-view');
+                    const sectionRect = yearSection.getBoundingClientRect();
+                    const viewportWidth = window.innerWidth;
+                    
+                    // Calculate the target scroll position that will center the section
+                    const targetScrollLeft = timelineView.scrollLeft + sectionRect.left - (viewportWidth / 2) + (sectionRect.width / 2);
+                    
+                    // Scroll to center the year section
+                    timelineView.scrollTo({
+                        left: targetScrollLeft,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+            
+            // Add touch-friendly drag scrolling for desktop
+            const timelineView = document.querySelector('.timeline-view');
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            timelineView.addEventListener('mousedown', (e) => {
+                isDown = true;
+                timelineView.style.cursor = 'grabbing';
+                startX = e.pageX - timelineView.offsetLeft;
+                scrollLeft = timelineView.scrollLeft;
+            });
+
+            timelineView.addEventListener('mouseleave', () => {
+                isDown = false;
+                timelineView.style.cursor = 'grab';
+            });
+
+            timelineView.addEventListener('mouseup', () => {
+                isDown = false;
+                timelineView.style.cursor = 'grab';
+            });
+
+            timelineView.addEventListener('mousemove', (e) => {
+                if(!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - timelineView.offsetLeft;
+                const walk = (x - startX) * 2; // Scroll multiplier
+                timelineView.scrollLeft = scrollLeft - walk;
+                updateHeaderAndShadows();
+            });
         });
 
         // Modal functionality
         function openModal(projectElement) {
-            const modal = document.querySelector('.modal');
+            console.log('Opening modal for:', projectElement.id);
+            
+            // Get all required elements
+            const modal = document.getElementById('project-modal');
+            console.log('Modal element:', modal);
+            
             const modalContent = modal.querySelector('.modal-content-inner');
             const modalTitle = modal.querySelector('.modal-title');
-            const prevButton = modal.querySelector('.prev-project');
-            const nextButton = modal.querySelector('.next-project');
+            const modalContentElement = modal.querySelector('.modal-content');
+            const prevButton = document.getElementById('prev-project-btn');
+            const nextButton = document.getElementById('next-project-btn');
             
-            // Save current scroll position before opening modal
+            // Save current scroll position
             savedScrollPosition = window.scrollY;
             
-            // Clone the project content
-            const projectClone = projectElement.cloneNode(true);
+            // Get project data directly from the source
+            // Expected ID format: "2025-dawn-and-dusk" (year-id)
+            const parts = projectElement.id.split('-');
+            const year = parseInt(parts[0], 10);
+            const id = parts.slice(1).join('-'); // In case the ID itself contains hyphens
             
-            // Set the modal title
-            const projectTitle = projectClone.querySelector('.project-title');
-            if (projectTitle) {
-                modalTitle.textContent = projectTitle.textContent;
-                projectTitle.remove();
+            // Find the project by both year and id
+            const projectData = projects.find(p => p.id === id && p.year === year);
+            
+            if (!projectData) {
+                console.error('Project data not found. ID:', id, 'Year:', year);
+                
+                // Fallback: try to extract content from DOM element
+                const titleElement = projectElement.querySelector('.project-title');
+                const descElement = projectElement.querySelector('.project-description');
+                const imgElement = projectElement.querySelector('.project-image img');
+                
+                if (titleElement && descElement && imgElement) {
+                    // Use DOM content directly
+                    // Put year in the header instead of title
+                    modalTitle.textContent = year;
+                    
+                    modalContent.innerHTML = `
+                        <div class="modal-project">
+                            <h1 class="modal-project-title">${titleElement.textContent}</h1>
+                            <div class="modal-project-content-wrapper">
+                                <div class="modal-project-image">
+                                    <img src="${imgElement.src}" alt="${imgElement.alt || ''}" />
+                                </div>
+                                <div class="modal-project-content">
+                                    <p class="modal-project-description">${descElement.innerHTML}</p>
+                                    <div class="modal-project-links">
+                                        ${projectElement.querySelector('.project-links')?.innerHTML || ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return; // Cannot display modal without content
+                }
+                
+                // Continue with the rest of the function...
+                return;
             }
             
-            // Clear previous content and add new content
-            modalContent.innerHTML = '';
-            modalContent.appendChild(projectClone);
+            // Prepare the content before showing modal
+            // Put year in the header instead of title
+            modalTitle.textContent = projectData.year;
             
-            // Update navigation buttons
+            // Create clean project content with title inside the content
+            modalContent.innerHTML = `
+                <div class="modal-project">
+                    <h1 class="modal-project-title">${projectData.title}</h1>
+                    <div class="modal-project-content-wrapper">
+                        <div class="modal-project-image">
+                            <img src="${projectData.image}" alt="${projectData.title}" />
+                        </div>
+                        <div class="modal-project-content">
+                            <p class="modal-project-description">${projectData.description}</p>
+                            <div class="modal-project-links">
+                                ${projectData.links.map(link => `
+                                    <a href="${link.url}" class="modal-project-link" target="_blank">${link.text}</a>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Set up navigation
             const allProjects = Array.from(document.querySelectorAll('.project'));
             const currentIndex = allProjects.indexOf(projectElement);
             
             prevButton.classList.toggle('disabled', currentIndex === 0);
             nextButton.classList.toggle('disabled', currentIndex === allProjects.length - 1);
             
+            // Setup navigation buttons
             prevButton.onclick = () => {
                 if (currentIndex > 0) {
                     openModal(allProjects[currentIndex - 1]);
@@ -920,50 +1012,87 @@
                 }
             };
             
-            // Reset modal scroll position
-            const modalContentElement = modal.querySelector('.modal-content');
+            // IMPORTANT: Reset scroll position to top
             modalContentElement.scrollTop = 0;
             
-            // Prevent body scrolling
+            // Freeze page scrolling
             document.body.style.overflow = 'hidden';
             
-            // Activate modal with transition
+            // Show modal
+            console.log('Adding active class to modal');
             modal.classList.add('active');
+            console.log('Modal classes after:', modal.className);
         }
 
         function closeModal() {
-            const modal = document.querySelector('.modal');
+            console.log('Closing modal');
+            const modal = document.getElementById('project-modal');
             
-            // Start transition
+            // Hide modal
             modal.classList.remove('active');
+            console.log('Modal classes after closing:', modal.className);
             
-            // Wait for transition to complete before restoring scroll
+            // Re-enable scrolling
+            document.body.style.overflow = '';
+            
+            // Restore scroll position
+            window.scrollTo(0, savedScrollPosition);
+            
+            // Clean up content after closing
             setTimeout(() => {
-                document.body.style.overflow = '';
-                
-                // Restore the previous scroll position
-                try {
-                    // First try with instant behavior (not supported in all browsers)
-                    window.scrollTo({
-                        top: savedScrollPosition,
-                        behavior: 'instant'
-                    });
-                } catch (e) {
-                    // Fallback for browsers that don't support 'instant'
-                    window.scrollTo(0, savedScrollPosition);
-                }
-            }, 300); // Match the transition duration
+                const modalContent = modal.querySelector('.modal-content-inner');
+                modalContent.innerHTML = '';
+            }, 300);
         }
 
         // Add savedScrollPosition variable
         let savedScrollPosition = 0;
 
         // Existing event listeners
-        window.addEventListener('scroll', updateHeaderAndShadows);
+        document.querySelector('.timeline-view').addEventListener('scroll', updateHeaderAndShadows);
         window.addEventListener('resize', updateHeaderAndShadows);
-        document.querySelector('.modal-close').addEventListener('click', closeModal);
+        
+        // Remove the vertical-to-horizontal scroll conversion for better stability
+        document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+        
+        // Test function for debugging
+        window.testModal = function() {
+            console.log('Testing modal');
+            const modal = document.getElementById('project-modal');
+            modal.classList.toggle('active');
+            if (modal.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+            console.log('Modal classes:', modal.className);
+            return 'Modal test complete';
+        };
+        
+        // Enhanced keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
+            const modal = document.getElementById('project-modal');
+            const isModalActive = modal.classList.contains('active');
+            
+            if (!isModalActive) return;
+            
+            switch (e.key) {
+                case 'Escape':
+                    closeModal();
+                    break;
+                case 'ArrowLeft':
+                    const prevButton = document.getElementById('prev-project-btn');
+                    if (!prevButton.classList.contains('disabled')) {
+                        prevButton.click();
+                    }
+                    break;
+                case 'ArrowRight':
+                    const nextButton = document.getElementById('next-project-btn');
+                    if (!nextButton.classList.contains('disabled')) {
+                        nextButton.click();
+                    }
+                    break;
+            }
         });
     </script>
 </body>
