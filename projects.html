@@ -71,7 +71,7 @@
             -webkit-overflow-scrolling: touch;
             width: 100%;
             height: 100%; /* Full height */
-            padding: 0 32px 0 80px; /* Updated left padding to 80px */
+            padding: 0 32px 0 80px; /* Desktop left padding */
             flex: 1;
             scrollbar-width: none; /* Hide scrollbar in Firefox */
             overscroll-behavior-x: contain; /* Prevent overscroll on mobile */
@@ -297,7 +297,7 @@
             }
             
             .timeline-view {
-                padding: 0 24px 120px 24px; /* Updated left padding to 24px */
+                padding: 0 24px 120px 12px; /* Mobile left padding reduced to 12px */
             }
             
             .year-section {
@@ -354,15 +354,16 @@
             .timeline-view {
                 grid-template-columns: 1fr;
                 gap: 16px;
-                padding: 0 24px 120px 24px; /* Ensure left padding is 24px */
+                padding: 0 24px 120px 12px; /* Mobile left padding reduced to 12px */
             }
 
             .project-image {
                 padding: 1px; /* Slightly smaller padding on mobile */
+                transform: scale(0.85); /* Make images smaller on mobile */
             }
             
             .project-image img {
-                max-height: 60vh;
+                max-height: 50vh; /* Reduce max height from 60vh to 50vh */
             }
 
             /* Year projects spacing is handled by margins on project elements */
@@ -674,7 +675,7 @@
             -webkit-overflow-scrolling: touch;
             width: 100%;
             height: 100%; /* Full height */
-            padding: 0 32px 0 128px;
+            padding: 0 32px 0 80px; /* Desktop left padding */
             flex: 1;
             scrollbar-width: none; /* Hide scrollbar in Firefox */
             overscroll-behavior-x: contain; /* Prevent overscroll on mobile */
@@ -756,7 +757,7 @@
             // Update current year based on scroll position
             if (yearMarkers.length > 0) {
                 // Calculate the left edge of the viewport plus a small offset
-                const viewportLeft = window.innerWidth <= 700 ? 24 : 80; // Match left padding based on viewport
+                const viewportLeft = window.innerWidth <= 700 ? 12 : 80; // Match left padding based on viewport
                 
                 // Find the marker closest to the left edge
                 let closestMarker = null;
@@ -838,7 +839,7 @@
                     yearMarker.style.position = 'absolute';
                     yearMarker.style.opacity = '0';
                     yearMarker.style.pointerEvents = 'none';
-                    yearMarker.style.left = `${index * (window.innerWidth <= 1024 ? 80 : 100) + index * (window.innerWidth <= 700 ? 24 : 32)}vw`;
+                    yearMarker.style.left = `${index * (window.innerWidth <= 1024 ? 80 : 100) + index * (window.innerWidth <= 700 ? 12 : 32)}vw`;
                     projectsContainer.appendChild(yearMarker);
                 }
                 
@@ -902,7 +903,7 @@
                         const viewportWidth = window.innerWidth;
                         
                         // Calculate the target scroll position
-                        const targetScrollLeft = timelineView.scrollLeft + markerRect.left - (window.innerWidth <= 700 ? 24 : 80); // Adjust for padding
+                        const targetScrollLeft = timelineView.scrollLeft + markerRect.left - (window.innerWidth <= 700 ? 12 : 80); // Adjust for padding
                         
                         // Scroll to the first project of that year
                         timelineView.scrollTo({
@@ -960,7 +961,7 @@
                     const markerRect = yearMarker.getBoundingClientRect();
                     
                     // Calculate the target scroll position
-                    const targetScrollLeft = timelineView.scrollLeft + markerRect.left - (window.innerWidth <= 700 ? 24 : 80); // Adjust for padding
+                    const targetScrollLeft = timelineView.scrollLeft + markerRect.left - (window.innerWidth <= 700 ? 12 : 80); // Adjust for padding
                     
                     // Scroll to the first project of that year
                     timelineView.scrollTo({
