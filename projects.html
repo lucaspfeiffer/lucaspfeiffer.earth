@@ -666,30 +666,47 @@
             }
         }
 
-        /* Horizontal scrolling timeline */
-        .timeline-view {
-            display: flex;
-            flex-direction: row;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            width: 100%;
-            height: 100%; /* Full height */
-            padding: 0 32px 0 80px; /* Desktop left padding */
-            flex: 1;
-            scrollbar-width: none; /* Hide scrollbar in Firefox */
-            overscroll-behavior-x: contain; /* Prevent overscroll on mobile */
-            cursor: grab; /* Show grab cursor to indicate scrollable */
-            gap: 0; /* Ensure no gap between year sections */
+        /* Toggle button for timeline markers */
+        .toggle-markers {
+            display: none; /* Hide the toggle button */
         }
         
-        /* When actively scrolling */
-        .timeline-view:active {
-            cursor: grabbing;
+        /* Single timeline reference marker */
+        .timeline-reference-marker {
+            position: fixed;
+            width: 1.5px; /* 1.5px line */
+            background-color: #888; /* Gray color */
+            z-index: 10;
+            pointer-events: none;
+            transition: left 0.3s ease;
+            
+            /* Top line only */
+            top: 96px; /* Height of the header */
+            height: 16px; /* Line length */
         }
         
-        .timeline-view::-webkit-scrollbar {
-            display: none; /* Hide scrollbar in Chrome/Safari/Edge */
+        /* Add a dot at the bottom of the line */
+        .timeline-reference-marker::after {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 7px; /* Larger dot size: 7px */
+            height: 7px; /* Larger dot size: 7px */
+            background-color: #CC5500; /* Burnt orange color */
+            border-radius: 50%; /* Make it round */
+            bottom: -3.5px; /* Position at the bottom of the line (half of height) */
+            left: -2.75px; /* Center the dot on the line (half of width) */
+        }
+        
+        .timeline-reference-marker::before,
+        .timeline-reference-marker span {
+            display: none;
+        }
+        
+        @media (max-width: 700px) {
+            .timeline-reference-marker {
+                top: 80px; /* Match mobile header height */
+            }
         }
     </style>
 </head>
@@ -700,12 +717,17 @@
                 <div class="header-left">
                     <div class="current-year">2024</div>
                 </div>
+                <!-- Timeline toggle button removed -->
             </div>
         </div>
         <div class="content-wrapper">
             <div class="main-content">
                 <div class="timeline-view">
                     <!-- Projects will be dynamically inserted here -->
+                </div>
+                <!-- Single fixed reference marker -->
+                <div class="timeline-reference-marker">
+                    <span class="top-label">← Updates Year →</span>
                 </div>
             </div>
         </div>
@@ -749,46 +771,60 @@
             const nav = document.querySelector('.bottom-nav');
             const timelineView = document.querySelector('.timeline-view');
             const currentYearElement = document.querySelector('.current-year');
-            const yearMarkers = document.querySelectorAll('[id^="20"]'); // Get all elements with IDs starting with year numbers
             
             // Add shadow to nav
             nav.classList.add('shadow');
             
-            // Update current year based on scroll position
-            if (yearMarkers.length > 0) {
-                // Calculate the left edge of the viewport plus a small offset
-                const viewportLeft = window.innerWidth <= 700 ? 12 : 80; // Match left padding based on viewport
+            // Get the position of the reference line for year detection
+            const referenceLine = document.querySelector('.timeline-reference-marker').getBoundingClientRect().left;
+            
+            // Find the project that first touches or crosses the reference line
+            const projects = document.querySelectorAll('.project');
+            let currentProject = null;
+            let minDistance = Infinity;
+            
+            projects.forEach(project => {
+                const rect = project.getBoundingClientRect();
+                // Get the left edge of the project
+                const projectLeft = rect.left;
+                // Calculate distance to the reference line
+                const distanceToLine = projectLeft - referenceLine;
                 
-                // Find the marker closest to the left edge
-                let closestMarker = null;
-                let minDistance = Infinity;
-                
-                yearMarkers.forEach(marker => {
-                    // Skip if not a year marker (has additional parts in the ID)
-                    if (marker.id.includes('-')) return;
-                    
-                    const rect = marker.getBoundingClientRect();
-                    const distance = Math.abs(rect.left - viewportLeft);
-                    
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestMarker = marker;
+                // We want the project that's closest to the line from the right side (approaching the line)
+                // Or the project that has just started to cross the line (negative distance)
+                // Projects that have completely crossed the line will have large negative distances
+                if ((distanceToLine <= 0 && distanceToLine > -rect.width) || 
+                    (distanceToLine > 0 && distanceToLine < 200)) {
+                    // Project is near or just starting to cross the line
+                    if (Math.abs(distanceToLine) < minDistance) {
+                        minDistance = Math.abs(distanceToLine);
+                        currentProject = project;
                     }
-                });
+                }
+            });
+            
+            // If found a project close to the reference line, update the year
+            if (currentProject) {
+                // Extract the year from the project ID (format: "2024-project-name")
+                const projectId = currentProject.id;
+                const projectYear = projectId.split('-')[0];
                 
-                // Update current year if it changed and a marker was found
-                if (closestMarker && closestMarker.id && currentYearElement.textContent !== closestMarker.id) {
-                    currentYearElement.textContent = closestMarker.id;
-                    currentYearElement.setAttribute('data-year', closestMarker.id);
+                // Update the year in the header if it changed
+                if (projectYear && currentYearElement.textContent !== projectYear) {
+                    currentYearElement.textContent = projectYear;
+                    currentYearElement.setAttribute('data-year', projectYear);
                     
                     // Update active class on year links
                     document.querySelectorAll('.year-link').forEach(link => {
-                        if (link.textContent === closestMarker.id) {
+                        if (link.textContent === projectYear) {
                             link.classList.add('active');
                         } else {
                             link.classList.remove('active');
                         }
                     });
+                    
+                    // Re-align the timeline with the newly updated year
+                    alignTimelineWithYear();
                 }
             }
         }
@@ -827,19 +863,31 @@
             
             // Add year markers for navigation
             let currentYear = null;
+            let yearProjectStart = {};
+            let yearCount = 0;
             
+            // First pass - create all projects and collect first project of each year
             sortedProjects.forEach((project, index) => {
-                // If this is a new year, add a hidden year marker for navigation
+                // If this is a new year, remember the index of the first project for this year
                 if (project.year !== currentYear) {
                     currentYear = project.year;
+                    yearProjectStart[project.year] = index;
+                    yearCount++;
                     
-                    // Create an invisible year marker div for navigation
+                    // Create an invisible year marker div for navigation only
                     const yearMarker = document.createElement('div');
                     yearMarker.id = project.year;
                     yearMarker.style.position = 'absolute';
                     yearMarker.style.opacity = '0';
                     yearMarker.style.pointerEvents = 'none';
-                    yearMarker.style.left = `${index * (window.innerWidth <= 1024 ? 80 : 100) + index * (window.innerWidth <= 700 ? 12 : 32)}vw`;
+                    yearMarker.style.zIndex = '-1';
+                    
+                    // Important: Position the year marker at the LEFT EDGE of the first project of the year
+                    // This ensures the year updates when the project crosses the reference line
+                    if (index > 0) {
+                        yearMarker.setAttribute('data-is-year-start', 'true');
+                    }
+                    
                     projectsContainer.appendChild(yearMarker);
                 }
                 
@@ -876,8 +924,41 @@
             // Add all projects to timeline view
             timelineView.appendChild(projectsContainer);
             
+            // Position year markers correctly - after all projects are rendered and sized
+            setTimeout(() => {
+                positionYearMarkers();
+            }, 100);
+            
             // Reattach event listeners
             attachEventListeners();
+        }
+        
+        // Function to accurately position year markers
+        function positionYearMarkers() {
+            // Get all projects and markers
+            const projects = document.querySelectorAll('.project');
+            const yearMarkers = document.querySelectorAll('[id^="20"]');
+            const timelineView = document.querySelector('.timeline-view');
+            
+            // For each year, find its first project and position the marker at its left edge
+            yearMarkers.forEach(marker => {
+                // Skip if not a pure year marker
+                if (marker.id.includes('-')) return;
+                
+                const year = marker.id;
+                const firstYearProject = document.querySelector(`[id^="${year}-"]`);
+                
+                if (firstYearProject) {
+                    // Get the left edge position of the first project of this year
+                    const projectRect = firstYearProject.getBoundingClientRect();
+                    const timelineRect = timelineView.getBoundingClientRect();
+                    
+                    // Position the marker at the LEFT edge of the first project
+                    // This ensures the year updates precisely when the project crosses the reference line
+                    const leftPosition = projectRect.left - timelineRect.left + timelineView.scrollLeft;
+                    marker.style.left = `${leftPosition}px`;
+                }
+            });
         }
 
         function attachEventListeners() {
@@ -947,6 +1028,7 @@
                         });
                     }
                     updateHeaderAndShadows();
+                    alignTimelineWithYear();
                 }, 100);
             }
             
@@ -1001,7 +1083,45 @@
                 const walk = (x - startX) * 2; // Scroll multiplier
                 timelineView.scrollLeft = scrollLeft - walk;
                 updateHeaderAndShadows();
+                alignTimelineWithYear();
             });
+            
+            // Ensure the timeline view updates on scroll
+            timelineView.addEventListener('scroll', () => {
+                requestAnimationFrame(() => {
+                    updateHeaderAndShadows();
+                    alignTimelineWithYear();
+                });
+            });
+            
+            // Initial alignment
+            alignTimelineWithYear();
+        });
+        
+        // Function to align timeline marker with the center of the current year text
+        function alignTimelineWithYear() {
+            const currentYearElement = document.querySelector('.current-year');
+            const timelineMarker = document.querySelector('.timeline-reference-marker');
+            
+            if (currentYearElement && timelineMarker) {
+                const yearRect = currentYearElement.getBoundingClientRect();
+                // Calculate center position of the year text
+                const centerPosition = yearRect.left + yearRect.width / 2;
+                
+                // Set the timeline marker to align with the center of the year text
+                timelineMarker.style.left = `${centerPosition}px`;
+            }
+        }
+        
+        // Handle resize events
+        window.addEventListener('resize', () => {
+            updateHeaderAndShadows();
+            alignTimelineWithYear();
+            
+            // Reposition all year markers when window size changes
+            setTimeout(() => {
+                positionYearMarkers();
+            }, 100);
         });
 
         // Modal functionality
@@ -1147,17 +1267,6 @@
         // Add savedScrollPosition variable
         let savedScrollPosition = 0;
 
-        // Existing event listeners
-        document.querySelector('.timeline-view').addEventListener('scroll', updateHeaderAndShadows);
-        
-        // Handle resize events
-        window.addEventListener('resize', () => {
-            updateHeaderAndShadows();
-            
-            // Using CSS variables for consistent, viewport-based scaling
-            // No need to manually update styles on resize
-        });
-        
         // Remove the vertical-to-horizontal scroll conversion for better stability
         document.getElementById('modal-close-btn').addEventListener('click', closeModal);
         
@@ -1200,6 +1309,25 @@
                     break;
             }
         });
+
+        // Helper function to calculate year marker position
+        function calculateYearPosition(index) {
+            const isMobile = window.innerWidth <= 700;
+            const isTablet = window.innerWidth <= 1024 && window.innerWidth > 700;
+            
+            // Base position calculation using viewport-relative values
+            let position;
+            
+            if (isMobile) {
+                position = `${index * 80 + 12}px`;
+            } else if (isTablet) {
+                position = `${index * 100 + 24}px`;
+            } else {
+                position = `${index * 120 + 80}px`;
+            }
+            
+            return position;
+        }
     </script>
 </body>
 </html> 
