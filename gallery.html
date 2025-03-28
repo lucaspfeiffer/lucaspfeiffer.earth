@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Lucas Pfeiffer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="gallery.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            transform-origin: center;
+            transform: translateY(0);
+            overflow-x: hidden;
+            background-color: #fff;
+            color: #000;
+        }
+
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 100;
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            border-bottom: 1px solid #000;
+            height: 96px;
+            box-sizing: border-box;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-right: auto;
+        }
+
+        .gallery-title {
+            font-size: 24px;
+            color: #000;
+            font-weight: 600;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .home-link {
+            text-decoration: none;
+            color: #000;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="sticky-header">
+            <div class="header-left">
+                <div class="gallery-title">Gallery</div>
+            </div>
+            <a href="index.html" class="home-link">Home</a>
+        </div>
+        
+        <div class="gallery-viewport">
+            <div class="gallery-scroller">
+                <!-- iPad device -->
+                <div class="device-container large-device" style="z-index: 12;">
+                    <div class="timelineImage_container" 
+                         style="height: 326.756522px; width: 572.041751px;">
+                        <div class="timelineImage_image" 
+                             style="background-image: url('./images/iPad Pro 12.9 - Space Gray - Landscape.png');">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Desktop device -->
+                <div class="device-container large-device" style="z-index: 11;">
+                    <div class="timelineImage_container" 
+                         style="height: 326.756522px; width: 419.204175px;">
+                        <div class="timelineImage_image" 
+                             style="background-image: url('./images/LocalKitchensMobileLanding.png');">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- iPhone device -->
+                <div class="device-container phone-device" style="z-index: 10;">
+                    <div class="timelineImage_container" 
+                         style="height: 229.756522px; width: 121.204175px;">
+                        <div class="timelineImage_image" 
+                             style="background-image: url('./images/1.1b bezel.png');">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Square format -->
+                <div class="device-container square-device" style="z-index: 9;">
+                    <div class="timelineImage_container" 
+                         style="height: 280.756522px; width: 280.204175px;">
+                        <div class="timelineImage_image" 
+                             style="background-image: url('./images/kdstraining.png');">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- iPhone device -->
+                <div class="device-container phone-device" style="z-index: 8;">
+                    <div class="timelineImage_container" 
+                         style="height: 229.756522px; width: 121.204175px;">
+                        <div class="timelineImage_image" 
+                             style="background-image: url('./images/1.1b bezel.png');">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Desktop device -->
+                <div class="device-container large-device" style="z-index: 7;">
+                    <div class="timelineImage_container" 
+                         style="height: 326.756522px; width: 419.204175px;">
+                        <div class="timelineImage_image" 
+                             style="background-image: url('./images/LocalKitchensMobileLanding.png');">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator">Scroll horizontally →</div>
+        </div>
+    </div>
+
+    <script src="gallery.js"></script>
+</body>
+</html>

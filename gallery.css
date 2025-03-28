@@ -1,0 +1,189 @@
+/* Gallery specific CSS with precise scaling factors and continuous viewport-based scaling */
+
+/* Gallery viewport and scrolling container */
+.gallery-viewport {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 96px);
+    overflow: hidden;
+}
+
+.gallery-scroller {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar IE/Edge */
+    padding-left: calc(50% - 200px); /* Center the first item */
+    padding-right: 50vw; /* Add space at the end */
+    cursor: grab;
+}
+
+.gallery-scroller::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari */
+}
+
+.gallery-scroller:active {
+    cursor: grabbing;
+}
+
+/* Device containers with viewport-proportional scaling */
+.device-container {
+    flex: 0 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center center;
+    /* Fixed minimum spacing between devices that scales with viewport */
+    margin-right: clamp(24px, 4vw, 60px);
+}
+
+/* Timeline image containers with viewport responsive measurements */
+.timelineImage_container {
+    position: relative;
+    transform-origin: center center;
+    will-change: transform;
+    /* Base dimensions that will be scaled */
+}
+
+.timelineImage_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.1s ease-out; /* Smooth transition for any transform changes */
+}
+
+/* Use CSS variables to enable fluid scaling and allow JavaScript fine-tuning */
+:root {
+    --large-device-scale-min: 0.335639;
+    --large-device-scale-max: 0.735639;
+    --phone-device-scale-min: 0.294933;
+    --phone-device-scale-max: 0.514933;
+    --square-device-scale-min: 0.35;
+    --square-device-scale-max: 0.6;
+    --min-viewport: 320;
+    --max-viewport: 1920;
+}
+
+/* Calculate scaling based on viewport width directly using CSS variables */
+.large-device {
+    transform: scale(calc(var(--large-device-scale-min) + (var(--large-device-scale-max) - var(--large-device-scale-min)) * 
+                  (100vw - var(--min-viewport) * 1px) / 
+                  (var(--max-viewport) - var(--min-viewport))));
+}
+
+.phone-device {
+    transform: scale(calc(var(--phone-device-scale-min) + (var(--phone-device-scale-max) - var(--phone-device-scale-min)) * 
+                  (100vw - var(--min-viewport) * 1px) / 
+                  (var(--max-viewport) - var(--min-viewport))));
+}
+
+.square-device {
+    transform: scale(calc(var(--square-device-scale-min) + (var(--square-device-scale-max) - var(--square-device-scale-min)) * 
+                  (100vw - var(--min-viewport) * 1px) / 
+                  (var(--max-viewport) - var(--min-viewport))));
+}
+
+/* Apply negative margins for overlapping effect, but maintain minimum spacing */
+.device-container:nth-child(1) {
+    padding-left: calc(53.805907px * (1 - (var(--large-device-scale-min) + (var(--large-device-scale-max) - var(--large-device-scale-min)) * 
+                 (100vw - var(--min-viewport) * 1px) / 
+                 (var(--max-viewport) - var(--min-viewport)))));
+}
+
+.device-container:nth-child(2) {
+    padding-left: calc(73.805907px * (1 - (var(--large-device-scale-min) + (var(--large-device-scale-max) - var(--large-device-scale-min)) * 
+                 (100vw - var(--min-viewport) * 1px) / 
+                 (var(--max-viewport) - var(--min-viewport)))));
+}
+
+.device-container:nth-child(3) {
+    padding-left: calc(13.805907px * (1 - (var(--phone-device-scale-min) + (var(--phone-device-scale-max) - var(--phone-device-scale-min)) * 
+                 (100vw - var(--min-viewport) * 1px) / 
+                 (var(--max-viewport) - var(--min-viewport)))));
+}
+
+.device-container:nth-child(4) {
+    padding-left: calc(33.805907px * (1 - (var(--square-device-scale-min) + (var(--square-device-scale-max) - var(--square-device-scale-min)) * 
+                 (100vw - var(--min-viewport) * 1px) / 
+                 (var(--max-viewport) - var(--min-viewport)))));
+}
+
+.device-container:nth-child(5) {
+    padding-left: calc(13.805907px * (1 - (var(--phone-device-scale-min) + (var(--phone-device-scale-max) - var(--phone-device-scale-min)) * 
+                 (100vw - var(--min-viewport) * 1px) / 
+                 (var(--max-viewport) - var(--min-viewport)))));
+}
+
+.device-container:nth-child(6) {
+    padding-left: calc(73.805907px * (1 - (var(--large-device-scale-min) + (var(--large-device-scale-max) - var(--large-device-scale-min)) * 
+                 (100vw - var(--min-viewport) * 1px) / 
+                 (var(--max-viewport) - var(--min-viewport)))));
+}
+
+/* Adjust header height at smaller screens */
+@media (max-width: 768px) {
+    .gallery-viewport {
+        height: calc(100vh - 80px);
+    }
+    
+    .gallery-scroller {
+        padding-left: calc(50% - 100px);
+    }
+    
+    /* Increase spacing at smaller screens to prevent overlap */
+    .device-container {
+        margin-right: clamp(30px, 6vw, 60px);
+    }
+}
+
+/* Adjust starting position at very small screens */
+@media (max-width: 480px) {
+    .gallery-scroller {
+        padding-left: calc(50% - 80px);
+    }
+    
+    .device-container {
+        margin-right: clamp(40px, 8vw, 60px);
+    }
+}
+
+/* Visual indicator for horizontal scrolling */
+.scroll-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border-radius: 20px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.scroll-indicator.visible {
+    opacity: 1;
+}

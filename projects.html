@@ -119,13 +119,22 @@
             padding: 0;
         }
 
+        /* Define CSS variables for consistent scaling */
+        :root {
+            --project-spacing: clamp(24px, 4vw, 60px);
+            --image-scale: clamp(0.5, 0.6 + 0.4 * (100vw - 320px) / 1600, 1);
+            --project-min-width: auto; /* Let images determine their natural width */
+            --project-max-width: none; /* No artificial limitations */
+        }
+        
         .year-projects {
             display: flex;
             flex-direction: row;
-            gap: 32px;
+            /* Spacing is handled by margins on child elements */
+            gap: 0;
             padding: 0;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-width: min-content;
         }
 
@@ -137,6 +146,11 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            min-width: var(--project-min-width);
+            max-width: var(--project-max-width);
+            /* Add consistent margin spacing instead of using gap */
+            margin-right: var(--project-spacing);
+            will-change: transform; /* Optimize for performance */
         }
 
         .project-image {
@@ -145,16 +159,27 @@
             align-items: center;
             border-radius: 12px;
             overflow: visible;
+            width: auto;
+            height: auto;
+            transform-origin: center center;
+            transform: scale(var(--image-scale)); /* Proportionally scale with viewport */
+            transition: transform 0.1s ease-out; /* Smoother scaling transitions */
+            padding: 2px; /* Ensure no cutoff at edges */
         }
 
         .project-image img {
             height: auto;
-            max-height: 70vh;
+            width: auto;
+            max-height: 70vh; /* Limit height relative to viewport */
             object-fit: contain;
             display: block;
             border-radius: 12px;
-            transition: transform 0.2s ease;
+            transition: opacity 0.2s ease; /* Fade in for better performance */
+            object-position: center; /* Always center the image content */
         }
+        
+        /* Special styling for Dawn and Dusk project - use the same approach as other images */
+        /* Dawn and Dusk will naturally hug its content with our new approach */
 
         /* Hide project content in main view */
         .timeline-view .project-content {
@@ -257,7 +282,14 @@
             background: #000;
         }
 
+        /* Mobile adjustments */
         @media (max-width: 700px) {
+            /* Update CSS variables for mobile */
+            :root {
+                --project-spacing: clamp(20px, 3vw, 32px);
+                --image-scale: clamp(0.45, 0.45 + 0.15 * (100vw - 320px) / 380, 0.6);
+            }
+            
             .sticky-header {
                 padding: 24px;
                 height: 80px; /* Match modal-nav height on mobile */
@@ -269,10 +301,6 @@
             
             .year-section {
                 padding: 0 16px;
-            }
-            
-            .project {
-                width: 66.67vw;
             }
 
             .project-title {
@@ -328,13 +356,15 @@
                 padding: 0 16px;
             }
 
+            .project-image {
+                padding: 1px; /* Slightly smaller padding on mobile */
+            }
+            
             .project-image img {
                 max-height: 60vh;
             }
 
-            .year-projects {
-                gap: 24px;
-            }
+            /* Year projects spacing is handled by margins on project elements */
         }
 
         .modal {
@@ -472,6 +502,15 @@
             object-fit: contain;
             border-radius: 8px;
         }
+        
+        /* Special modal handling for Dawn and Dusk */
+        .modal-content-inner [id="2025-dawn-and-dusk"] .modal-project-image img {
+            height: auto;
+            max-height: 480px;
+            width: auto;
+            max-width: 100%;
+            padding: 8px;
+        }
 
         .modal-project-title {
             font-size: 48px;
@@ -598,6 +637,12 @@
             .modal-project-image img {
                 max-height: calc(40vh - 48px);
                 margin-bottom: 8px;
+            }
+            
+            /* Mobile modal styling for Dawn and Dusk */
+            .modal-content-inner [id="2025-dawn-and-dusk"] .modal-project-image img {
+                max-height: calc(40vh - 48px);
+                padding: 4px;
             }
             
             .modal-project-title {
@@ -769,7 +814,7 @@
             projectsContainer.className = 'year-projects';
             projectsContainer.style.display = 'flex';
             projectsContainer.style.flexDirection = 'row';
-            projectsContainer.style.gap = window.innerWidth <= 700 ? '24px' : '32px';
+            // Using CSS variables for consistent spacing - no need to set gap here
             projectsContainer.style.width = '100%';
             
             // Sort all projects by year (descending) and then by month (descending)
@@ -799,7 +844,15 @@
                 // Create project element
                 const projectElement = document.createElement('div');
                 projectElement.id = `${project.year}-${project.id}`;
+                
+                // Add project class and handle last item's margin
+                const isLastProject = index === sortedProjects.length - 1;
                 projectElement.className = 'project';
+                
+                // No right margin needed for the last project
+                if (isLastProject) {
+                    projectElement.style.marginRight = '0';
+                }
                 projectElement.innerHTML = `
                     <div class="project-image">
                         <img src="${project.image}" alt="${project.title}" />
@@ -1099,15 +1152,8 @@
         window.addEventListener('resize', () => {
             updateHeaderAndShadows();
             
-            // Update project widths on resize
-            document.querySelectorAll('.project').forEach(project => {
-                project.style.width = window.innerWidth <= 1024 ? '80vw' : '1000px';
-            });
-            
-            // Update gaps in year projects containers
-            document.querySelectorAll('.year-projects').forEach(container => {
-                container.style.gap = window.innerWidth <= 700 ? '24px' : '32px';
-            });
+            // Using CSS variables for consistent, viewport-based scaling
+            // No need to manually update styles on resize
         });
         
         // Remove the vertical-to-horizontal scroll conversion for better stability
