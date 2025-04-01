@@ -496,11 +496,11 @@
             font-weight: 500;
             line-height: 1.4;
             font-family: 'Inter', -apple-system, sans-serif;
-            transition: opacity 0.2s ease-out; /* Smooth transition for text changes */
-            margin: 0; /* Remove margin */
-            padding: 0; /* Remove padding */
-            height: auto; /* Allow height to be determined by content */
-            min-height: 0; /* Remove minimum height constraint */
+            transition: opacity 0.2s ease-out;
+            margin: 0;
+            padding: 0;
+            height: auto;
+            min-height: 0;
         }
         
         .modal-project-links {
@@ -660,7 +660,6 @@
                 padding: 0;
                 height: auto;
                 min-height: 0;
-                /* max-width removed */
             }
             
             .modal-project-content-wrapper {
@@ -1220,7 +1219,6 @@
                     
                     modalHTML = `
                         <div class="modal-project">
-                            <h1 class="modal-project-title">${titleElement.textContent}</h1>
                             <div class="modal-project-content-wrapper">
                                 <div class="modal-project-image">
                                     <img src="${imgElement.src}" alt="${imgElement.alt || ''}" loading="eager" />
@@ -1246,7 +1244,6 @@
                 // Create clean project content with title inside the content
                 modalHTML = `
                     <div class="modal-project">
-                        <h1 class="modal-project-title">${projectData.title}</h1>
                         <div class="modal-project-content-wrapper">
                             <div class="modal-project-image">
                                 <img src="${projectData.image}" alt="${projectData.title}" loading="eager" />
