@@ -126,7 +126,7 @@
         /* Define CSS variables for consistent scaling */
         :root {
             --project-spacing: clamp(24px, 4vw, 60px);
-            --image-scale: clamp(0.5, 0.6 + 0.4 * (100vw - 320px) / 1600, 1);
+            --image-scale: clamp(0.6, 0.7 + 0.3 * (100vw - 600px) / 1000, 1); /* Adjusted scaling for 600px breakpoint */
             --project-min-width: auto; /* Let images determine their natural width */
             --project-max-width: none; /* No artificial limitations */
         }
@@ -227,8 +227,8 @@
 
         /* Bottom navigation removed */
 
-        /* Mobile adjustments */
-        @media (max-width: 700px) {
+        /* Mobile adjustments - below 600px */
+        @media (max-width: 599px) {
             /* Update CSS variables for mobile */
             :root {
                 --project-spacing: clamp(20px, 3vw, 32px);
@@ -318,16 +318,29 @@
             visibility: hidden;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s, visibility 0.3s;
+            transition: opacity 0.2s, visibility 0.2s; /* Faster transition */
             display: flex;
             flex-direction: column;
             overflow: hidden; /* Essential - prevent body scroll bleed */
+        }
+        
+        /* Set default flex order for all modal components */
+        .modal-nav {
+            order: 2; /* Navigation at the bottom by default */
+        }
+        
+        .modal-content {
+            order: 1; /* Content on top by default */
         }
 
         .modal.active {
             visibility: visible;
             opacity: 1;
             pointer-events: all;
+        }
+        
+        .modal.transitioning .modal-content-inner {
+            transition: opacity 0.1s ease-out; /* Faster transition */
         }
 
         .modal-nav {
@@ -365,6 +378,11 @@
             height: 52px;
             background: transparent;
             border-radius: 50%;
+            transition: transform 0.1s ease-out; /* Snappy feedback when clicked */
+        }
+        
+        .modal-nav-button:active, .modal-close:active {
+            transform: scale(0.95); /* Slight scale down when clicked */
         }
 
         /* Hover effect removed */
@@ -407,6 +425,7 @@
             padding: 32px;
             display: flex;
             flex-direction: column;
+            transition: opacity 0.1s ease-out; /* Faster transition */
         }
 
         /* Override project styles when in modal */
@@ -438,15 +457,17 @@
             max-width: 100%;
             object-fit: contain;
             border-radius: 8px;
+            transition: opacity 0.2s ease-out;
         }
         
         /* Special modal handling for Dawn and Dusk */
         .modal-content-inner [id="2025-dawn-and-dusk"] .modal-project-image img {
             height: auto;
-            max-height: 480px;
+            max-height: 70vh; /* Use viewport height for consistency */
             width: auto;
             max-width: 100%;
             padding: 8px;
+            object-fit: contain;
         }
 
         .modal-project-title {
@@ -456,12 +477,15 @@
             line-height: 1;
             font-family: 'Inter', -apple-system, sans-serif;
             margin-bottom: 32px;
+            margin-left: 4px;
+            min-height: 56px; /* Consistent height for title */
+            transition: opacity 0.2s ease-out;
         }
         
         .modal-project-content {
             display: flex;
             flex-direction: column;
-            gap: 32px;
+            gap: 32px; /* Restored original spacing */
             flex-grow: 1;
         }
         
@@ -471,11 +495,18 @@
             font-weight: 500;
             line-height: 1.4;
             font-family: 'Inter', -apple-system, sans-serif;
+            transition: opacity 0.2s ease-out; /* Smooth transition for text changes */
+            margin: 0; /* Remove margin */
+            padding: 0; /* Remove padding */
+            height: auto; /* Allow height to be determined by content */
+            min-height: 0; /* Remove minimum height constraint */
         }
         
         .modal-project-links {
             display: flex;
             gap: 24px;
+            transition: opacity 0.2s ease-out;
+            margin-top: 16px; /* Add specific top margin to control distance from description */
         }
         
         .modal-project-link {
@@ -486,19 +517,11 @@
             font-family: 'Inter', -apple-system, sans-serif;
         }
 
-        /* Tablet landscape (iPad) specific adjustments */
-        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-            .project {
-                width: 75vw;
-            }
-            
-            .project-image img {
-                max-height: 60vh;
-            }
-        }
         
         /* Desktop layout - image on right */
-        @media (min-width: 768px) {
+        
+        /* Desktop breakpoint (600px and up) */
+        @media (min-width: 600px) {
             .modal-project {
                 flex-direction: column;
                 align-items: flex-start;
@@ -515,53 +538,58 @@
                 flex-direction: row;
                 width: 100%;
                 gap: 48px;
+                min-height: 0; /* Allow height to be determined by content */
+                transition: opacity 0.2s ease-out;
             }
             
             .modal-project-image {
-                order: 1;
-                width: auto;
+                order: 0; /* Image on left */
+                width: auto; /* Allow natural sizing */
                 position: sticky;
                 top: 112px; /* Nav height + some padding */
                 align-self: flex-start;
                 border-radius: 8px;
-                overflow: hidden;
-                margin-left: auto;
+                overflow: visible; /* Ensure image isn't cut off */
+                margin-right: auto;
+                max-width: 45%; /* Limit width to prevent oversized images */
             }
             
             .modal-project-image img {
                 width: auto;
                 max-width: 100%;
-                max-height: calc(70vh - 96px);
+                max-height: 70vh; /* Slightly reduced for better fit */
                 object-fit: contain;
                 display: block;
                 border-radius: 8px;
+                transition: opacity 0.15s ease-out; /* Smooth transitions */
             }
             
             .modal-project-content {
-                order: 2;
-                width: 55%;
+                order: 1; /* Content on right */
+                width: 60%; /* Increased from 55% */
                 padding-bottom: 64px;
             }
             
             .modal-content-inner {
-                padding: 48px 32px;
-                max-width: 1080px; /* Slightly wider for side-by-side layout */
+                padding: 48px 128px 48px 192px; /* Tripled left padding from 64px to 192px */
+                max-width: 1280px; /* Increased max-width for better use of screen space */
             }
 
             .modal-nav {
-                order: 3;
+                order: 2; /* Keep navigation at bottom consistently */
                 position: relative;
                 border-top: 1px solid #000;
                 border-bottom: none;
             }
         }
 
-        @media (max-width: 700px) {
+        /* Mobile breakpoint (below 600px) */
+        @media (max-width: 599px) {
             .modal-nav {
                 padding: 24px;
                 height: 80px;
                 position: relative;
-                order: 3;
+                order: 2; /* Keep navigation at bottom consistently */
                 border-top: 1px solid #000;
                 border-bottom: none;
             }
@@ -589,7 +617,7 @@
             }
 
             .modal-content-inner {
-                padding: 24px;
+                padding: 24px 32px; /* Increased horizontal padding */
             }
 
             .modal-project {
@@ -601,29 +629,43 @@
             }
             
             .modal-project-image img {
-                max-height: calc(40vh - 48px);
+                max-height: 45vh; /* Simplified and slightly increased */
                 margin-bottom: 8px;
+                transition: opacity 0.15s ease-out; /* Added for smooth transitions */
             }
             
-            /* Mobile modal styling for Dawn and Dusk */
+            /* Modal styling for Dawn and Dusk */
             .modal-content-inner [id="2025-dawn-and-dusk"] .modal-project-image img {
-                max-height: calc(40vh - 48px);
+                max-height: 50vh; /* Match standard image height */
                 padding: 4px;
+                object-fit: contain;
             }
             
             .modal-project-title {
                 font-size: 32px;
                 margin-bottom: 24px;
+                min-height: 36px; /* Adjusted for mobile font size */
             }
             
             .modal-project-description {
                 font-size: 18px;
-                margin-bottom: 16px;
+                margin: 0;
+                padding: 0;
+                height: auto;
+                min-height: 0;
+                /* max-width removed */
+            }
+            
+            .modal-project-content-wrapper {
+                min-height: 0; /* Allow height to be determined by content */
             }
 
             .modal-project-image {
-                height: 320px; /* Smaller fixed height for mobile */
+                height: auto; /* Allow natural height */
+                max-height: 50vh; /* Cap height */
                 order: 1; /* Ensure image is first */
+                overflow: visible; /* Ensure image isn't cut off */
+                margin: 0 auto 16px; /* Center image */
             }
             
             .modal-project-link {
@@ -635,6 +677,7 @@
                 display: flex;
                 flex-direction: column;
                 width: 100%;
+                gap: 0; /* Remove gap for mobile */
             }
 
             .modal-project-content {
@@ -1046,21 +1089,81 @@
         });
 
         // Modal functionality
-        function openModal(projectElement) {
+        let currentlyLoadingProject = false;
+        let modalPreloadedImages = {};
+
+        // Preload an image and return a promise
+        function preloadImage(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = src;
+            });
+        }
+
+        // Preload adjacent project images
+        function preloadAdjacentProjects(currentIndex, allProjects) {
+            // Preload next project
+            if (currentIndex < allProjects.length - 1) {
+                const nextProject = allProjects[currentIndex + 1];
+                const nextParts = nextProject.id.split('-');
+                const nextYear = parseInt(nextParts[0], 10);
+                const nextId = nextParts.slice(1).join('-');
+                const nextProjectData = projects.find(p => p.id === nextId && p.year === nextYear);
+                
+                if (nextProjectData) {
+                    preloadImage(nextProjectData.image)
+                        .then(img => {
+                            modalPreloadedImages[nextProject.id] = img;
+                        })
+                        .catch(() => {
+                            // Silent fail - image will load normally if preload fails
+                        });
+                }
+            }
+            
+            // Preload previous project
+            if (currentIndex > 0) {
+                const prevProject = allProjects[currentIndex - 1];
+                const prevParts = prevProject.id.split('-');
+                const prevYear = parseInt(prevParts[0], 10);
+                const prevId = prevParts.slice(1).join('-');
+                const prevProjectData = projects.find(p => p.id === prevId && p.year === prevYear);
+                
+                if (prevProjectData) {
+                    preloadImage(prevProjectData.image)
+                        .then(img => {
+                            modalPreloadedImages[prevProject.id] = img;
+                        })
+                        .catch(() => {
+                            // Silent fail - image will load normally if preload fails
+                        });
+                }
+            }
+        }
+
+        function openModal(projectElement, isNavigating = false) {
+            // Prevent multiple operations at once
+            if (currentlyLoadingProject) {
+                return;
+            }
+            
+            currentlyLoadingProject = true;
             console.log('Opening modal for:', projectElement.id);
             
             // Get all required elements
             const modal = document.getElementById('project-modal');
-            console.log('Modal element:', modal);
-            
             const modalContent = modal.querySelector('.modal-content-inner');
             const modalTitle = modal.querySelector('.modal-title');
             const modalContentElement = modal.querySelector('.modal-content');
             const prevButton = document.getElementById('prev-project-btn');
             const nextButton = document.getElementById('next-project-btn');
             
-            // Save current scroll position
-            savedScrollPosition = window.scrollY;
+            // Save current scroll position if not navigating
+            if (!isNavigating) {
+                savedScrollPosition = window.scrollY;
+            }
             
             // Get project data directly from the source
             // Expected ID format: "2025-dawn-and-dusk" (year-id)
@@ -1070,6 +1173,29 @@
             
             // Find the project by both year and id
             const projectData = projects.find(p => p.id === id && p.year === year);
+            
+            // Set up navigation first
+            const allProjects = Array.from(document.querySelectorAll('.project'));
+            const currentIndex = allProjects.indexOf(projectElement);
+            
+            prevButton.classList.toggle('disabled', currentIndex === 0);
+            nextButton.classList.toggle('disabled', currentIndex === allProjects.length - 1);
+            
+            // Setup navigation buttons
+            prevButton.onclick = () => {
+                if (currentIndex > 0 && !currentlyLoadingProject) {
+                    openModal(allProjects[currentIndex - 1], true);
+                }
+            };
+            
+            nextButton.onclick = () => {
+                if (currentIndex < allProjects.length - 1 && !currentlyLoadingProject) {
+                    openModal(allProjects[currentIndex + 1], true);
+                }
+            };
+            
+            // Prepare content based on available data
+            let modalHTML = '';
             
             if (!projectData) {
                 console.error('Project data not found. ID:', id, 'Year:', year);
@@ -1084,12 +1210,12 @@
                     // Put year in the header instead of title
                     modalTitle.textContent = year;
                     
-                    modalContent.innerHTML = `
+                    modalHTML = `
                         <div class="modal-project">
                             <h1 class="modal-project-title">${titleElement.textContent}</h1>
                             <div class="modal-project-content-wrapper">
                                 <div class="modal-project-image">
-                                    <img src="${imgElement.src}" alt="${imgElement.alt || ''}" />
+                                    <img src="${imgElement.src}" alt="${imgElement.alt || ''}" loading="eager" />
                                 </div>
                                 <div class="modal-project-content">
                                     <p class="modal-project-description">${descElement.innerHTML}</p>
@@ -1101,76 +1227,122 @@
                         </div>
                     `;
                 } else {
+                    currentlyLoadingProject = false;
                     return; // Cannot display modal without content
                 }
+            } else {
+                // Prepare the content before showing modal
+                // Put year in the header instead of title
+                modalTitle.textContent = projectData.year;
                 
-                // Continue with the rest of the function...
-                return;
-            }
-            
-            // Prepare the content before showing modal
-            // Put year in the header instead of title
-            modalTitle.textContent = projectData.year;
-            
-            // Create clean project content with title inside the content
-            modalContent.innerHTML = `
-                <div class="modal-project">
-                    <h1 class="modal-project-title">${projectData.title}</h1>
-                    <div class="modal-project-content-wrapper">
-                        <div class="modal-project-image">
-                            <img src="${projectData.image}" alt="${projectData.title}" />
-                        </div>
-                        <div class="modal-project-content">
-                            <p class="modal-project-description">${projectData.description}</p>
-                            <div class="modal-project-links">
-                                ${projectData.links.map(link => `
-                                    <a href="${link.url}" class="modal-project-link" target="_blank">${link.text}</a>
-                                `).join('')}
+                // Create clean project content with title inside the content
+                modalHTML = `
+                    <div class="modal-project">
+                        <h1 class="modal-project-title">${projectData.title}</h1>
+                        <div class="modal-project-content-wrapper">
+                            <div class="modal-project-image">
+                                <img src="${projectData.image}" alt="${projectData.title}" loading="eager" />
+                            </div>
+                            <div class="modal-project-content">
+                                <p class="modal-project-description">${projectData.description}</p>
+                                <div class="modal-project-links">
+                                    ${projectData.links.map(link => `
+                                        <a href="${link.url}" class="modal-project-link" target="_blank">${link.text}</a>
+                                    `).join('')}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            }
             
-            // Set up navigation
-            const allProjects = Array.from(document.querySelectorAll('.project'));
-            const currentIndex = allProjects.indexOf(projectElement);
-            
-            prevButton.classList.toggle('disabled', currentIndex === 0);
-            nextButton.classList.toggle('disabled', currentIndex === allProjects.length - 1);
-            
-            // Setup navigation buttons
-            prevButton.onclick = () => {
-                if (currentIndex > 0) {
-                    openModal(allProjects[currentIndex - 1]);
+            // Function to apply content to modal
+            const applyModalContent = () => {
+                // If this is navigation between projects, use a smooth transition
+                if (isNavigating && modal.classList.contains('active')) {
+                    // Add transitioning class
+                    modal.classList.add('transitioning');
+                    
+                    // Fade out current content
+                    modalContent.style.opacity = '0';
+                    
+                    // After a shorter fade-out, update content and fade back in quickly
+                    setTimeout(() => {
+                        // Apply new content
+                        modalContent.innerHTML = modalHTML;
+                        
+                        // IMPORTANT: Reset scroll position to top
+                        modalContentElement.scrollTop = 0;
+                        
+                        // Only maintain title height stability
+                        const newTitle = modalContent.querySelector('.modal-project-title');
+                        
+                        if (newTitle && newTitle.clientHeight < 56) {
+                            newTitle.style.minHeight = '56px';
+                        }
+                        
+                        // Fade in the new content immediately
+                        setTimeout(() => {
+                            modalContent.style.opacity = '1';
+                            
+                            // Reset loading state after fade completes with shorter delay
+                            setTimeout(() => {
+                                modal.classList.remove('transitioning');
+                                currentlyLoadingProject = false;
+                            }, 50); // Reduced from 100ms
+                        }, 30); // Reduced from 50ms
+                    }, 80); // Reduced from 150ms
+                } else {
+                    // Initial open - apply content directly
+                    modalContent.innerHTML = modalHTML;
+                    modalContentElement.scrollTop = 0;
+                    
+                    // Freeze page scrolling
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Show modal
+                    modal.classList.add('active');
+                    
+                    // Reset loading state after a short delay
+                    setTimeout(() => {
+                        currentlyLoadingProject = false;
+                    }, 150);
                 }
+                
+                // Preload adjacent projects for smoother navigation
+                preloadAdjacentProjects(currentIndex, allProjects);
             };
             
-            nextButton.onclick = () => {
-                if (currentIndex < allProjects.length - 1) {
-                    openModal(allProjects[currentIndex + 1]);
-                }
-            };
-            
-            // IMPORTANT: Reset scroll position to top
-            modalContentElement.scrollTop = 0;
-            
-            // Freeze page scrolling
-            document.body.style.overflow = 'hidden';
-            
-            // Show modal
-            console.log('Adding active class to modal');
-            modal.classList.add('active');
-            console.log('Modal classes after:', modal.className);
+            // Try to use preloaded image if available
+            if (modalPreloadedImages[projectElement.id]) {
+                applyModalContent();
+            } else {
+                // First, attempt to preload the image
+                const imgSrc = projectData ? projectData.image : projectElement.querySelector('.project-image img').src;
+                
+                preloadImage(imgSrc)
+                    .then(() => {
+                        applyModalContent();
+                    })
+                    .catch(() => {
+                        // If preload fails, still show the modal
+                        applyModalContent();
+                    });
+            }
         }
 
         function closeModal() {
-            console.log('Closing modal');
+            // Prevent closing during transitions
+            if (currentlyLoadingProject) {
+                return;
+            }
+            
+            currentlyLoadingProject = true;
+            
             const modal = document.getElementById('project-modal');
             
             // Hide modal
             modal.classList.remove('active');
-            console.log('Modal classes after closing:', modal.className);
             
             // Re-enable scrolling
             document.body.style.overflow = '';
@@ -1178,11 +1350,12 @@
             // Restore scroll position
             window.scrollTo(0, savedScrollPosition);
             
-            // Clean up content after closing
+            // Clean up content with faster timing
             setTimeout(() => {
                 const modalContent = modal.querySelector('.modal-content-inner');
                 modalContent.innerHTML = '';
-            }, 300);
+                currentlyLoadingProject = false;
+            }, 200); // Reduced from 300ms for snappier response
         }
 
         // Add savedScrollPosition variable
@@ -1205,24 +1378,36 @@
             return 'Modal test complete';
         };
         
-        // Enhanced keyboard navigation
+        // Enhanced keyboard navigation with debouncing
+        let keyNavigationTimeout = null;
         document.addEventListener('keydown', (e) => {
             const modal = document.getElementById('project-modal');
             const isModalActive = modal.classList.contains('active');
             
-            if (!isModalActive) return;
+            // Only process if modal is active and not in a loading state
+            if (!isModalActive || currentlyLoadingProject) return;
+            
+            // Prevent key repeat issues with shorter debounce
+            if (keyNavigationTimeout) return;
+            
+            keyNavigationTimeout = setTimeout(() => {
+                keyNavigationTimeout = null;
+            }, 150); // Reduced from 300ms for snappier response
             
             switch (e.key) {
                 case 'Escape':
+                    e.preventDefault();
                     closeModal();
                     break;
                 case 'ArrowLeft':
+                    e.preventDefault();
                     const prevButton = document.getElementById('prev-project-btn');
                     if (!prevButton.classList.contains('disabled')) {
                         prevButton.click();
                     }
                     break;
                 case 'ArrowRight':
+                    e.preventDefault();
                     const nextButton = document.getElementById('next-project-btn');
                     if (!nextButton.classList.contains('disabled')) {
                         nextButton.click();
