@@ -43,17 +43,18 @@
 
         .sticky-header {
             position: sticky;
-            top: 0;
+            bottom: 0;
             background: #fff;
             z-index: 100;
-            padding: 32px;
+            padding: 24px 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            border-bottom: 1px solid #000;
-            height: 96px;
+            border-top: 1px solid #000;
+            height: 80px;
             box-sizing: border-box;
+            margin: 0;
         }
 
         .header-left {
@@ -71,7 +72,7 @@
             -webkit-overflow-scrolling: touch;
             width: 100%;
             height: 100%; /* Full height */
-            padding: 0 32px 0 80px; /* Desktop left padding */
+            padding: 0 32px 24px 80px; /* Desktop left padding, added bottom padding */
             flex: 1;
             scrollbar-width: none; /* Hide scrollbar in Firefox */
             overscroll-behavior-x: contain; /* Prevent overscroll on mobile */
@@ -81,13 +82,15 @@
 
         .sticky-header-wrapper {
             position: sticky;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
             width: 100%;
             background: #fff;
             z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin: 0;
+            padding: 0;
         }
 
         .main-content {
@@ -123,7 +126,7 @@
         /* Define CSS variables for consistent scaling */
         :root {
             --project-spacing: clamp(24px, 4vw, 60px);
-            --image-scale: clamp(0.5, 0.6 + 0.4 * (100vw - 320px) / 1600, 1);
+            --image-scale: clamp(0.6, 0.7 + 0.3 * (100vw - 600px) / 1000, 1); /* Adjusted scaling for 600px breakpoint */
             --project-min-width: auto; /* Let images determine their natural width */
             --project-max-width: none; /* No artificial limitations */
         }
@@ -222,69 +225,10 @@
             font-family: 'Inter', -apple-system, sans-serif;
         }
 
-        .bottom-nav {
-            position: sticky;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 48px;
-            background: #fff;
-            border-top: 1px solid #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: box-shadow 0.2s ease;
-            z-index: 1000;
-            margin-top: auto;
-        }
+        /* Bottom navigation removed */
 
-        .bottom-nav.shadow {
-            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .bottom-nav-inner {
-            width: 100%;
-            max-width: 890px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 24px;
-            padding: 0 32px;
-            height: 100%;
-        }
-
-        .year-link {
-            font-size: 16px;
-            color: #000;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 8px;
-            min-width: 24px;
-            text-align: center;
-            position: relative;
-        }
-
-        .year-link:hover {
-            text-decoration: underline;
-        }
-        
-        .year-link.active {
-            font-weight: 600;
-        }
-        
-        .year-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 8px;
-            right: 8px;
-            height: 2px;
-            background: #000;
-        }
-
-        /* Mobile adjustments */
-        @media (max-width: 700px) {
+        /* Mobile adjustments - below 600px */
+        @media (max-width: 599px) {
             /* Update CSS variables for mobile */
             :root {
                 --project-spacing: clamp(20px, 3vw, 32px);
@@ -293,11 +237,12 @@
             
             .sticky-header {
                 padding: 24px;
-                height: 80px; /* Match modal-nav height on mobile */
+                height: 80px;
+                margin: 0;
             }
             
             .timeline-view {
-                padding: 0 24px 120px 12px; /* Mobile left padding reduced to 12px */
+                padding: 0 24px 80px 12px; /* Adjust bottom padding to match header height */
             }
             
             .year-section {
@@ -328,14 +273,7 @@
                 gap: 16px;
             }
 
-            .bottom-nav {
-                height: 40px;
-            }
-
-            .year-link {
-                font-size: 14px;
-                padding: 4px;
-            }
+            /* Bottom navigation CSS removed */
 
             .current-year {
                 font-size: 17px;
@@ -354,7 +292,7 @@
             .timeline-view {
                 grid-template-columns: 1fr;
                 gap: 16px;
-                padding: 0 24px 120px 12px; /* Mobile left padding reduced to 12px */
+                padding: 0 24px 24px 12px; /* Mobile left padding reduced to 12px, bottom padding reduced */
             }
 
             .project-image {
@@ -380,10 +318,26 @@
             visibility: hidden;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s, visibility 0.3s;
+            transition: opacity 0.2s, visibility 0.2s; /* Faster transition */
             display: flex;
             flex-direction: column;
             overflow: hidden; /* Essential - prevent body scroll bleed */
+        }
+        
+        /* Set default flex order for all modal components */
+        .modal-nav {
+            order: 2; /* Navigation at the bottom by default */
+        }
+        
+        .modal-content {
+            order: 1; /* Content on top by default */
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+            height: calc(100vh - 80px); /* Viewport height minus nav height */
+            scroll-behavior: smooth;
+            padding-bottom: 0; /* Ensure content doesn't get hidden behind the navbar */
         }
 
         .modal.active {
@@ -391,21 +345,25 @@
             opacity: 1;
             pointer-events: all;
         }
+        
+        .modal.transitioning .modal-content-inner {
+            transition: opacity 0.1s ease-out; /* Faster transition */
+        }
 
         .modal-nav {
-            position: sticky;
-            top: 0;
+            position: relative;
+            bottom: 0;
             left: 0;
             right: 0;
-            padding: 32px;
+            padding: 24px 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #000;
+            border-top: 1px solid #aaaaaa;
             background: #fff;
             z-index: 10;
             flex-shrink: 0;
-            height: 96px;
+            height: 80px;
             box-sizing: border-box;
             width: 100%;
         }
@@ -427,12 +385,14 @@
             height: 52px;
             background: transparent;
             border-radius: 50%;
-            transition: background-color 0.2s ease;
+            transition: transform 0.1s ease-out; /* Snappy feedback when clicked */
+        }
+        
+        .modal-nav-button:active, .modal-close:active {
+            transform: scale(0.95); /* Slight scale down when clicked */
         }
 
-        .modal-nav-button:hover, .modal-close:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
+        /* Hover effect removed */
 
         .modal-nav-button.disabled {
             opacity: 0.3;
@@ -456,22 +416,15 @@
             cursor: pointer;
         }
 
-        .modal-content {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            position: relative;
-            height: calc(100vh - 96px); /* Viewport height minus nav height */
-            scroll-behavior: smooth;
-        }
-
         .modal-content-inner {
             max-width: 890px;
             width: 100%;
             margin: 0 auto;
             padding: 32px;
+            padding-bottom: 32px; /* Consistent padding at bottom */
             display: flex;
             flex-direction: column;
+            transition: opacity 0.1s ease-out; /* Faster transition */
         }
 
         /* Override project styles when in modal */
@@ -490,10 +443,11 @@
             flex-shrink: 0;
             display: flex;
             justify-content: center;
+            align-items: flex-start; /* Change to top-align the image */
             overflow: visible;
             padding: 0;
             width: auto;
-            height: 480px; /* Fixed height */
+            height: 400px; /* Reduced from 480px to 400px */
             margin: 0 auto;
         }
 
@@ -502,16 +456,19 @@
             height: 100%;
             max-width: 100%;
             object-fit: contain;
+            object-position: top; /* Ensure image is aligned to top */
             border-radius: 8px;
+            transition: opacity 0.2s ease-out;
         }
         
         /* Special modal handling for Dawn and Dusk */
         .modal-content-inner [id="2025-dawn-and-dusk"] .modal-project-image img {
             height: auto;
-            max-height: 480px;
+            max-height: 70vh; /* Use viewport height for consistency */
             width: auto;
             max-width: 100%;
             padding: 8px;
+            object-fit: contain;
         }
 
         .modal-project-title {
@@ -521,12 +478,15 @@
             line-height: 1;
             font-family: 'Inter', -apple-system, sans-serif;
             margin-bottom: 32px;
+            margin-left: 4px;
+            min-height: 56px; /* Consistent height for title */
+            transition: opacity 0.2s ease-out;
         }
         
         .modal-project-content {
             display: flex;
             flex-direction: column;
-            gap: 32px;
+            gap: 32px; /* Restored original spacing */
             flex-grow: 1;
         }
         
@@ -536,11 +496,18 @@
             font-weight: 500;
             line-height: 1.4;
             font-family: 'Inter', -apple-system, sans-serif;
+            transition: opacity 0.2s ease-out; /* Smooth transition for text changes */
+            margin: 0; /* Remove margin */
+            padding: 0; /* Remove padding */
+            height: auto; /* Allow height to be determined by content */
+            min-height: 0; /* Remove minimum height constraint */
         }
         
         .modal-project-links {
             display: flex;
             gap: 24px;
+            transition: opacity 0.2s ease-out;
+            margin-top: 16px; /* Add specific top margin to control distance from description */
         }
         
         .modal-project-link {
@@ -551,19 +518,11 @@
             font-family: 'Inter', -apple-system, sans-serif;
         }
 
-        /* Tablet landscape (iPad) specific adjustments */
-        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-            .project {
-                width: 75vw;
-            }
-            
-            .project-image img {
-                max-height: 60vh;
-            }
-        }
         
         /* Desktop layout - image on right */
-        @media (min-width: 768px) {
+        
+        /* Desktop breakpoint (600px and up) */
+        @media (min-width: 600px) {
             .modal-project {
                 flex-direction: column;
                 align-items: flex-start;
@@ -580,89 +539,168 @@
                 flex-direction: row;
                 width: 100%;
                 gap: 48px;
+                min-height: 0; /* Allow height to be determined by content */
+                transition: opacity 0.2s ease-out;
             }
             
             .modal-project-image {
-                order: 2;
-                width: auto;
+                order: 0; /* Image on left */
+                width: auto; /* Allow natural sizing */
                 position: sticky;
                 top: 112px; /* Nav height + some padding */
                 align-self: flex-start;
+                align-items: flex-start; /* Ensure top alignment in desktop view */
                 border-radius: 8px;
-                overflow: hidden;
-                margin-left: auto;
+                overflow: visible; /* Ensure image isn't cut off */
+                margin-right: auto;
+                max-width: 45%; /* Limit width to prevent oversized images */
             }
             
             .modal-project-image img {
                 width: auto;
                 max-width: 100%;
-                max-height: calc(70vh - 96px);
+                max-height: 70vh; /* Slightly reduced for better fit */
                 object-fit: contain;
+                object-position: top; /* Consistent top alignment */
                 display: block;
                 border-radius: 8px;
+                transition: opacity 0.15s ease-out; /* Smooth transitions */
             }
             
             .modal-project-content {
-                order: 1;
-                width: 55%;
+                order: 1; /* Content on right */
+                width: 60%; /* Increased from 55% */
                 padding-bottom: 64px;
+                margin-bottom: 32px; /* Fixed margin to ensure content doesn't underlap the nav */
             }
             
             .modal-content-inner {
-                padding: 48px 32px;
-                max-width: 1080px; /* Slightly wider for side-by-side layout */
+                padding: 48px;
+                padding-left: calc(32px + min(160px, max(0px, 20vw - 120px))); /* More gradual reduction as viewport gets smaller */
+                max-width: 1280px; /* Increased max-width for better use of screen space */
+            }
+
+            .modal-nav {
+                order: 2; /* Keep navigation at bottom consistently */
+                position: relative;
+                border-top: 1px solid #aaaaaa;
+                border-bottom: none;
             }
         }
 
-        @media (max-width: 700px) {
+        /* Mobile breakpoint (below 600px) */
+        @media (max-width: 599px) {
             .modal-nav {
                 padding: 24px;
-                height: 80px; /* Reduce nav height on mobile */
+                height: 80px;
+                position: relative;
+                order: 2; /* Keep navigation at bottom consistently */
+                border-top: 1px solid #aaaaaa;
+                border-bottom: none;
+            }
+            
+            .modal-title {
+                font-size: 17px; /* Match the header year size on mobile */
+            }
+            
+            .modal-nav-button, .modal-close {
+                width: 44px;
+                height: 44px;
+            }
+            
+            .modal-nav-button svg, .modal-close svg {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .modal-nav-controls {
+                gap: 16px;
             }
 
             .modal-content {
-                height: calc(100vh - 80px); /* Adjust for smaller nav */
+                height: calc(100vh - 80px);
             }
 
             .modal-content-inner {
-                padding: 24px;
+                padding: 24px 32px; /* Increased horizontal padding */
             }
 
             .modal-project {
                 gap: 16px;
             }
-
+            
             .modal-project-content {
                 gap: 16px;
             }
             
             .modal-project-image img {
-                max-height: calc(40vh - 48px);
+                max-height: 45vh; /* Simplified and slightly increased */
                 margin-bottom: 8px;
+                object-position: top; /* Ensure top alignment in mobile view */
+                transition: opacity 0.15s ease-out; /* Added for smooth transitions */
             }
             
-            /* Mobile modal styling for Dawn and Dusk */
+            /* Modal styling for Dawn and Dusk */
             .modal-content-inner [id="2025-dawn-and-dusk"] .modal-project-image img {
-                max-height: calc(40vh - 48px);
+                max-height: 50vh; /* Match standard image height */
                 padding: 4px;
+                object-fit: contain;
+                object-position: top; /* Ensure top alignment for special project */
             }
             
             .modal-project-title {
                 font-size: 32px;
                 margin-bottom: 24px;
+                min-height: 36px; /* Adjusted for mobile font size */
             }
             
             .modal-project-description {
                 font-size: 18px;
-                margin-bottom: 16px;
+                margin: 0;
+                padding: 0;
+                height: auto;
+                min-height: 0;
+                /* max-width removed */
+            }
+            
+            .modal-project-content-wrapper {
+                min-height: 0; /* Allow height to be determined by content */
             }
 
             .modal-project-image {
-                height: 320px; /* Smaller fixed height for mobile */
+                height: auto; /* Allow natural height */
+                max-height: 50vh; /* Cap height */
+                order: 1; /* Ensure image is first */
+                overflow: visible; /* Ensure image isn't cut off */
+                margin: 0 auto 16px; /* Center image */
             }
             
             .modal-project-link {
                 font-size: 18px;
+            }
+
+            /* Adjust modal content wrapper for mobile */
+            .modal-project-content-wrapper {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                gap: 0; /* Remove gap for mobile */
+            }
+
+            .modal-project-content {
+                order: 2; /* Move content below image */
+                width: 100%;
+                padding-bottom: 24px;
+                margin-bottom: 24px; /* Added fixed margin for mobile to prevent content from underlapping nav */
+            }
+
+            .timeline-reference-marker {
+                bottom: 80px;
+                height: 16px;
+            }
+
+            .timeline-reference-marker::after {
+                top: -3.5px; /* Keep dot position consistent */
             }
         }
 
@@ -671,7 +709,7 @@
             display: none; /* Hide the toggle button */
         }
         
-        /* Single timeline reference marker */
+        /* Move timeline reference marker to bottom */
         .timeline-reference-marker {
             position: fixed;
             width: 1.5px; /* 1.5px line */
@@ -680,12 +718,12 @@
             pointer-events: none;
             transition: left 0.3s ease;
             
-            /* Top line only */
-            top: 96px; /* Height of the header */
-            height: 16px; /* Line length */
+            /* Bottom line */
+            bottom: 80px; /* Match header height */
+            height: 16px; /* Original line length */
         }
         
-        /* Add a dot at the bottom of the line */
+        /* Add a dot at the top of the line */
         .timeline-reference-marker::after {
             content: '';
             display: block;
@@ -694,32 +732,18 @@
             height: 7px; /* Larger dot size: 7px */
             background-color: #CC5500; /* Burnt orange color */
             border-radius: 50%; /* Make it round */
-            bottom: -3.5px; /* Position at the bottom of the line (half of height) */
+            top: -3.5px; /* Position at the top of the line (half of height) */
             left: -2.75px; /* Center the dot on the line (half of width) */
         }
-        
+
         .timeline-reference-marker::before,
         .timeline-reference-marker span {
             display: none;
-        }
-        
-        @media (max-width: 700px) {
-            .timeline-reference-marker {
-                top: 80px; /* Match mobile header height */
-            }
         }
     </style>
 </head>
 <body>
     <div class="page-wrapper">
-        <div class="sticky-header-wrapper">
-            <div class="sticky-header">
-                <div class="header-left">
-                    <div class="current-year">2024</div>
-                </div>
-                <!-- Timeline toggle button removed -->
-            </div>
-        </div>
         <div class="content-wrapper">
             <div class="main-content">
                 <div class="timeline-view">
@@ -731,12 +755,14 @@
                 </div>
             </div>
         </div>
-
-        <nav class="bottom-nav">
-            <div class="bottom-nav-inner">
-                <!-- Year links will be dynamically generated -->
+        <div class="sticky-header-wrapper">
+            <div class="sticky-header">
+                <div class="header-left">
+                    <div class="current-year">2024</div>
+                </div>
+                <!-- Timeline toggle button removed -->
             </div>
-        </nav>
+        </div>
     </div>
 
     <div class="modal" id="project-modal">
@@ -768,12 +794,8 @@
     <script src="projects.js"></script>
     <script>
         function updateHeaderAndShadows() {
-            const nav = document.querySelector('.bottom-nav');
             const timelineView = document.querySelector('.timeline-view');
             const currentYearElement = document.querySelector('.current-year');
-            
-            // Add shadow to nav
-            nav.classList.add('shadow');
             
             // Get the position of the reference line for year detection
             const referenceLine = document.querySelector('.timeline-reference-marker').getBoundingClientRect().left;
@@ -814,14 +836,7 @@
                     currentYearElement.textContent = projectYear;
                     currentYearElement.setAttribute('data-year', projectYear);
                     
-                    // Update active class on year links
-                    document.querySelectorAll('.year-link').forEach(link => {
-                        if (link.textContent === projectYear) {
-                            link.classList.add('active');
-                        } else {
-                            link.classList.remove('active');
-                        }
-                    });
+                    // Year links removed
                     
                     // Re-align the timeline with the newly updated year
                     alignTimelineWithYear();
@@ -831,21 +846,12 @@
 
         function renderProjects() {
             const timelineView = document.querySelector('.timeline-view');
-            const bottomNav = document.querySelector('.bottom-nav-inner');
             
             // Clear existing content
             timelineView.innerHTML = '';
-            bottomNav.innerHTML = '';
             
             // Get unique years and sort them in descending order
             const years = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a);
-            
-            // Render year links in bottom nav
-            years.forEach((year, index) => {
-                // Add active class to first year
-                const isActive = index === 0 ? 'active' : '';
-                bottomNav.innerHTML += `<a href="#${year}" class="year-link ${isActive}">${year}</a>`;
-            });
             
             // Create a single container for all projects
             const projectsContainer = document.createElement('div');
@@ -971,41 +977,7 @@
                 });
             });
 
-            // Year link handlers
-            document.querySelectorAll('.year-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const year = this.textContent;
-                    const yearMarker = document.getElementById(year);
-                    if (yearMarker) {
-                        // Get the center point of the marker
-                        const timelineView = document.querySelector('.timeline-view');
-                        const markerRect = yearMarker.getBoundingClientRect();
-                        const viewportWidth = window.innerWidth;
-                        
-                        // Calculate the target scroll position
-                        const targetScrollLeft = timelineView.scrollLeft + markerRect.left - (window.innerWidth <= 700 ? 12 : 80); // Adjust for padding
-                        
-                        // Scroll to the first project of that year
-                        timelineView.scrollTo({
-                            left: targetScrollLeft,
-                            behavior: 'smooth'
-                        });
-                        
-                        // Update the current year
-                        document.querySelector('.current-year').textContent = year;
-                        
-                        // Update active class on year links
-                        document.querySelectorAll('.year-link').forEach(link => {
-                            if (link.textContent === year) {
-                                link.classList.add('active');
-                            } else {
-                                link.classList.remove('active');
-                            }
-                        });
-                    }
-                });
-            });
+            // Year link handlers removed
         }
 
         // Initialize
@@ -1125,21 +1097,81 @@
         });
 
         // Modal functionality
-        function openModal(projectElement) {
+        let currentlyLoadingProject = false;
+        let modalPreloadedImages = {};
+
+        // Preload an image and return a promise
+        function preloadImage(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = src;
+            });
+        }
+
+        // Preload adjacent project images
+        function preloadAdjacentProjects(currentIndex, allProjects) {
+            // Preload next project
+            if (currentIndex < allProjects.length - 1) {
+                const nextProject = allProjects[currentIndex + 1];
+                const nextParts = nextProject.id.split('-');
+                const nextYear = parseInt(nextParts[0], 10);
+                const nextId = nextParts.slice(1).join('-');
+                const nextProjectData = projects.find(p => p.id === nextId && p.year === nextYear);
+                
+                if (nextProjectData) {
+                    preloadImage(nextProjectData.image)
+                        .then(img => {
+                            modalPreloadedImages[nextProject.id] = img;
+                        })
+                        .catch(() => {
+                            // Silent fail - image will load normally if preload fails
+                        });
+                }
+            }
+            
+            // Preload previous project
+            if (currentIndex > 0) {
+                const prevProject = allProjects[currentIndex - 1];
+                const prevParts = prevProject.id.split('-');
+                const prevYear = parseInt(prevParts[0], 10);
+                const prevId = prevParts.slice(1).join('-');
+                const prevProjectData = projects.find(p => p.id === prevId && p.year === prevYear);
+                
+                if (prevProjectData) {
+                    preloadImage(prevProjectData.image)
+                        .then(img => {
+                            modalPreloadedImages[prevProject.id] = img;
+                        })
+                        .catch(() => {
+                            // Silent fail - image will load normally if preload fails
+                        });
+                }
+            }
+        }
+
+        function openModal(projectElement, isNavigating = false) {
+            // Prevent multiple operations at once
+            if (currentlyLoadingProject) {
+                return;
+            }
+            
+            currentlyLoadingProject = true;
             console.log('Opening modal for:', projectElement.id);
             
             // Get all required elements
             const modal = document.getElementById('project-modal');
-            console.log('Modal element:', modal);
-            
             const modalContent = modal.querySelector('.modal-content-inner');
             const modalTitle = modal.querySelector('.modal-title');
             const modalContentElement = modal.querySelector('.modal-content');
             const prevButton = document.getElementById('prev-project-btn');
             const nextButton = document.getElementById('next-project-btn');
             
-            // Save current scroll position
-            savedScrollPosition = window.scrollY;
+            // Save current scroll position if not navigating
+            if (!isNavigating) {
+                savedScrollPosition = window.scrollY;
+            }
             
             // Get project data directly from the source
             // Expected ID format: "2025-dawn-and-dusk" (year-id)
@@ -1149,6 +1181,29 @@
             
             // Find the project by both year and id
             const projectData = projects.find(p => p.id === id && p.year === year);
+            
+            // Set up navigation first
+            const allProjects = Array.from(document.querySelectorAll('.project'));
+            const currentIndex = allProjects.indexOf(projectElement);
+            
+            prevButton.classList.toggle('disabled', currentIndex === 0);
+            nextButton.classList.toggle('disabled', currentIndex === allProjects.length - 1);
+            
+            // Setup navigation buttons
+            prevButton.onclick = () => {
+                if (currentIndex > 0 && !currentlyLoadingProject) {
+                    openModal(allProjects[currentIndex - 1], true);
+                }
+            };
+            
+            nextButton.onclick = () => {
+                if (currentIndex < allProjects.length - 1 && !currentlyLoadingProject) {
+                    openModal(allProjects[currentIndex + 1], true);
+                }
+            };
+            
+            // Prepare content based on available data
+            let modalHTML = '';
             
             if (!projectData) {
                 console.error('Project data not found. ID:', id, 'Year:', year);
@@ -1163,12 +1218,12 @@
                     // Put year in the header instead of title
                     modalTitle.textContent = year;
                     
-                    modalContent.innerHTML = `
+                    modalHTML = `
                         <div class="modal-project">
                             <h1 class="modal-project-title">${titleElement.textContent}</h1>
                             <div class="modal-project-content-wrapper">
                                 <div class="modal-project-image">
-                                    <img src="${imgElement.src}" alt="${imgElement.alt || ''}" />
+                                    <img src="${imgElement.src}" alt="${imgElement.alt || ''}" loading="eager" />
                                 </div>
                                 <div class="modal-project-content">
                                     <p class="modal-project-description">${descElement.innerHTML}</p>
@@ -1180,76 +1235,122 @@
                         </div>
                     `;
                 } else {
+                    currentlyLoadingProject = false;
                     return; // Cannot display modal without content
                 }
+            } else {
+                // Prepare the content before showing modal
+                // Put year in the header instead of title
+                modalTitle.textContent = projectData.year;
                 
-                // Continue with the rest of the function...
-                return;
-            }
-            
-            // Prepare the content before showing modal
-            // Put year in the header instead of title
-            modalTitle.textContent = projectData.year;
-            
-            // Create clean project content with title inside the content
-            modalContent.innerHTML = `
-                <div class="modal-project">
-                    <h1 class="modal-project-title">${projectData.title}</h1>
-                    <div class="modal-project-content-wrapper">
-                        <div class="modal-project-image">
-                            <img src="${projectData.image}" alt="${projectData.title}" />
-                        </div>
-                        <div class="modal-project-content">
-                            <p class="modal-project-description">${projectData.description}</p>
-                            <div class="modal-project-links">
-                                ${projectData.links.map(link => `
-                                    <a href="${link.url}" class="modal-project-link" target="_blank">${link.text}</a>
-                                `).join('')}
+                // Create clean project content with title inside the content
+                modalHTML = `
+                    <div class="modal-project">
+                        <h1 class="modal-project-title">${projectData.title}</h1>
+                        <div class="modal-project-content-wrapper">
+                            <div class="modal-project-image">
+                                <img src="${projectData.image}" alt="${projectData.title}" loading="eager" />
+                            </div>
+                            <div class="modal-project-content">
+                                <p class="modal-project-description">${projectData.description}</p>
+                                <div class="modal-project-links">
+                                    ${projectData.links.map(link => `
+                                        <a href="${link.url}" class="modal-project-link" target="_blank">${link.text}</a>
+                                    `).join('')}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            }
             
-            // Set up navigation
-            const allProjects = Array.from(document.querySelectorAll('.project'));
-            const currentIndex = allProjects.indexOf(projectElement);
-            
-            prevButton.classList.toggle('disabled', currentIndex === 0);
-            nextButton.classList.toggle('disabled', currentIndex === allProjects.length - 1);
-            
-            // Setup navigation buttons
-            prevButton.onclick = () => {
-                if (currentIndex > 0) {
-                    openModal(allProjects[currentIndex - 1]);
+            // Function to apply content to modal
+            const applyModalContent = () => {
+                // If this is navigation between projects, use a smooth transition
+                if (isNavigating && modal.classList.contains('active')) {
+                    // Add transitioning class
+                    modal.classList.add('transitioning');
+                    
+                    // Fade out current content
+                    modalContent.style.opacity = '0';
+                    
+                    // After a shorter fade-out, update content and fade back in quickly
+                    setTimeout(() => {
+                        // Apply new content
+                        modalContent.innerHTML = modalHTML;
+                        
+                        // IMPORTANT: Reset scroll position to top
+                        modalContentElement.scrollTop = 0;
+                        
+                        // Only maintain title height stability
+                        const newTitle = modalContent.querySelector('.modal-project-title');
+                        
+                        if (newTitle && newTitle.clientHeight < 56) {
+                            newTitle.style.minHeight = '56px';
+                        }
+                        
+                        // Fade in the new content immediately
+                        setTimeout(() => {
+                            modalContent.style.opacity = '1';
+                            
+                            // Reset loading state after fade completes with shorter delay
+                            setTimeout(() => {
+                                modal.classList.remove('transitioning');
+                                currentlyLoadingProject = false;
+                            }, 50); // Reduced from 100ms
+                        }, 30); // Reduced from 50ms
+                    }, 80); // Reduced from 150ms
+                } else {
+                    // Initial open - apply content directly
+                    modalContent.innerHTML = modalHTML;
+                    modalContentElement.scrollTop = 0;
+                    
+                    // Freeze page scrolling
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Show modal
+                    modal.classList.add('active');
+                    
+                    // Reset loading state after a short delay
+                    setTimeout(() => {
+                        currentlyLoadingProject = false;
+                    }, 150);
                 }
+                
+                // Preload adjacent projects for smoother navigation
+                preloadAdjacentProjects(currentIndex, allProjects);
             };
             
-            nextButton.onclick = () => {
-                if (currentIndex < allProjects.length - 1) {
-                    openModal(allProjects[currentIndex + 1]);
-                }
-            };
-            
-            // IMPORTANT: Reset scroll position to top
-            modalContentElement.scrollTop = 0;
-            
-            // Freeze page scrolling
-            document.body.style.overflow = 'hidden';
-            
-            // Show modal
-            console.log('Adding active class to modal');
-            modal.classList.add('active');
-            console.log('Modal classes after:', modal.className);
+            // Try to use preloaded image if available
+            if (modalPreloadedImages[projectElement.id]) {
+                applyModalContent();
+            } else {
+                // First, attempt to preload the image
+                const imgSrc = projectData ? projectData.image : projectElement.querySelector('.project-image img').src;
+                
+                preloadImage(imgSrc)
+                    .then(() => {
+                        applyModalContent();
+                    })
+                    .catch(() => {
+                        // If preload fails, still show the modal
+                        applyModalContent();
+                    });
+            }
         }
 
         function closeModal() {
-            console.log('Closing modal');
+            // Prevent closing during transitions
+            if (currentlyLoadingProject) {
+                return;
+            }
+            
+            currentlyLoadingProject = true;
+            
             const modal = document.getElementById('project-modal');
             
             // Hide modal
             modal.classList.remove('active');
-            console.log('Modal classes after closing:', modal.className);
             
             // Re-enable scrolling
             document.body.style.overflow = '';
@@ -1257,11 +1358,12 @@
             // Restore scroll position
             window.scrollTo(0, savedScrollPosition);
             
-            // Clean up content after closing
+            // Clean up content with faster timing
             setTimeout(() => {
                 const modalContent = modal.querySelector('.modal-content-inner');
                 modalContent.innerHTML = '';
-            }, 300);
+                currentlyLoadingProject = false;
+            }, 200); // Reduced from 300ms for snappier response
         }
 
         // Add savedScrollPosition variable
@@ -1284,24 +1386,36 @@
             return 'Modal test complete';
         };
         
-        // Enhanced keyboard navigation
+        // Enhanced keyboard navigation with debouncing
+        let keyNavigationTimeout = null;
         document.addEventListener('keydown', (e) => {
             const modal = document.getElementById('project-modal');
             const isModalActive = modal.classList.contains('active');
             
-            if (!isModalActive) return;
+            // Only process if modal is active and not in a loading state
+            if (!isModalActive || currentlyLoadingProject) return;
+            
+            // Prevent key repeat issues with shorter debounce
+            if (keyNavigationTimeout) return;
+            
+            keyNavigationTimeout = setTimeout(() => {
+                keyNavigationTimeout = null;
+            }, 150); // Reduced from 300ms for snappier response
             
             switch (e.key) {
                 case 'Escape':
+                    e.preventDefault();
                     closeModal();
                     break;
                 case 'ArrowLeft':
+                    e.preventDefault();
                     const prevButton = document.getElementById('prev-project-btn');
                     if (!prevButton.classList.contains('disabled')) {
                         prevButton.click();
                     }
                     break;
                 case 'ArrowRight':
+                    e.preventDefault();
                     const nextButton = document.getElementById('next-project-btn');
                     if (!nextButton.classList.contains('disabled')) {
                         nextButton.click();
