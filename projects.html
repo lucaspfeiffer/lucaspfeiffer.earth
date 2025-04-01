@@ -361,12 +361,9 @@
             height: 52px;
             background: transparent;
             border-radius: 50%;
-            transition: background-color 0.2s ease;
         }
 
-        .modal-nav-button:hover, .modal-close:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
+        /* Hover effect removed */
 
         .modal-nav-button.disabled {
             opacity: 0.3;
@@ -552,6 +549,24 @@
             .modal-nav {
                 padding: 24px;
                 height: 80px; /* Reduce nav height on mobile */
+            }
+            
+            .modal-title {
+                font-size: 17px; /* Match the header year size on mobile */
+            }
+            
+            .modal-nav-button, .modal-close {
+                width: 44px;
+                height: 44px;
+            }
+            
+            .modal-nav-button svg, .modal-close svg {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .modal-nav-controls {
+                gap: 16px;
             }
 
             .modal-content {
