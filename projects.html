@@ -318,10 +318,10 @@
             visibility: hidden;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.2s, visibility 0.2s; /* Faster transition */
+            transition: opacity 0.15s ease-out, visibility 0.15s ease-out;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Essential - prevent body scroll bleed */
+            overflow: hidden;
         }
         
         /* Set default flex order for all modal components */
@@ -344,10 +344,6 @@
             visibility: visible;
             opacity: 1;
             pointer-events: all;
-        }
-        
-        .modal.transitioning .modal-content-inner {
-            transition: opacity 0.1s ease-out; /* Faster transition */
         }
 
         .modal-nav {
@@ -417,6 +413,8 @@
         }
 
         .modal-content-inner {
+            opacity: 0;
+            transition: opacity 0.15s ease-out;
             max-width: 890px;
             width: 100%;
             margin: 0 auto;
@@ -424,7 +422,10 @@
             padding-bottom: 32px; /* Consistent padding at bottom */
             display: flex;
             flex-direction: column;
-            transition: opacity 0.1s ease-out; /* Faster transition */
+        }
+
+        .modal.active .modal-content-inner {
+            opacity: 1;
         }
 
         /* Override project styles when in modal */
@@ -541,6 +542,7 @@
                 gap: 48px;
                 min-height: 0; /* Allow height to be determined by content */
                 transition: opacity 0.2s ease-out;
+                padding-top: 32px; /* Added top padding for desktop layout */
             }
             
             .modal-project-image {
@@ -1097,57 +1099,25 @@
 
         // Modal functionality
         let currentlyLoadingProject = false;
-        let modalPreloadedImages = {};
+        let safetyTimeout = null;
 
-        // Preload an image and return a promise
-        function preloadImage(src) {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.onload = () => resolve(img);
-                img.onerror = reject;
-                img.src = src;
-            });
-        }
-
-        // Preload adjacent project images
-        function preloadAdjacentProjects(currentIndex, allProjects) {
-            // Preload next project
-            if (currentIndex < allProjects.length - 1) {
-                const nextProject = allProjects[currentIndex + 1];
-                const nextParts = nextProject.id.split('-');
-                const nextYear = parseInt(nextParts[0], 10);
-                const nextId = nextParts.slice(1).join('-');
-                const nextProjectData = projects.find(p => p.id === nextId && p.year === nextYear);
-                
-                if (nextProjectData) {
-                    preloadImage(nextProjectData.image)
-                        .then(img => {
-                            modalPreloadedImages[nextProject.id] = img;
-                        })
-                        .catch(() => {
-                            // Silent fail - image will load normally if preload fails
-                        });
-                }
+        // Maximum allowed time for a modal transition (ms)
+        const MAX_TRANSITION_TIME = 1500;
+        
+        // Function to safely reset loading state if it gets stuck
+        function ensureLoadingStateReset() {
+            // Clear any existing timeout
+            if (safetyTimeout) {
+                clearTimeout(safetyTimeout);
             }
             
-            // Preload previous project
-            if (currentIndex > 0) {
-                const prevProject = allProjects[currentIndex - 1];
-                const prevParts = prevProject.id.split('-');
-                const prevYear = parseInt(prevParts[0], 10);
-                const prevId = prevParts.slice(1).join('-');
-                const prevProjectData = projects.find(p => p.id === prevId && p.year === prevYear);
-                
-                if (prevProjectData) {
-                    preloadImage(prevProjectData.image)
-                        .then(img => {
-                            modalPreloadedImages[prevProject.id] = img;
-                        })
-                        .catch(() => {
-                            // Silent fail - image will load normally if preload fails
-                        });
+            // Set new safety timeout
+            safetyTimeout = setTimeout(() => {
+                if (currentlyLoadingProject) {
+                    console.log('Safety: Resetting stuck loading state');
+                    currentlyLoadingProject = false;
                 }
-            }
+            }, MAX_TRANSITION_TIME);
         }
 
         function openModal(projectElement, isNavigating = false) {
@@ -1157,7 +1127,6 @@
             }
             
             currentlyLoadingProject = true;
-            console.log('Opening modal for:', projectElement.id);
             
             // Get all required elements
             const modal = document.getElementById('project-modal');
@@ -1173,15 +1142,14 @@
             }
             
             // Get project data directly from the source
-            // Expected ID format: "2025-dawn-and-dusk" (year-id)
             const parts = projectElement.id.split('-');
             const year = parseInt(parts[0], 10);
-            const id = parts.slice(1).join('-'); // In case the ID itself contains hyphens
+            const id = parts.slice(1).join('-');
             
             // Find the project by both year and id
             const projectData = projects.find(p => p.id === id && p.year === year);
             
-            // Set up navigation first
+            // Set up navigation
             const allProjects = Array.from(document.querySelectorAll('.project'));
             const currentIndex = allProjects.indexOf(projectElement);
             
@@ -1201,20 +1169,17 @@
                 }
             };
             
-            // Prepare content based on available data
+            // Prepare content
             let modalHTML = '';
             
             if (!projectData) {
                 console.error('Project data not found. ID:', id, 'Year:', year);
                 
-                // Fallback: try to extract content from DOM element
-                const titleElement = projectElement.querySelector('.project-title');
+                // Fallback to DOM content
                 const descElement = projectElement.querySelector('.project-description');
                 const imgElement = projectElement.querySelector('.project-image img');
                 
-                if (titleElement && descElement && imgElement) {
-                    // Use DOM content directly
-                    // Put year in the header instead of title
+                if (descElement && imgElement) {
                     modalTitle.textContent = year;
                     
                     modalHTML = `
@@ -1234,14 +1199,11 @@
                     `;
                 } else {
                     currentlyLoadingProject = false;
-                    return; // Cannot display modal without content
+                    return;
                 }
             } else {
-                // Prepare the content before showing modal
-                // Put year in the header instead of title
                 modalTitle.textContent = projectData.year;
                 
-                // Create clean project content with title inside the content
                 modalHTML = `
                     <div class="modal-project">
                         <div class="modal-project-content-wrapper">
@@ -1261,106 +1223,56 @@
                 `;
             }
             
-            // Function to apply content to modal
-            const applyModalContent = () => {
-                // If this is navigation between projects, use a smooth transition
-                if (isNavigating && modal.classList.contains('active')) {
-                    // Add transitioning class
-                    modal.classList.add('transitioning');
-                    
-                    // Fade out current content
-                    modalContent.style.opacity = '0';
-                    
-                    // After a shorter fade-out, update content and fade back in quickly
-                    setTimeout(() => {
-                        // Apply new content
-                        modalContent.innerHTML = modalHTML;
-                        
-                        // IMPORTANT: Reset scroll position to top
-                        modalContentElement.scrollTop = 0;
-                        
-                        // Only maintain title height stability
-                        const newTitle = modalContent.querySelector('.modal-project-title');
-                        
-                        if (newTitle && newTitle.clientHeight < 56) {
-                            newTitle.style.minHeight = '56px';
-                        }
-                        
-                        // Fade in the new content immediately
-                        setTimeout(() => {
-                            modalContent.style.opacity = '1';
-                            
-                            // Reset loading state after fade completes with shorter delay
-                            setTimeout(() => {
-                                modal.classList.remove('transitioning');
-                                currentlyLoadingProject = false;
-                            }, 50); // Reduced from 100ms
-                        }, 30); // Reduced from 50ms
-                    }, 80); // Reduced from 150ms
-                } else {
-                    // Initial open - apply content directly
+            // Function to apply content after image is loaded
+            const applyContent = () => {
+                modalContent.style.opacity = '0';
+                
+                setTimeout(() => {
                     modalContent.innerHTML = modalHTML;
+                    
+                    // Reset scroll position
                     modalContentElement.scrollTop = 0;
                     
-                    // Freeze page scrolling
-                    document.body.style.overflow = 'hidden';
+                    // Show modal if not already shown
+                    if (!modal.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                        modal.classList.add('active');
+                    }
                     
-                    // Show modal
-                    modal.classList.add('active');
-                    
-                    // Reset loading state after a short delay
-                    setTimeout(() => {
+                    // Fade in content
+                    requestAnimationFrame(() => {
+                        modalContent.style.opacity = '1';
                         currentlyLoadingProject = false;
-                    }, 150);
-                }
-                
-                // Preload adjacent projects for smoother navigation
-                preloadAdjacentProjects(currentIndex, allProjects);
+                    });
+                }, isNavigating ? 150 : 0);
             };
             
-            // Try to use preloaded image if available
-            if (modalPreloadedImages[projectElement.id]) {
-                applyModalContent();
-            } else {
-                // First, attempt to preload the image
-                const imgSrc = projectData ? projectData.image : projectElement.querySelector('.project-image img').src;
-                
-                preloadImage(imgSrc)
-                    .then(() => {
-                        applyModalContent();
-                    })
-                    .catch(() => {
-                        // If preload fails, still show the modal
-                        applyModalContent();
-                    });
-            }
+            // Preload image
+            const tempImg = new Image();
+            tempImg.onload = applyContent;
+            tempImg.onerror = applyContent; // Still show content even if image fails
+            tempImg.src = projectData ? projectData.image : projectElement.querySelector('.project-image img').src;
         }
 
         function closeModal() {
-            // Prevent closing during transitions
-            if (currentlyLoadingProject) {
-                return;
-            }
-            
-            currentlyLoadingProject = true;
+            if (currentlyLoadingProject) return;
             
             const modal = document.getElementById('project-modal');
+            const modalContent = modal.querySelector('.modal-content-inner');
             
-            // Hide modal
-            modal.classList.remove('active');
+            // Fade out content first
+            modalContent.style.opacity = '0';
             
-            // Re-enable scrolling
-            document.body.style.overflow = '';
-            
-            // Restore scroll position
-            window.scrollTo(0, savedScrollPosition);
-            
-            // Clean up content with faster timing
             setTimeout(() => {
-                const modalContent = modal.querySelector('.modal-content-inner');
-                modalContent.innerHTML = '';
-                currentlyLoadingProject = false;
-            }, 200); // Reduced from 300ms for snappier response
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                window.scrollTo(0, savedScrollPosition);
+                
+                // Clean up content after transition
+                setTimeout(() => {
+                    modalContent.innerHTML = '';
+                }, 150);
+            }, 150);
         }
 
         // Add savedScrollPosition variable
@@ -1392,33 +1304,36 @@
             // Only process if modal is active and not in a loading state
             if (!isModalActive || currentlyLoadingProject) return;
             
-            // Prevent key repeat issues with shorter debounce
-            if (keyNavigationTimeout) return;
+            // Use a simpler debounce approach
+            if (keyNavigationTimeout) {
+                clearTimeout(keyNavigationTimeout);
+            }
             
+            // Very short debounce time for responsive feel
             keyNavigationTimeout = setTimeout(() => {
                 keyNavigationTimeout = null;
-            }, 150); // Reduced from 300ms for snappier response
-            
-            switch (e.key) {
-                case 'Escape':
-                    e.preventDefault();
-                    closeModal();
-                    break;
-                case 'ArrowLeft':
-                    e.preventDefault();
-                    const prevButton = document.getElementById('prev-project-btn');
-                    if (!prevButton.classList.contains('disabled')) {
-                        prevButton.click();
-                    }
-                    break;
-                case 'ArrowRight':
-                    e.preventDefault();
-                    const nextButton = document.getElementById('next-project-btn');
-                    if (!nextButton.classList.contains('disabled')) {
-                        nextButton.click();
-                    }
-                    break;
-            }
+                
+                switch (e.key) {
+                    case 'Escape':
+                        e.preventDefault();
+                        closeModal();
+                        break;
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        const prevButton = document.getElementById('prev-project-btn');
+                        if (!prevButton.classList.contains('disabled')) {
+                            prevButton.click();
+                        }
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        const nextButton = document.getElementById('next-project-btn');
+                        if (!nextButton.classList.contains('disabled')) {
+                            nextButton.click();
+                        }
+                        break;
+                }
+            }, 50); // Very short debounce for responsive feel
         });
 
         // Helper function to calculate year marker position
