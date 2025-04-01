@@ -43,17 +43,18 @@
 
         .sticky-header {
             position: sticky;
-            top: 0;
+            bottom: 0;
             background: #fff;
             z-index: 100;
-            padding: 32px;
+            padding: 24px 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            border-bottom: 1px solid #000;
-            height: 96px;
+            border-top: 1px solid #000;
+            height: 80px;
             box-sizing: border-box;
+            margin: 0;
         }
 
         .header-left {
@@ -81,13 +82,15 @@
 
         .sticky-header-wrapper {
             position: sticky;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
             width: 100%;
             background: #fff;
             z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin: 0;
+            padding: 0;
         }
 
         .main-content {
@@ -234,11 +237,12 @@
             
             .sticky-header {
                 padding: 24px;
-                height: 80px; /* Match modal-nav height on mobile */
+                height: 80px;
+                margin: 0;
             }
             
             .timeline-view {
-                padding: 0 24px 24px 12px; /* Mobile left padding reduced to 12px, bottom padding reduced */
+                padding: 0 24px 80px 12px; /* Adjust bottom padding to match header height */
             }
             
             .year-section {
@@ -327,19 +331,19 @@
         }
 
         .modal-nav {
-            position: sticky;
-            top: 0;
+            position: relative;
+            bottom: 0;
             left: 0;
             right: 0;
-            padding: 32px;
+            padding: 24px 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #000;
+            border-top: 1px solid #000;
             background: #fff;
             z-index: 10;
             flex-shrink: 0;
-            height: 96px;
+            height: 80px;
             box-sizing: border-box;
             width: 100%;
         }
@@ -392,7 +396,7 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             position: relative;
-            height: calc(100vh - 96px); /* Viewport height minus nav height */
+            height: calc(100vh - 80px); /* Viewport height minus nav height */
             scroll-behavior: smooth;
         }
 
@@ -514,7 +518,7 @@
             }
             
             .modal-project-image {
-                order: 2;
+                order: 1;
                 width: auto;
                 position: sticky;
                 top: 112px; /* Nav height + some padding */
@@ -534,7 +538,7 @@
             }
             
             .modal-project-content {
-                order: 1;
+                order: 2;
                 width: 55%;
                 padding-bottom: 64px;
             }
@@ -543,12 +547,23 @@
                 padding: 48px 32px;
                 max-width: 1080px; /* Slightly wider for side-by-side layout */
             }
+
+            .modal-nav {
+                order: 3;
+                position: relative;
+                border-top: 1px solid #000;
+                border-bottom: none;
+            }
         }
 
         @media (max-width: 700px) {
             .modal-nav {
                 padding: 24px;
-                height: 80px; /* Reduce nav height on mobile */
+                height: 80px;
+                position: relative;
+                order: 3;
+                border-top: 1px solid #000;
+                border-bottom: none;
             }
             
             .modal-title {
@@ -570,7 +585,7 @@
             }
 
             .modal-content {
-                height: calc(100vh - 80px); /* Adjust for smaller nav */
+                height: calc(100vh - 80px);
             }
 
             .modal-content-inner {
@@ -608,10 +623,33 @@
 
             .modal-project-image {
                 height: 320px; /* Smaller fixed height for mobile */
+                order: 1; /* Ensure image is first */
             }
             
             .modal-project-link {
                 font-size: 18px;
+            }
+
+            /* Adjust modal content wrapper for mobile */
+            .modal-project-content-wrapper {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .modal-project-content {
+                order: 2; /* Move content below image */
+                width: 100%;
+                padding-bottom: 24px;
+            }
+
+            .timeline-reference-marker {
+                bottom: 80px;
+                height: 16px;
+            }
+
+            .timeline-reference-marker::after {
+                top: -3.5px; /* Keep dot position consistent */
             }
         }
 
@@ -620,7 +658,7 @@
             display: none; /* Hide the toggle button */
         }
         
-        /* Single timeline reference marker */
+        /* Move timeline reference marker to bottom */
         .timeline-reference-marker {
             position: fixed;
             width: 1.5px; /* 1.5px line */
@@ -629,12 +667,12 @@
             pointer-events: none;
             transition: left 0.3s ease;
             
-            /* Top line only */
-            top: 96px; /* Height of the header */
-            height: 16px; /* Line length */
+            /* Bottom line */
+            bottom: 80px; /* Match header height */
+            height: 16px; /* Original line length */
         }
         
-        /* Add a dot at the bottom of the line */
+        /* Add a dot at the top of the line */
         .timeline-reference-marker::after {
             content: '';
             display: block;
@@ -643,32 +681,18 @@
             height: 7px; /* Larger dot size: 7px */
             background-color: #CC5500; /* Burnt orange color */
             border-radius: 50%; /* Make it round */
-            bottom: -3.5px; /* Position at the bottom of the line (half of height) */
+            top: -3.5px; /* Position at the top of the line (half of height) */
             left: -2.75px; /* Center the dot on the line (half of width) */
         }
-        
+
         .timeline-reference-marker::before,
         .timeline-reference-marker span {
             display: none;
-        }
-        
-        @media (max-width: 700px) {
-            .timeline-reference-marker {
-                top: 80px; /* Match mobile header height */
-            }
         }
     </style>
 </head>
 <body>
     <div class="page-wrapper">
-        <div class="sticky-header-wrapper">
-            <div class="sticky-header">
-                <div class="header-left">
-                    <div class="current-year">2024</div>
-                </div>
-                <!-- Timeline toggle button removed -->
-            </div>
-        </div>
         <div class="content-wrapper">
             <div class="main-content">
                 <div class="timeline-view">
@@ -678,6 +702,14 @@
                 <div class="timeline-reference-marker">
                     <span class="top-label">← Updates Year →</span>
                 </div>
+            </div>
+        </div>
+        <div class="sticky-header-wrapper">
+            <div class="sticky-header">
+                <div class="header-left">
+                    <div class="current-year">2024</div>
+                </div>
+                <!-- Timeline toggle button removed -->
             </div>
         </div>
     </div>
