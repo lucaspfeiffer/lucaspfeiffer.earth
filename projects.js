@@ -15,8 +15,8 @@ const projects = [
     },
     {
         id: 'local-kitchens-mobile-app',
-        year: 2023,
-        month: 6,
+        year: 2024,
+        month: 9,
         title: 'Local Kitchens Mobile App',
         description: 'The Local Kitchens mobile app, a multibrand ordering experience for the Local Kitchens restaurants. An online hawker hall experience to discover food from beloved chefs from all over the world, serving their unique dishes in the Local Kitchens restaurants.',
         image: './images/local kitchens mobile app.webp',
@@ -80,7 +80,7 @@ const projects = [
     {
         id: 'next-feed',
         year: 2023,
-        month: 7,
+        month: 6,
         title: 'Next Feed',
         description: 'Next is a mobile mobile app for Local Kitchens resturant managers to aggregate tasks across different apps',
         image: './images/Next feed.webp',
@@ -106,7 +106,7 @@ const projects = [
     },
     {
         id: 'authentication-redesign',
-        year: 2023,
+        year: 2024,
         month: 3,
         title: 'Authentication Redesign',
         description: 'Redesigned authentication flow for Local Kitchens online guests',
@@ -151,8 +151,8 @@ const projects = [
     },
     {
         id: 'mobile-ordering',
-        year: 2022,
-        month: 6,
+        year: 2023,
+        month: 7,
         title: 'Mobile Ordering',
         description: 'Top of funnel feature tile in the Local Kitchens guest ordering apps to feature contextual promotions, new brands, and specials.',
         image: './images/mobile ordering.webp',
