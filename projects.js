@@ -15,8 +15,8 @@ const projects = [
     },
     {
         id: 'local-kitchens-mobile-app',
-        year: 2024,
-        month: 11,
+        year: 2023,
+        month: 6,
         title: 'Local Kitchens Mobile App',
         description: 'The Local Kitchens mobile app, a multibrand ordering experience for the Local Kitchens restaurants. An online hawker hall experience to discover food from beloved chefs from all over the world, serving their unique dishes in the Local Kitchens restaurants.',
         image: './images/local kitchens mobile app.webp',
@@ -30,7 +30,7 @@ const projects = [
     {
         id: 'multi-brand-ordering',
         year: 2024,
-        month: 10,
+        month: 1,
         title: 'Multi-Brand Ordering',
         description: 'An ordering experience that allows customers to order from multiple restaurant brands in a single transaction.',
         image: './images/multi-brand ordering.webp',
@@ -38,17 +38,17 @@ const projects = [
     },
     {
         id: 'brand-page-storytelling',
-        year: 2024,
+        year: 2023,
         month: 9,
         title: 'Brand Page Storytelling',
-        description: 'Restaurant brand pages with rich storytelling features to showcase the chef, cuisine, and brand history.',
+        description: 'Enhanced storytelling at strategic points in the ordering journey to showcase the chef, cuisine, and brand history.',
         image: './images/brand page - storytelling.webp',
         links: []
     },
     {
         id: 'local-kitchens-kiosk',
         year: 2024,
-        month: 7,
+        month: 3,
         title: 'Local Kitchens Kiosk',
         description: 'The Local Kitchens in-store ordering kiosk, a multibrand ordering experience for the Local Kitchens restaurants. A modern hawker hall experience to discover food from beloved chefs from all over the world, serving their unique dishes in the Local Kitchens restaurants.',
         image: './images/kiosk.webp',
@@ -60,20 +60,20 @@ const projects = [
         ]
     },
     {
-        id: 'kitchenos-tv',
+        id: 'status-board',
         year: 2023,
         month: 9,
-        title: 'KitchenOS TV Display',
-        description: 'Kitchen display system for order management and status tracking on large screen TVs.',
+        title: 'Status Board',
+        description: 'The Local Kitchens status board is a front of resturant status board for guests and delivery partners to track the status of their order.',
         image: './images/tv.webp',
         links: []
     },
     {
         id: 'peek-cook',
         year: 2023,
-        month: 8,
+        month: 5,
         title: 'Peek - Cook View',
-        description: 'Cook view in the Peek order management system, showing detailed cooking instructions and timers.',
+        description: 'Peek is a live service recipe reference tool, a spin off from CoPilot, designed to put all recipe details at a cooks fingertips to avoid best guess, with the anti-goal of decreasing throughput.',
         image: './images/Peek - cook.webp',
         links: []
     },
@@ -82,7 +82,7 @@ const projects = [
         year: 2023,
         month: 7,
         title: 'Next Feed',
-        description: 'Feed-based interface showing upcoming tasks and notifications for kitchen staff.',
+        description: 'Next is a mobile mobile app for Local Kitchens resturant managers to aggregate tasks across different apps',
         image: './images/Next feed.webp',
         links: []
     },
@@ -91,14 +91,14 @@ const projects = [
         year: 2023,
         month: 6,
         title: 'Issue Creator',
-        description: 'Tool for creating and tracking issues in the kitchen operations system.',
+        description: 'Create an issue for your support teams from the Next mobile app.',
         image: './images/Create issue.webp',
         links: []
     },
     {
         id: 'kitchenos-copilot',
         year: 2023,
-        month: 5,
+        month: 3,
         title: 'KitchenOS CoPilot',
         description: 'The Local Kitchens recipe training tool from KitchenOS, an operating system for on-demand commercial kitchens. Designed to help new cooks learn dishes quickly, and to speed up all cooks training for dish swaps and new dishes.',
         image: './images/copilot training.webp',
@@ -109,7 +109,7 @@ const projects = [
         year: 2023,
         month: 3,
         title: 'Authentication Redesign',
-        description: 'Redesigned authentication flow for KitchenOS systems with improved security and user experience.',
+        description: 'Redesigned authentication flow for Local Kitchens online guests',
         image: './images/authentication redesign  2.webp',
         links: []
     },
@@ -118,16 +118,16 @@ const projects = [
         year: 2023,
         month: 2,
         title: 'KitchenOS Login',
-        description: 'Login screen for the KitchenOS platform.',
+        description: 'KitchenOS is an operating system for on-demand commercial kitchens. This is the login screen for the Kitchen Display System in KitchenOS, the displays in the prep and live service lines.',
         image: './images/kitchenOS login.webp',
         links: []
     },
     {
         id: 'kitchen-comp',
-        year: 2022,
-        month: 10,
+        year: 2023,
+        month: 5,
         title: 'Kitchen Computer',
-        description: 'The Local Kitchens kitchen computer, used for order management and kitchen displays.',
+        description: 'A kitchen level competition integrated into the Kitchen Display Systems at Local Kitchens resturants. Designed to leverage item level reviews in real time, with a focus on the team before the individual.',
         image: './images/kitchen comp.webp',
         links: []
     },
@@ -136,7 +136,7 @@ const projects = [
         year: 2022,
         month: 9,
         title: 'All Day View',
-        description: 'Comprehensive view showing all orders for the day in a kitchen management system.',
+        description: 'All Day View, a feature in the Kitchen Display System in KitchenOS designed to give expo more context on the current state of the kitchen',
         image: './images/all day view.webp',
         links: []
     },
@@ -145,7 +145,7 @@ const projects = [
         year: 2022,
         month: 7,
         title: 'Line Item Reviews',
-        description: 'Interface for reviewing individual line items in kitchen orders.',
+        description: 'A post order survery built at a hackathon at Local Kitchens to review individual line items in kitchen orders, giving us more granular feedback on the quality of the food for operational improvements.',
         image: './images/line item reviews.webp',
         links: []
     },
@@ -154,7 +154,7 @@ const projects = [
         year: 2022,
         month: 6,
         title: 'Mobile Ordering',
-        description: 'Mobile ordering experience for restaurant customers.',
+        description: 'Top of funnel feature tile in the Local Kitchens guest ordering apps to feature contextual promotions, new brands, and specials.',
         image: './images/mobile ordering.webp',
         links: []
     },
@@ -163,7 +163,7 @@ const projects = [
         year: 2022,
         month: 5,
         title: 'Go To Market',
-        description: 'Go-to-market strategy visualization for new product launches.',
+        description: 'Features across the Local Kitchens guest mobile ordering platforms to bring new brands to market.',
         image: './images/go to market.webp',
         links: []
     },
@@ -172,7 +172,7 @@ const projects = [
         year: 2022,
         month: 4,
         title: 'Client-Side Printer Config',
-        description: 'Configuration interface for client-side printer management in restaurant systems.',
+        description: 'A clever solution to have connected printers with Client-Side Printers, a feature in the Kitchen Display System in KitchenOS.',
         image: './images/client side printer config.webp',
         links: []
     },
@@ -181,7 +181,7 @@ const projects = [
         year: 2021,
         month: 10,
         title: 'SupplyHound Team Tool',
-        description: 'Team management tool for SupplyHound inventory management system.',
+        description: 'SupplyHounds Team Tool for sending reminders to jobsite workers to request materials as they need them to avoid delays.',
         image: './images/supplyhound team tool.webp',
         links: []
     },
@@ -190,7 +190,7 @@ const projects = [
         year: 2021,
         month: 7,
         title: 'SupplyHound List',
-        description: 'List view for SupplyHound inventory management system.',
+        description: 'SupplyHound mobile app for managing jobsite materials and placing materials orders throughout the day. Avoid sending the team off site to the supply store for ods and ends, and get an amazon like, 2 hour delivery experience at the jobsite.',
         image: './images/supplyhound list.webp',
         links: []
     },
@@ -199,7 +199,7 @@ const projects = [
         year: 2021,
         month: 3,
         title: 'SupplyHound Shortcuts',
-        description: 'Quick action shortcuts for SupplyHound inventory management system.',
+        description: 'SupplyHound list shortcuts for jobsite matierals and supplies ordering. SupplyHound is built for pros who do not like to dig though a catalog, so shortcuts help speed up data entry for the open list format',
         image: './images/supplyhound shortcuts.webp',
         links: []
     },
@@ -208,7 +208,7 @@ const projects = [
         year: 2019,
         month: 6,
         title: 'Line Mogul Point of Sale',
-        description: 'Point of sale system for Line Mogul restaurant management platform.',
+        description: 'Line Mogul Point of sale system for live events.',
         image: './images/line mogul point of sale.webp',
         links: []
     },
@@ -217,7 +217,7 @@ const projects = [
         year: 2018,
         month: 9,
         title: 'Line Mogul Mobile Ordering',
-        description: 'Mobile ordering system for Line Mogul restaurant management platform.',
+        description: 'Mobile ordering for a no wait event experience. See wait times to pick the shortest line, or choose to pay to use the VIP line.',
         image: './images/line mogul mobile ordering.webp',
         links: []
     }
