@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Projects - Lucas Pfeiffer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,6 +94,8 @@
             z-index: 1000;
             margin: 0;
             padding: 0;
+            /* Ensure it stays above browser controls */
+            padding-bottom: env(safe-area-inset-bottom, 0);
         }
 
         .main-content {
@@ -368,6 +370,8 @@
             height: 80px;
             box-sizing: border-box;
             width: 100%;
+            /* Ensure it stays above browser controls */
+            padding-bottom: calc(24px + env(safe-area-inset-bottom, 0));
         }
 
         .modal-nav-controls {
@@ -702,7 +706,7 @@
             }
 
             .timeline-reference-marker {
-                bottom: 80px; /* Align exactly with the header height */
+                bottom: calc(80px + env(safe-area-inset-bottom, 0)); /* Match header height + safe area */
                 height: 16px;
                 z-index: 1001;
             }
@@ -723,9 +727,12 @@
             
             /* Ensure modal nav is always visible */
             .modal-nav {
-                position: sticky;
+                position: fixed;
                 bottom: 0;
-                z-index: 100;
+                z-index: 2001;
+                /* Ensure it stays above browser controls */
+                padding-bottom: calc(24px + env(safe-area-inset-bottom, 0));
+                height: auto;
             }
         }
 
@@ -742,7 +749,7 @@
             z-index: 1001;
             pointer-events: none;
             transition: left 0.3s ease;
-            bottom: 80px; /* Match exactly with header height */
+            bottom: calc(80px + env(safe-area-inset-bottom, 0)); /* Match header height + safe area */
             height: 16px;
         }
         
