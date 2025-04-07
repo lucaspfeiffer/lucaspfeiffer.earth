@@ -785,6 +785,17 @@
             .modal-content {
                 height: calc(-webkit-fill-available - 80px);
             }
+            
+            /* Fix iOS safe area inset handling */
+            .sticky-header-wrapper {
+                background: #fff;
+                padding-bottom: env(safe-area-inset-bottom, 0);
+            }
+            
+            .modal-nav {
+                background: #fff;
+                padding-bottom: calc(24px + env(safe-area-inset-bottom, 0));
+            }
         }
     </style>
 </head>
