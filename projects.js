@@ -42,7 +42,7 @@ const projects = [
         month: 9,
         title: 'Brand Page Storytelling',
         description: 'Enhanced storytelling at strategic points in the ordering journey to showcase the chef, cuisine, and brand history.',
-        image: './images/brand page - storytelling.webp',
+        image: './images/brand page - storytelling-3.webp',
         links: []
     },
     {
@@ -146,7 +146,7 @@ const projects = [
         month: 7,
         title: 'Line Item Reviews',
         description: 'A post order survery built at a hackathon at Local Kitchens to review individual line items in kitchen orders, giving us more granular feedback on the quality of the food for operational improvements.',
-        image: './images/line item reviews-2.webp',
+        image: './images/line item reviews-3.webp',
         links: []
     },
     {
