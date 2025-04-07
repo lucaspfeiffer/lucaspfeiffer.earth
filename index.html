@@ -136,7 +136,7 @@
         /* Mobile Styles */
         @media (max-width: 700px) {
             html {
-                overflow: hidden;
+                overflow: auto;
                 height: 100%;
             }
 
@@ -144,21 +144,12 @@
                 padding: 32px;
                 height: auto;
                 overflow-y: auto;
-            }
-
-            body.needs-scroll {
-                height: auto;
-                overflow-y: auto;
                 min-height: 100dvh;
-            }
-
-            html.needs-scroll {
-                overflow: auto;
-                height: auto;
             }
 
             .content-wrapper {
                 margin-bottom: 80px;
+                transform: none;
             }
 
             .title {
@@ -223,8 +214,11 @@
             }
 
             .hero-section {
-                min-height: calc(100dvh - 40px);
-                padding-top: 0px;  /* Changed from 76px to 128px */
+                min-height: calc(100dvh - 64px);
+                padding-top: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
             }
 
             .dic-info-container {
@@ -242,59 +236,8 @@
         }
 
         /* Add new class that will be applied after page load */
-        .transitions-enabled {
-            .content-wrapper {
-                transition: gap 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            
-            .title {
-                transition: font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            
-            .hash {
-                transition: font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            
-            .countdown-time {
-                transition: font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            
-            .countdown-message {
-                transition: font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            
-            .title-group,
-            .countdown-container,
-            .info-container {
-                transition: gap 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            
-            body {
-                transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .section-title {
-                transition: font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            
-            .link {
-                transition: font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            
-            .links-container,
-            .section {
-                transition: gap 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
+        .transitions-enabled .content-wrapper {
+            transition: gap 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
 </head>
@@ -314,7 +257,7 @@
         </div>
         <div class="links-container">
             <div class="section">
-                <h2 class="section-title">Projects</h2>
+                <h2 class="section-title">Featured Projects</h2>
                 <div class="links-list">
                     <a href="https://lucaspfeiffer.earth/projects" class="link" target="_blank">Timeline</a>
                     <a href="https://apps.apple.com/us/app/dawn-and-dusk/id6470000000" class="link" target="_blank">Dawn and Dusk</a>
@@ -322,7 +265,7 @@
                 </div>
             </div>
             <div class="section">
-                <h2 class="section-title">Writing</h2>
+                <h2 class="section-title">Featured Writing</h2>
                 <div class="links-list">
                     <a href="https://www.kaletopia.com/p/the-techno-gather-manifesto-rough" class="link" target="_blank">The Techno Gather Manifesto</a>
                     <a href="https://www.kaletopia.com/p/the-social-event-network-rough-draft" class="link" target="_blank">The social (event) network</a>
@@ -333,6 +276,7 @@
                 <h2 class="section-title">More</h2>
                 <div class="links-list">
                     <a href="https://youtu.be/efwLNtCGx2c" class="link" target="_blank">Interview with Melody Kim</a>
+                    <a href="https://primal.net/p/nprofile1qqsgwfh2lr8dvjsjtex9yk9sm5jdp0g6ut2eun66szj0aynuztsvppsqsvquc" class="link" target="_blank">Nostr</a>
                 </div>
             </div>
             <div class="section">
