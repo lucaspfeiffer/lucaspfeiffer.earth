@@ -83,7 +83,7 @@ const projects = [
         month: 6,
         title: 'Next Feed',
         description: 'Next is a mobile mobile app for Local Kitchens resturant managers to aggregate tasks across different apps',
-        image: './images/Next feed.webp',
+        image: './images/Next feed-2.webp',
         links: []
     },
     {
@@ -92,7 +92,7 @@ const projects = [
         month: 6,
         title: 'Issue Creator',
         description: 'Create an issue for your support teams from the Next mobile app.',
-        image: './images/Create issue.webp',
+        image: './images/Create issue-2.webp',
         links: []
     },
     {
@@ -146,7 +146,7 @@ const projects = [
         month: 7,
         title: 'Line Item Reviews',
         description: 'A post order survery built at a hackathon at Local Kitchens to review individual line items in kitchen orders, giving us more granular feedback on the quality of the food for operational improvements.',
-        image: './images/line item reviews.webp',
+        image: './images/line item reviews-2.webp',
         links: []
     },
     {
