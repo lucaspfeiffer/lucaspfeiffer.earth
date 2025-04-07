@@ -39,6 +39,7 @@
             padding-bottom: 0;
             height: 100vh;
             overflow: hidden;
+            position: relative;
         }
 
         .sticky-header {
@@ -71,24 +72,24 @@
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
             width: 100%;
-            height: 100%; /* Full height */
-            padding: 0 32px 24px 80px; /* Desktop left padding, added bottom padding */
+            height: calc(100vh - 80px);
+            padding: 0 32px 120px 80px;
             flex: 1;
-            scrollbar-width: none; /* Hide scrollbar in Firefox */
-            overscroll-behavior-x: contain; /* Prevent overscroll on mobile */
-            cursor: grab; /* Show grab cursor to indicate scrollable */
-            gap: 0; /* Ensure no gap between year sections */
+            scrollbar-width: none;
+            overscroll-behavior-x: contain;
+            cursor: grab;
+            gap: 0;
+            position: relative;
         }
 
         .sticky-header-wrapper {
-            position: sticky;
+            position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             width: 100%;
             background: #fff;
-            z-index: 100;
-            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
             margin: 0;
             padding: 0;
         }
@@ -242,7 +243,8 @@
             }
             
             .timeline-view {
-                padding: 0 24px 80px 12px; /* Adjust bottom padding to match header height */
+                padding: 0 24px 96px 12px; /* Adjusted to account for marker height */
+                height: calc(100vh - 80px);
             }
             
             .year-section {
@@ -336,8 +338,8 @@
             -webkit-overflow-scrolling: touch;
             position: relative;
             height: calc(100vh - 80px); /* Viewport height minus nav height */
+            padding-bottom: 120px;
             scroll-behavior: smooth;
-            padding-bottom: 0; /* Ensure content doesn't get hidden behind the navbar */
         }
 
         .modal.active {
@@ -347,7 +349,7 @@
         }
 
         .modal-nav {
-            position: relative;
+            position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
@@ -357,8 +359,7 @@
             justify-content: space-between;
             border-top: 1px solid #aaaaaa;
             background: #fff;
-            z-index: 10;
-            flex-shrink: 0;
+            z-index: 2001;
             height: 80px;
             box-sizing: border-box;
             width: 100%;
@@ -696,8 +697,9 @@
             }
 
             .timeline-reference-marker {
-                bottom: 80px;
+                bottom: 80px; /* Align exactly with the header height */
                 height: 16px;
+                z-index: 1001;
             }
 
             .timeline-reference-marker::after {
@@ -711,7 +713,7 @@
             
             /* Ensure modal content doesn't get hidden behind the nav */
             .modal-content {
-                padding-bottom: 80px; /* Add padding to ensure content is visible above the nav */
+                padding-bottom: 96px; /* Adjusted to match timeline view padding */
             }
             
             /* Ensure modal nav is always visible */
@@ -730,15 +732,13 @@
         /* Move timeline reference marker to bottom */
         .timeline-reference-marker {
             position: fixed;
-            width: 1.5px; /* 1.5px line */
-            background-color: #888; /* Gray color */
-            z-index: 10;
+            width: 1.5px;
+            background-color: #888;
+            z-index: 1001;
             pointer-events: none;
             transition: left 0.3s ease;
-            
-            /* Bottom line */
-            bottom: 80px; /* Match header height */
-            height: 16px; /* Original line length */
+            bottom: 80px; /* Match exactly with header height */
+            height: 16px;
         }
         
         /* Add a dot at the top of the line */
