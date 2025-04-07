@@ -37,7 +37,8 @@
             padding: 0;
             padding-top: 0;
             padding-bottom: 0;
-            height: 100vh;
+            height: 100vh; /* Fallback */
+            height: 100dvh; /* Dynamic viewport height */
             overflow: hidden;
             position: relative;
         }
@@ -72,8 +73,9 @@
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
             width: 100%;
-            height: calc(100vh - 80px);
-            padding: 0 32px 120px 80px;
+            height: calc(100vh - 80px); /* Fallback */
+            height: calc(100dvh - 80px); /* Dynamic viewport height */
+            padding: 0 32px 96px 80px;
             flex: 1;
             scrollbar-width: none;
             overscroll-behavior-x: contain;
@@ -243,8 +245,9 @@
             }
             
             .timeline-view {
-                padding: 0 24px 96px 12px; /* Adjusted to account for marker height */
-                height: calc(100vh - 80px);
+                padding: 0 24px 96px 12px;
+                height: calc(100vh - 80px); /* Fallback */
+                height: calc(100dvh - 80px); /* Dynamic viewport height */
             }
             
             .year-section {
@@ -315,6 +318,8 @@
             left: 0;
             right: 0;
             bottom: 0;
+            height: 100vh; /* Fallback */
+            height: 100dvh; /* Dynamic viewport height */
             background: #fff;
             z-index: 2000;
             visibility: hidden;
@@ -337,9 +342,9 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             position: relative;
-            height: calc(100vh - 80px); /* Viewport height minus nav height */
-            padding-bottom: 120px;
-            scroll-behavior: smooth;
+            height: calc(100vh - 80px); /* Fallback */
+            height: calc(100dvh - 80px); /* Dynamic viewport height */
+            padding-bottom: 96px;
         }
 
         .modal.active {
@@ -757,6 +762,22 @@
         .timeline-reference-marker::before,
         .timeline-reference-marker span {
             display: none;
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            /* iOS-specific fixes */
+            .content-wrapper,
+            .timeline-view,
+            .modal,
+            .modal-content {
+                /* Use -webkit-fill-available as a fallback for older iOS */
+                height: -webkit-fill-available;
+            }
+            
+            .timeline-view,
+            .modal-content {
+                height: calc(-webkit-fill-available - 80px);
+            }
         }
     </style>
 </head>
