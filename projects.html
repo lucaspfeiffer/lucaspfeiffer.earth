@@ -240,16 +240,37 @@
                 --image-scale: clamp(0.45, 0.45 + 0.15 * (100vw - 320px) / 380, 0.6);
             }
             
+            .sticky-header-wrapper {
+                position: fixed;
+                top: 0;
+                bottom: auto;
+                left: 0;
+                right: 0;
+                width: 100%;
+                z-index: 1000;
+                margin: 0;
+                padding: 0;
+                /* Ensure it stays above browser controls */
+                padding-top: env(safe-area-inset-top, 0);
+                padding-bottom: 0;
+            }
+            
             .sticky-header {
+                position: sticky;
+                top: 0;
+                bottom: auto;
                 padding: 24px;
                 height: 80px;
                 margin: 0;
+                border-top: none;
+                border-bottom: 1px solid #000;
             }
             
             .timeline-view {
-                padding: 0 24px 96px 12px;
+                padding: 80px 24px 24px 12px;
                 height: calc(100vh - 80px); /* Fallback */
                 height: calc(100dvh - 80px); /* Dynamic viewport height */
+                margin-top: 0;
             }
             
             .year-section {
@@ -604,11 +625,16 @@
         @media (max-width: 599px) {
             .modal-nav {
                 padding: 24px;
-                height: 80px;
-                position: relative;
-                order: 2; /* Keep navigation at bottom consistently */
-                border-top: 1px solid #aaaaaa;
-                border-bottom: none;
+                height: 80px; /* Match exactly with the timeline header */
+                position: fixed;
+                top: 0;
+                bottom: auto;
+                order: 0; /* Navigation at top for mobile */
+                border-top: none;
+                border-bottom: 1px solid #000; /* Match border color with timeline header */
+                padding-top: calc(24px + env(safe-area-inset-top, 0));
+                padding-bottom: 24px;
+                box-sizing: border-box; /* Ensure padding is included in height */
             }
             
             .modal-title {
@@ -631,6 +657,8 @@
 
             .modal-content {
                 height: calc(100vh - 80px);
+                margin-top: 80px;
+                order: 1; /* Content below navigation for mobile */
             }
 
             .modal-content-inner {
@@ -706,33 +734,41 @@
             }
 
             .timeline-reference-marker {
-                bottom: calc(80px + env(safe-area-inset-bottom, 0)); /* Match header height + safe area */
+                bottom: auto;
+                top: calc(80px + env(safe-area-inset-top, 0)); /* Position fully below header */
                 height: 16px;
                 z-index: 1001;
             }
 
             .timeline-reference-marker::after {
-                top: -3.5px; /* Keep dot position consistent */
+                top: auto;
+                bottom: -3.5px; /* Position dot at the bottom of the line */
+                z-index: 1002; /* Ensure dot appears above the line */
             }
             
             /* Fix for timeline view to ensure content doesn't get hidden behind the header */
             .timeline-view {
-                padding-bottom: 100px; /* Increase bottom padding to ensure content is visible above the header */
+                padding-top: 100px; /* Increase top padding to ensure content is visible below the header */
+                padding-bottom: 24px; /* Reduce bottom padding since header is at top */
             }
             
             /* Ensure modal content doesn't get hidden behind the nav */
             .modal-content {
-                padding-bottom: 96px; /* Adjusted to match timeline view padding */
+                padding-top: 24px;
+                padding-bottom: 24px;
             }
             
             /* Ensure modal nav is always visible */
             .modal-nav {
                 position: fixed;
-                bottom: 0;
+                top: 0;
+                bottom: auto;
                 z-index: 2001;
                 /* Ensure it stays above browser controls */
-                padding-bottom: calc(24px + env(safe-area-inset-bottom, 0));
-                height: auto;
+                padding-top: calc(24px + env(safe-area-inset-top, 0));
+                padding-bottom: 24px;
+                height: 80px; /* Match height with timeline header exactly */
+                box-sizing: border-box; /* Ensure padding is included in height */
             }
         }
 
@@ -749,7 +785,7 @@
             z-index: 1001;
             pointer-events: none;
             transition: left 0.3s ease;
-            bottom: calc(80px + env(safe-area-inset-bottom, 0)); /* Match header height + safe area */
+            bottom: calc(80px + env(safe-area-inset-bottom, 0));
             height: 16px;
         }
         
@@ -758,17 +794,31 @@
             content: '';
             display: block;
             position: absolute;
-            width: 7px; /* Larger dot size: 7px */
-            height: 7px; /* Larger dot size: 7px */
-            background-color: #CC5500; /* Burnt orange color */
-            border-radius: 50%; /* Make it round */
-            top: -3.5px; /* Position at the top of the line (half of height) */
-            left: -2.75px; /* Center the dot on the line (half of width) */
+            width: 7px;
+            height: 7px;
+            background-color: #CC5500;
+            border-radius: 50%;
+            top: -3.5px;
+            left: -2.75px;
         }
 
         .timeline-reference-marker::before,
         .timeline-reference-marker span {
             display: none;
+        }
+
+        /* Mobile-specific timeline marker styling */
+        @media (max-width: 599px) {
+            .timeline-reference-marker {
+                bottom: auto;
+                top: calc(80px + env(safe-area-inset-top, 0));
+                height: 16px;
+            }
+
+            .timeline-reference-marker::after {
+                top: auto;
+                bottom: -3.5px;
+            }
         }
 
         @supports (-webkit-touch-callout: none) {
@@ -787,14 +837,36 @@
             }
             
             /* Fix iOS safe area inset handling */
-            .sticky-header-wrapper {
-                background: #fff;
-                padding-bottom: env(safe-area-inset-bottom, 0);
+            @media (min-width: 600px) {
+                .sticky-header-wrapper {
+                    background: #fff;
+                    padding-bottom: env(safe-area-inset-bottom, 0);
+                }
+                
+                .modal-nav {
+                    background: #fff;
+                    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0));
+                }
             }
             
-            .modal-nav {
-                background: #fff;
-                padding-bottom: calc(24px + env(safe-area-inset-bottom, 0));
+            @media (max-width: 599px) {
+                .sticky-header-wrapper {
+                    background: #fff;
+                    padding-top: env(safe-area-inset-top, 0);
+                    padding-bottom: 0;
+                }
+                
+                .modal-nav {
+                    background: #fff;
+                    padding-top: calc(24px + env(safe-area-inset-top, 0));
+                    padding-bottom: 24px;
+                }
+                
+                /* Move the dot to the bottom of the line on mobile */
+                .timeline-reference-marker::after {
+                    top: auto;
+                    bottom: -3.5px; /* Position dot at the bottom of the line */
+                }
             }
         }
     </style>
