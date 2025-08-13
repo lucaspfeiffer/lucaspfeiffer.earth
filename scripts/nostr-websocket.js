@@ -64,13 +64,13 @@ class NostrClient {
             const reqMessage = ['REQ', subscriptionId, filters];
             this.ws.send(JSON.stringify(reqMessage));
 
-            // Timeout after 10 seconds
+            // Timeout after 20 seconds for larger searches
             setTimeout(() => {
                 if (this.subscriptions.has(subscriptionId)) {
                     this.subscriptions.delete(subscriptionId);
                     resolve(this.events); // Return whatever we have
                 }
-            }, 10000);
+            }, 20000);
         });
     }
 

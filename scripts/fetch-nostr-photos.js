@@ -166,20 +166,54 @@ async function main() {
         const npub = 'npub1sunw47xw6e9pyhjv2fvtphfy6z734ck4ne844q9yl6f8cyhqczrqz3fjdk';
         const pubkey = npubToHex(npub);
         
-        console.log('📡 Connecting to Nostr relay...');
-        const client = new NostrClient('wss://relay.damus.io');
-        await client.connect();
+        // Try multiple relays for better coverage - expanded for 5 years
+        const relays = [
+            'wss://relay.damus.io',
+            'wss://nos.lol',
+            'wss://relay.primal.net', 
+            'wss://relay.snort.social',
+            'wss://nostr.wine',
+            'wss://relay.nostr.band',
+            'wss://nostr.mom',
+            'wss://relay.nostrich.de',
+            'wss://nostr-relay.wlvs.space',
+            'wss://relay.nostr.bg',
+            'wss://offchain.pub',
+            'wss://brb.io'
+        ];
         
-        // Request recent events with photos
-        const filter = {
-            authors: [pubkey],
-            kinds: [1, 20], // Text notes and picture-first events
-            limit: 200
-        };
+        const allEvents = new Map(); // Use Map to deduplicate by event ID
         
-        console.log('📥 Fetching recent posts...');
-        const events = await client.subscribe(filter);
-        client.close();
+        for (const relayUrl of relays) {
+            try {
+                console.log(`📡 Connecting to ${relayUrl}...`);
+                const client = new NostrClient(relayUrl);
+                await client.connect();
+                
+                // Request events with photos - 5 year span
+                const filter = {
+                    authors: [pubkey],
+                    kinds: [1, 20], // Text notes and picture-first events
+                    limit: 500, // Higher limit for 5 years of history
+                    since: Math.floor(Date.now() / 1000) - (5 * 365 * 24 * 60 * 60) // 5 years ago
+                };
+                
+                console.log('📥 Fetching posts...');
+                const events = await client.subscribe(filter);
+                client.close();
+                
+                // Add events to our collection (Map automatically deduplicates by key)
+                events.forEach(event => allEvents.set(event.id, event));
+                console.log(`   ✅ Got ${events.length} posts (${allEvents.size} unique total)\n`);
+                
+            } catch (err) {
+                console.error(`   ❌ Failed to connect to ${relayUrl}: ${err.message}\n`);
+                continue; // Try next relay
+            }
+        }
+        
+        const events = Array.from(allEvents.values());
+        console.log(`📊 Total unique events from all relays: ${events.length}`);
         
         console.log(`Found ${events.length} posts\n`);
         
