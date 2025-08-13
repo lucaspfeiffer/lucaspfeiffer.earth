@@ -5,6 +5,10 @@ on:
     # Run twice daily at 6 AM and 6 PM UTC
     - cron: '0 6,18 * * *'
   workflow_dispatch: # Manual trigger button in GitHub UI
+  push:
+    paths:
+      - 'scripts/**'
+      - '.github/workflows/sync-nostr.yml'
 
 permissions:
   contents: write
@@ -14,28 +18,23 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
       
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: 'scripts/package-lock.json'
         
     - name: Install dependencies
       working-directory: scripts
-      run: npm install
+      run: npm ci
         
-    - name: Fetch Nostr photos
+    - name: Fetch and process Nostr photos
       working-directory: scripts  
       run: node fetch-nostr-photos.js
-      
-    - name: Convert to WebP
-      uses: calibreapp/image-actions@main
-      with:
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
-        jpegQuality: '80'
-        pngQuality: '80' 
-        webpQuality: '80'
         
     - name: Commit new photos
       run: |
@@ -50,9 +49,10 @@ jobs:
           exit 0
         fi
         
-        # Count new images
-        NEW_COUNT=$(git diff --staged --name-only --diff-filter=A | grep "images/nostr-" | wc -l | tr -d ' ')
+        # Count changes
+        NEW_COUNT=$(git diff --staged --name-only --diff-filter=A | grep -c "images/nostr-" || echo "0")
         MODIFIED_COUNT=$(git diff --staged --name-only --diff-filter=M | wc -l | tr -d ' ')
+        TOTAL_FILES=$(git diff --staged --name-only | wc -l | tr -d ' ')
         
         if [ "$NEW_COUNT" -gt 0 ]; then
           COMMIT_MSG="📸 Add $NEW_COUNT new photos from Nostr"
@@ -61,8 +61,10 @@ jobs:
         fi
         
         if [ "$MODIFIED_COUNT" -gt 0 ]; then
-          COMMIT_MSG="$COMMIT_MSG (optimized $MODIFIED_COUNT images)"
+          COMMIT_MSG="$COMMIT_MSG ($MODIFIED_COUNT files updated)"
         fi
+        
+        echo "Committing $TOTAL_FILES files..."
         
         git commit -m "$COMMIT_MSG
 

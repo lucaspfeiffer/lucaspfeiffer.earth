@@ -174,7 +174,7 @@ async function main() {
         const filter = {
             authors: [pubkey],
             kinds: [1, 20], // Text notes and picture-first events
-            limit: 50
+            limit: 200
         };
         
         console.log('📥 Fetching recent posts...');
