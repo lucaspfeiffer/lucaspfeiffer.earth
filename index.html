@@ -36,7 +36,7 @@
             gap: 40px;
             transform-origin: center;
             transform: translateY(0);
-            margin-bottom: 164px;
+            margin-bottom: 56px;
         }
         
         .title {
@@ -148,7 +148,7 @@
             }
 
             .content-wrapper {
-                margin-bottom: 80px;
+                margin-bottom: 40px;
                 transform: none;
             }
 
@@ -242,9 +242,8 @@
 
         .photo-module {
             width: 100vw;
-            height: 80vh;
             margin-left: calc(-50vw + 50%);
-            padding-top: 320px;
+            padding-top: 80px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -260,7 +259,7 @@
 
         .photo-module img {
             max-width: 100%;
-            max-height: 80vh;
+            height: auto;
             object-fit: contain;
             display: block;
             cursor: pointer;
@@ -269,12 +268,16 @@
         .photo-module-date {
             text-align: center;
             color: black;
-            font-size: 16px;
+            font-size: 24px;
             font-weight: 500;
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         @media (max-width: 700px) {
+            .photo-module {
+                padding-top: 40px;
+            }
+            
             .photo-module-date {
                 font-size: 14px;
             }
@@ -399,7 +402,24 @@
             };
             
             const photoModule = document.getElementById('latest-photo');
-            const dateStr = `${latestPhoto.month.toString().padStart(2, '0')}/01/${latestPhoto.year}`;
+            
+            // Extract actual date from title or description if available
+            let dateStr = `${latestPhoto.month.toString().padStart(2, '0')}/01/${latestPhoto.year}`; // fallback
+            
+            // Check for "Photo from YYYY-MM-DD" in title
+            const titleDateMatch = latestPhoto.title.match(/Photo from (\d{4})-(\d{2})-(\d{2})/);
+            if (titleDateMatch) {
+                const [, year, month, day] = titleDateMatch;
+                dateStr = `${month}/${day}/${year}`;
+            }
+            // Check for "Posted on M/D/YYYY" in description
+            else {
+                const descDateMatch = latestPhoto.description.match(/Posted on (\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                if (descDateMatch) {
+                    const [, month, day, year] = descDateMatch;
+                    dateStr = `${month.padStart(2, '0')}/${day.padStart(2, '0')}/${year}`;
+                }
+            }
             
             photoModule.innerHTML = `
                 <a href="/photos.html">

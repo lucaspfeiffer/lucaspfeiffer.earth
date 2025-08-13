@@ -823,7 +823,23 @@
                 photoElement.className = 'photo-item';
                 photoElement.id = `${photo.year}-${photo.id}`;
                 
-                const dateStr = `${photo.month.toString().padStart(2, '0')}/01/${photo.year}`;
+                // Extract actual date from title or description if available
+                let dateStr = `${photo.month.toString().padStart(2, '0')}/01/${photo.year}`; // fallback
+                
+                // Check for "Photo from YYYY-MM-DD" in title
+                const titleDateMatch = photo.title.match(/Photo from (\d{4})-(\d{2})-(\d{2})/);
+                if (titleDateMatch) {
+                    const [, year, month, day] = titleDateMatch;
+                    dateStr = `${month}/${day}/${year}`;
+                }
+                // Check for "Posted on M/D/YYYY" in description
+                else {
+                    const descDateMatch = photo.description.match(/Posted on (\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                    if (descDateMatch) {
+                        const [, month, day, year] = descDateMatch;
+                        dateStr = `${month.padStart(2, '0')}/${day.padStart(2, '0')}/${year}`;
+                    }
+                }
                 
                 photoElement.innerHTML = `
                     <div class="photo-container">
