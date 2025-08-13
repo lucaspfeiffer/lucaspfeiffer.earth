@@ -1,0 +1,74 @@
+name: Sync Nostr Photos
+
+on:
+  schedule:
+    # Run twice daily at 6 AM and 6 PM UTC
+    - cron: '0 6,18 * * *'
+  workflow_dispatch: # Manual trigger button in GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        
+    - name: Install dependencies
+      working-directory: scripts
+      run: npm install
+        
+    - name: Fetch Nostr photos
+      working-directory: scripts  
+      run: node fetch-nostr-photos.js
+      
+    - name: Convert to WebP
+      uses: calibreapp/image-actions@main
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        jpegQuality: '80'
+        pngQuality: '80' 
+        webpQuality: '80'
+        
+    - name: Commit new photos
+      run: |
+        git config --local user.email "nostr-bot@github.com"
+        git config --local user.name "Nostr Photo Bot"
+        
+        git add -A
+        
+        # Check if there are changes to commit
+        if git diff --staged --quiet; then
+          echo "No new photos to commit"
+          exit 0
+        fi
+        
+        # Count new images
+        NEW_COUNT=$(git diff --staged --name-only --diff-filter=A | grep "images/nostr-" | wc -l | tr -d ' ')
+        MODIFIED_COUNT=$(git diff --staged --name-only --diff-filter=M | wc -l | tr -d ' ')
+        
+        if [ "$NEW_COUNT" -gt 0 ]; then
+          COMMIT_MSG="📸 Add $NEW_COUNT new photos from Nostr"
+        else
+          COMMIT_MSG="🖼️ Update photos and optimize images"
+        fi
+        
+        if [ "$MODIFIED_COUNT" -gt 0 ]; then
+          COMMIT_MSG="$COMMIT_MSG (optimized $MODIFIED_COUNT images)"
+        fi
+        
+        git commit -m "$COMMIT_MSG
+
+        🤖 Auto-synced from Nostr account
+        🚀 Generated with Claude Code
+
+        Co-Authored-By: Claude <noreply@anthropic.com>"
+        
+        git push

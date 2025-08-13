@@ -17,7 +17,11 @@
       "Bash(ls:*)",
       "Bash(mkdir:*)",
       "Bash(rm:*)",
-      "WebFetchTool(domain:www.apple.com)"
+      "WebFetchTool(domain:www.apple.com)",
+      "WebSearch",
+      "Bash(node:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)"
     ],
     "deny": []
   }

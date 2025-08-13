@@ -1,0 +1,17 @@
+{
+  "name": "nostr-photo-fetcher",
+  "version": "1.0.0",
+  "description": "Fetch photos from Nostr and update website",
+  "main": "fetch-nostr-photos.js",
+  "scripts": {
+    "start": "node fetch-nostr-photos.js",
+    "test": "node test-fetch.js"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5",
+    "ws": "^8.16.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

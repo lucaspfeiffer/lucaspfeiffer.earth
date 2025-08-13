@@ -1,0 +1,123 @@
+name: Fetch Nostr Photos
+
+on:
+  schedule:
+    # Run daily at 12:00 UTC (8:00 AM EST)
+    - cron: '0 12 * * *'
+  workflow_dispatch: # Allow manual triggering
+  push:
+    paths:
+      - 'scripts/**'
+      - '.github/workflows/nostr-photos.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  fetch-photos:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: 'scripts/package-lock.json'
+        
+    - name: Install dependencies
+      run: |
+        cd scripts
+        npm install
+        
+    - name: Fetch new Nostr photos
+      run: |
+        cd scripts
+        node fetch-nostr-photos.js
+        
+    - name: Optimize images to WebP
+      uses: calibreapp/image-actions@main
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        # Convert JPEG/PNG to WebP with 80% quality
+        jpegQuality: '80'
+        pngQuality: '80'
+        webpQuality: '80'
+        # Only process images in the images/ directory
+        ignorePaths: 'node_modules/**,scripts/**,.git/**'
+        
+    - name: Check for changes
+      id: check_changes
+      run: |
+        git add .
+        if git diff --cached --quiet; then
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "No changes to commit"
+        else
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+          echo "Changes detected"
+        fi
+        
+    - name: Commit and push changes
+      if: steps.check_changes.outputs.has_changes == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Count new photos
+        NEW_PHOTOS=$(git diff --cached --name-only | grep "images/nostr-" | wc -l)
+        
+        git commit -m "Add $NEW_PHOTOS new photos from Nostr
+
+        🤖 Generated with [Claude Code](https://claude.ai/code)
+
+        Co-Authored-By: Claude <noreply@anthropic.com>"
+        
+        git push
+        
+    - name: Deploy to GitHub Pages
+      if: steps.check_changes.outputs.has_changes == 'true'
+      uses: actions/deploy-pages@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+  # Separate job for WebP conversion in case images were already downloaded
+  optimize-existing:
+    runs-on: ubuntu-latest
+    needs: fetch-photos
+    if: always() # Run even if fetch-photos had no changes
+    
+    steps:
+    - name: Checkout repository  
+      uses: actions/checkout@v4
+      
+    - name: Optimize existing images
+      uses: calibreapp/image-actions@main
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        jpegQuality: '80' 
+        pngQuality: '80'
+        webpQuality: '80'
+        ignorePaths: 'node_modules/**,scripts/**,.git/**'
+        
+    - name: Commit optimized images
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        git add .
+        if ! git diff --cached --quiet; then
+          git commit -m "Optimize images to WebP format
+          
+          🤖 Generated with [Claude Code](https://claude.ai/code)
+          
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+          git push
+        else
+          echo "No image optimizations needed"
+        fi
