@@ -933,5 +933,16 @@
     "description": "these guys jam",
     "created_at": 1755358325,
     "originalUrl": "https://image.nostr.build/ff6c691c2d82c893bd5e76f41a316081f30e8ba2d4d068d681f92b57faf61a51.jpg"
+  },
+  {
+    "id": "nostr-8b71add1-0",
+    "eventId": "8b71add170e16119a0bbbfe6b286f38b1275e51e6cb68bd28843c16c492ea213",
+    "year": 2025,
+    "month": 8,
+    "image": "images/nostr-8b71add1-0.webp",
+    "title": "walking in san francisco",
+    "description": "walking in san francisco",
+    "created_at": 1755642025,
+    "originalUrl": "https://image.nostr.build/79fe436ffc0fbec7382b31398ebf42179b9d8d24831effbeddb02ae0ad4195d0.jpg"
   }
 ]
