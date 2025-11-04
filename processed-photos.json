@@ -1054,5 +1054,27 @@
     "description": "having a cup",
     "created_at": 1761923266,
     "originalUrl": "https://image.nostr.build/3ddd46a7f06a212eb9842195e860cf66fd4c68e8992418d65cf82c7cec67c53f.jpg"
+  },
+  {
+    "id": "nostr-78174e9a-0",
+    "eventId": "78174e9a89c4df37d3066becd273acf4090297e12f934b44aa25550abef5064a",
+    "year": 2025,
+    "month": 11,
+    "image": "images/nostr-78174e9a-0.webp",
+    "title": "Photo from 2025-11-04",
+    "description": "Posted on 11/4/2025",
+    "created_at": 1762217684,
+    "originalUrl": "https://image.nostr.build/6282b7109575cfe0934f918a15138097b54613097212b896d57f76edd1614438.jpg"
+  },
+  {
+    "id": "nostr-78174e9a-1",
+    "eventId": "78174e9a89c4df37d3066becd273acf4090297e12f934b44aa25550abef5064a",
+    "year": 2025,
+    "month": 11,
+    "image": "images/nostr-78174e9a-1.webp",
+    "title": "Photo from 2025-11-04",
+    "description": "Posted on 11/4/2025",
+    "created_at": 1762217684,
+    "originalUrl": "https://image.nostr.build/885981f7c596cbf61c8a4a7ff9997d3a0323593445c57e1dd53bcc4a4fb2d685.jpg"
   }
 ]
