@@ -1098,5 +1098,16 @@
     "description": "morning coffee",
     "created_at": 1763312843,
     "originalUrl": "https://image.nostr.build/88d7f3579cfa8af5707dd50b3f968ab65e1ac94dcd0f81aa851339daa75330ad.jpg"
+  },
+  {
+    "id": "nostr-ab3e6fe2-0",
+    "eventId": "ab3e6fe29a5ab02bea76880d3b18c73fc9458aa0c94a90ab690d453138797ba6",
+    "year": 2025,
+    "month": 11,
+    "image": "images/nostr-ab3e6fe2-0.webp",
+    "title": "Photo from 2025-11-21",
+    "description": "Posted on 11/21/2025",
+    "created_at": 1763759647,
+    "originalUrl": "https://image.nostr.build/d32b1185bb21b760b0357cbdae6f20e665ee3c9849c7dad269202dc61eb318bf.jpg"
   }
 ]
