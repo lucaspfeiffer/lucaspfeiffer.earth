@@ -1120,5 +1120,16 @@
     "description": "Posted on 12/14/2025",
     "created_at": 1765670688,
     "originalUrl": "https://image.nostr.build/4884f3e1aeaa7dd4512a4b8ba3202b00304631142fb48eb93f6f30617af08a29.jpg"
+  },
+  {
+    "id": "nostr-18640629-0",
+    "eventId": "186406291ee98f328f4f0ff272b87915b2af7f5be65c5dbf2ff503caccf665bb",
+    "year": 2025,
+    "month": 12,
+    "image": "images/nostr-18640629-0.webp",
+    "title": "Photo from 2025-12-22",
+    "description": "Posted on 12/22/2025",
+    "created_at": 1766436312,
+    "originalUrl": "https://image.nostr.build/c2b8fd29e5231b6d19d6ca7d6db40a1192df366162852138128603d437598086.jpg"
   }
 ]
