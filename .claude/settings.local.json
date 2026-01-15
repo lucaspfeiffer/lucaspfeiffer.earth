@@ -21,7 +21,10 @@
       "WebSearch",
       "Bash(node:*)",
       "Bash(npm install)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(exiftool:*)",
+      "Bash(identify:*)",
+      "Bash(python3:*)"
     ],
     "deny": []
   }
