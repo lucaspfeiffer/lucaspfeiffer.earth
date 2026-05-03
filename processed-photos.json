@@ -1230,5 +1230,16 @@
     "description": "Posted on 4/29/2026",
     "created_at": 1777500231,
     "originalUrl": "https://image.nostr.build/db281d877d312ce4da716e7ed697ed4ab48a0d8b6650e983c2962c887faea14a.jpg"
+  },
+  {
+    "id": "nostr-c57a4d42-0",
+    "eventId": "c57a4d42cafc53c5ab8977a9681c56fe448589606697b2403d092c8e441d735c",
+    "year": 2026,
+    "month": 5,
+    "image": "images/nostr-c57a4d42-0.webp",
+    "title": "Photo from 2026-05-03",
+    "description": "Posted on 5/3/2026",
+    "created_at": 1777803462,
+    "originalUrl": "https://image.nostr.build/f15755bbc7b7a49eac5ce61c973d0c3a9d49d57b7aa51417406e3da68bd36b1b.jpg"
   }
 ]
