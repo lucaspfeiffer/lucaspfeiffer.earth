@@ -1155,12 +1155,12 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             renderProjects();
-            
+
             // Set initial current year to most recent year (first in the list)
             const years = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a);
             if (years.length > 0) {
                 document.querySelector('.current-year').textContent = years[0];
-                
+
                 // Auto-scroll to first year section (slight delay to let rendering complete)
                 setTimeout(() => {
                     const firstYearSection = document.getElementById(years[0]);
@@ -1175,6 +1175,18 @@
                     alignTimelineWithYear();
                 }, 100);
             }
+
+            // If the URL has a project hash (e.g. #2026-open-sdk), open that project's modal
+            const openProjectFromHash = () => {
+                const hash = window.location.hash.slice(1);
+                if (!hash) return;
+                const projectElement = document.getElementById(hash);
+                if (projectElement && projectElement.classList.contains('project')) {
+                    openModal(projectElement);
+                }
+            };
+            setTimeout(openProjectFromHash, 200);
+            window.addEventListener('hashchange', openProjectFromHash);
             
             // Make current year clickable to open a menu on mobile
             document.querySelector('.current-year').addEventListener('click', function() {
