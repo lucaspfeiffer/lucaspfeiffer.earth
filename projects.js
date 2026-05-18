@@ -1,5 +1,89 @@
 const projects = [
     {
+        id: 'tacwu-summer-collection',
+        year: 2026,
+        month: 4,
+        title: 'Tools a Cowboy Would Use — 2026 Summer Collection',
+        description: 'Limited time collection by Tools a Cowboy Would Use. Each item is hand embroidered, hand drawn artwork, with a patch for when it was made. This collection elevates Dawn and Dusk by Tools a Cowboy Would Use into a category of legendary tools.',
+        image: './images/tacwu summer collection.webp',
+        links: [
+            {
+                text: 'Learn more',
+                url: 'https://toolsacowboywoulduse.com/?view=store'
+            }
+        ]
+    },
+    {
+        id: 'tacwu-site',
+        year: 2025,
+        month: 3,
+        title: 'toolsacowboywoulduse.com',
+        description: 'Tools a Cowboy Would Use is an art project, often described as a clothing brand that makes consumer apps as accessories.',
+        image: './images/tacwu site.png',
+        links: [
+            {
+                text: 'toolsacowboywoulduse.com',
+                url: 'https://toolsacowboywoulduse.com'
+            }
+        ]
+    },
+    {
+        id: 'open-mobile-apps',
+        year: 2025,
+        month: 9,
+        title: 'Open Mobile Apps',
+        description: 'The Open mobile app is a product for restaurants that enables them to launch their own mobile app on the iOS and Google Play stores. This product helps restaurants offer a world class ‘hero online ordering experience,’ where customers explore the latest menu with beautiful merchandising, make purchases with best-in-class conversion, earn and spend loyalty cash, refer friends, send gift cards, get notified/browse/apply the latest promotions, and more.',
+        image: './images/open mobile apps.png',
+        links: [
+            {
+                text: 'Open',
+                url: 'https://getopen.com'
+            }
+        ]
+    },
+    {
+        id: 'open-ordering-websites',
+        year: 2025,
+        month: 12,
+        title: 'Open Ordering Websites',
+        description: 'Open web ordering and catering is a product Open built for restaurants, enabling them to offer their customers a world class online ordering experience, and to take orders directly from these customers. Especially serves new customers coming from social media, ads, Google, and the marketing website.',
+        image: './images/open ordering websites.png',
+        links: [
+            {
+                text: 'Open',
+                url: 'https://getopen.com'
+            }
+        ]
+    },
+    {
+        id: 'open-promotions-loyalty',
+        year: 2025,
+        month: 6,
+        title: 'Open Promotions, Loyalty, Gift Cards & Referrals',
+        description: 'Open Promotions, Loyalty, Gift Cards, Referrals, and more are tools the team at Open designed, built, and has iterated on to help restaurants migrate online customers from marketplaces like Uber Eats and DoorDash to their own direct ordering channels, get them engaged, and grow LTV.',
+        image: './images/open growth.png',
+        links: [
+            {
+                text: 'Open',
+                url: 'https://getopen.com'
+            }
+        ]
+    },
+    {
+        id: 'open-sdk',
+        year: 2026,
+        month: 5,
+        title: 'Open SDK',
+        description: 'The Open SDK is a set of product design and engineering packages used to leverage Open’s ordering primitives to build a completely unique and personalized web ordering experience for any restaurant. The Open SDK helps design and build the best marketing website and web ordering experience, then helps maintain, make edits, scale, and improve over time.',
+        image: './images/open sdk.png',
+        links: [
+            {
+                text: 'Open',
+                url: 'https://getopen.com'
+            }
+        ]
+    },
+    {
         id: 'dawn-and-dusk',
         year: 2025,
         month: 3,
@@ -20,12 +104,7 @@ const projects = [
         title: 'Local Kitchens Mobile App',
         description: 'The Local Kitchens mobile app, a multibrand ordering experience for the Local Kitchens restaurants. An online hawker hall experience to discover food from beloved chefs from all over the world, serving their unique dishes in the Local Kitchens restaurants.',
         image: './images/local kitchens mobile app.webp',
-        links: [
-            {
-                text: 'Download on App Store',
-                url: 'https://apps.apple.com/us/app/local-kitchens/id1592013238'
-            }
-        ]
+        links: []
     },
     {
         id: 'multi-brand-ordering',
@@ -52,12 +131,7 @@ const projects = [
         title: 'Local Kitchens Kiosk',
         description: 'The Local Kitchens in-store ordering kiosk, a multibrand ordering experience for the Local Kitchens restaurants. A modern hawker hall experience to discover food from beloved chefs from all over the world, serving their unique dishes in the Local Kitchens restaurants.',
         image: './images/kiosk.webp',
-        links: [
-            {
-                text: 'Find a restaurant',
-                url: 'https://maps.apple.com/?address=San%20Francisco%20Bay%20Area,%20CA,%20United%20States&auid=17686758198201699014&ll=37.789,-122.419&lsp=9902&q=Local%20Kitchens&t=h'
-            }
-        ]
+        links: []
     },
     {
         id: 'status-board',
@@ -202,6 +276,20 @@ const projects = [
         description: 'SupplyHound list shortcuts for jobsite matierals and supplies ordering. SupplyHound is built for pros who do not like to dig though a catalog, so shortcuts help speed up data entry for the open list format',
         image: './images/supplyhound shortcuts.webp',
         links: []
+    },
+    {
+        id: 'art-of-sport-brand',
+        year: 2019,
+        month: 7,
+        title: 'Art of Sport Brand - Summer 2019 Target Launch',
+        description: 'Art of Sport is an athlete-focused skincare and body care line from Kobe Bryant based in Los Angeles. In the summer of 2019, Art of Sport redeveloped the brand and packaging for a nationwide launch at all Target retail stores.',
+        image: './images/art of sport.webp',
+        links: [
+            {
+                text: 'Forbes article',
+                url: 'https://www.forbes.com/sites/joanverdon/2020/09/21/art-of-sport-the-skincare-line-backed-by-kobe-bryant-plans-retail-expansion/'
+            }
+        ]
     },
     {
         id: 'line-mogul-pos',

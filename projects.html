@@ -206,6 +206,18 @@
         /* Special styling for Dawn and Dusk project - use the same approach as other images */
         /* Dawn and Dusk will naturally hug its content with our new approach */
 
+        /* Art of Sport: square corners and slightly smaller on timeline */
+        [id="2019-art-of-sport-brand"] .project-image {
+            transform: scale(calc(var(--image-scale) * 0.8));
+            border-radius: 0;
+        }
+        [id="2019-art-of-sport-brand"] .project-image img {
+            border-radius: 0;
+        }
+        .modal-project-image img[src*="art of sport"] {
+            border-radius: 0;
+        }
+
         /* Hide project content in main view */
         .timeline-view .project-content {
             display: none;
@@ -1384,26 +1396,28 @@
             
             // Function to apply content after image is loaded
             const applyContent = () => {
-                modalContent.style.opacity = '0';
-                
-                setTimeout(() => {
+                if (isNavigating) {
+                    // Modal already open — instant swap, no fade (image is preloaded)
                     modalContent.innerHTML = modalHTML;
-                    
-                    // Reset scroll position
                     modalContentElement.scrollTop = 0;
-                    
-                    // Show modal if not already shown
-                    if (!modal.classList.contains('active')) {
-                        document.body.style.overflow = 'hidden';
-                        modal.classList.add('active');
-                    }
-                    
-                    // Fade in content
-                    requestAnimationFrame(() => {
-                        modalContent.style.opacity = '1';
-                        currentlyLoadingProject = false;
-                    });
-                }, isNavigating ? 150 : 0);
+                    currentlyLoadingProject = false;
+                    return;
+                }
+
+                // First open — fade in
+                modalContent.style.opacity = '0';
+                modalContent.innerHTML = modalHTML;
+                modalContentElement.scrollTop = 0;
+
+                if (!modal.classList.contains('active')) {
+                    document.body.style.overflow = 'hidden';
+                    modal.classList.add('active');
+                }
+
+                requestAnimationFrame(() => {
+                    modalContent.style.opacity = '1';
+                    currentlyLoadingProject = false;
+                });
             };
             
             // Preload image
