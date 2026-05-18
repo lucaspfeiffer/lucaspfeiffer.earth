@@ -104,12 +104,7 @@ const projects = [
         title: 'Local Kitchens Mobile App',
         description: 'The Local Kitchens mobile app, a multibrand ordering experience for the Local Kitchens restaurants. An online hawker hall experience to discover food from beloved chefs from all over the world, serving their unique dishes in the Local Kitchens restaurants.',
         image: './images/local kitchens mobile app.webp',
-        links: [
-            {
-                text: 'Download on App Store',
-                url: 'https://apps.apple.com/us/app/local-kitchens/id1592013238'
-            }
-        ]
+        links: []
     },
     {
         id: 'multi-brand-ordering',
@@ -136,12 +131,7 @@ const projects = [
         title: 'Local Kitchens Kiosk',
         description: 'The Local Kitchens in-store ordering kiosk, a multibrand ordering experience for the Local Kitchens restaurants. A modern hawker hall experience to discover food from beloved chefs from all over the world, serving their unique dishes in the Local Kitchens restaurants.',
         image: './images/kiosk.webp',
-        links: [
-            {
-                text: 'Find a restaurant',
-                url: 'https://maps.apple.com/?address=San%20Francisco%20Bay%20Area,%20CA,%20United%20States&auid=17686758198201699014&ll=37.789,-122.419&lsp=9902&q=Local%20Kitchens&t=h'
-            }
-        ]
+        links: []
     },
     {
         id: 'status-board',
