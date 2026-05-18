@@ -19,7 +19,7 @@ const projects = [
         month: 3,
         title: 'toolsacowboywoulduse.com',
         description: 'Tools a Cowboy Would Use is an art project, often described as a clothing brand that makes consumer apps as accessories.',
-        image: './images/tacwu site.png',
+        image: './images/tacwu site.webp',
         links: [
             {
                 text: 'toolsacowboywoulduse.com',
@@ -33,7 +33,7 @@ const projects = [
         month: 9,
         title: 'Open Mobile Apps',
         description: 'The Open mobile app is a product for restaurants that enables them to launch their own mobile app on the iOS and Google Play stores. This product helps restaurants offer a world class ‘hero online ordering experience,’ where customers explore the latest menu with beautiful merchandising, make purchases with best-in-class conversion, earn and spend loyalty cash, refer friends, send gift cards, get notified/browse/apply the latest promotions, and more.',
-        image: './images/open mobile apps.png',
+        image: './images/open mobile apps.webp',
         links: [
             {
                 text: 'Open',
@@ -47,7 +47,7 @@ const projects = [
         month: 12,
         title: 'Open Ordering Websites',
         description: 'Open web ordering and catering is a product Open built for restaurants, enabling them to offer their customers a world class online ordering experience, and to take orders directly from these customers. Especially serves new customers coming from social media, ads, Google, and the marketing website.',
-        image: './images/open ordering websites.png',
+        image: './images/open ordering websites.webp',
         links: [
             {
                 text: 'Open',
@@ -61,7 +61,7 @@ const projects = [
         month: 6,
         title: 'Open Promotions, Loyalty, Gift Cards & Referrals',
         description: 'Open Promotions, Loyalty, Gift Cards, Referrals, and more are tools the team at Open designed, built, and has iterated on to help restaurants migrate online customers from marketplaces like Uber Eats and DoorDash to their own direct ordering channels, get them engaged, and grow LTV.',
-        image: './images/open growth.png',
+        image: './images/open growth.webp',
         links: [
             {
                 text: 'Open',
@@ -75,7 +75,7 @@ const projects = [
         month: 5,
         title: 'Open SDK',
         description: 'The Open SDK is a set of product design and engineering packages used to leverage Open’s ordering primitives to build a completely unique and personalized web ordering experience for any restaurant. The Open SDK helps design and build the best marketing website and web ordering experience, then helps maintain, make edits, scale, and improve over time.',
-        image: './images/open sdk.png',
+        image: './images/open sdk.webp',
         links: [
             {
                 text: 'Open',
