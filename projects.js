@@ -75,7 +75,7 @@ const projects = [
         month: 5,
         title: 'Open SDK',
         description: 'The Open SDK is a set of product design and engineering packages used to leverage Open’s ordering primitives to build a completely unique and personalized web ordering experience for any restaurant. The Open SDK helps design and build the best marketing website and web ordering experience, then helps maintain, make edits, scale, and improve over time.',
-        image: '',
+        image: './images/open sdk.png',
         links: [
             {
                 text: 'Open',
