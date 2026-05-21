@@ -308,5 +308,23 @@ const projects = [
         description: 'Mobile ordering for a no wait event experience. See wait times to pick the shortest line, or choose to pay to use the VIP line.',
         image: './images/line mogul mobile ordering.webp',
         links: []
+    },
+    {
+        id: 'woodworking-high-school',
+        year: 2016,
+        month: 12,
+        title: 'Woodworking',
+        description: 'Wooden cooler made as a senior project in high school.',
+        image: './images/woodworking high school.webp',
+        links: []
+    },
+    {
+        id: 'woodworking-2015',
+        year: 2015,
+        month: 12,
+        title: 'Woodworking Making',
+        description: 'General woodworking and building things in the shop.',
+        image: './images/woodworking 2015.webp',
+        links: []
     }
-]; 
+];
