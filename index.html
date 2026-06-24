@@ -144,7 +144,7 @@
                 padding: 32px;
                 height: auto;
                 overflow-y: auto;
-                min-height: 100dvh;
+                min-height: 100svh;
             }
 
             .content-wrapper {
@@ -214,7 +214,7 @@
             }
 
             .hero-section {
-                min-height: calc(100dvh - 64px);
+                min-height: calc(100svh - 64px);
                 padding-top: 0;
                 display: flex;
                 flex-direction: column;
@@ -354,31 +354,6 @@
             setTimeout(() => {
                 document.body.classList.add('transitions-enabled');
             }, 100);
-
-            // Improved scroll check
-            function checkScroll() {
-                const content = document.querySelector('.content-wrapper');
-                const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-                
-                if (content.offsetHeight + 148 > viewportHeight) { // 108px top + 40px bottom
-                    document.body.classList.add('needs-scroll');
-                    document.documentElement.classList.add('needs-scroll');
-                } else {
-                    document.body.classList.remove('needs-scroll');
-                    document.documentElement.classList.remove('needs-scroll');
-                }
-            }
-
-            // Check more frequently during load
-            checkScroll();
-            setTimeout(checkScroll, 100);
-            setTimeout(checkScroll, 500);
-            
-            // Check on resize and viewport changes
-            window.addEventListener('resize', checkScroll);
-            if (window.visualViewport) {
-                window.visualViewport.addEventListener('resize', checkScroll);
-            }
         });
 
         // Update intervals
