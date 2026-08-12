@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Open SDK - Lucas Pfeiffer</title>
+    <!-- A reload starts at the top. Browsers otherwise restore the scroll
+         position, which drops you back into the middle of a long page. This
+         runs before first paint so there is no jump to watch. Anchors still
+         work: `manual` turns off restoration, not hash navigation. -->
+    <script>if ('scrollRestoration' in history) history.scrollRestoration = 'manual';</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -11,13 +16,17 @@
     <link href="../assets/css/schematic.css" rel="stylesheet">
 </head>
 <body>
-    <div class="project-page">
-        <a href="/" class="back">Lucas Pfeiffer</a>
+    <div class="project-page" id="top">
+        <a href="/" class="back" aria-label="Back to lucaspfeiffer.earth">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M15 18L9 12L15 6"/>
+            </svg>
+        </a>
 
         <div class="project-head">
             <h1>Open SDK</h1>
             <div class="project-meta">May 2026 — Open</div>
-            <p class="project-lede">A set of product design and engineering packages that leverage Open’s ordering primitives to build a completely unique and personalized web ordering experience for any restaurant.</p>
+            <p class="project-lede">A set of product design and engineering packages that leverage Open’s ordering primitives to build completely unique and personalized ordering experiences for any restaurant. Built by the design and engineering team at Open.</p>
         </div>
 
         <figure class="project-figure">
@@ -25,95 +34,31 @@
             <figcaption>A restaurant’s own ordering experience, built on the SDK.</figcaption>
         </figure>
 
-        <!-- ============================ the schematic ============================
+        <!-- ============================ the chapters ============================
+             Heading left, illustrations right. Each heading sticks while its
+             own chapter scrolls and hands off to the next — see schematic.css.
+             No javascript: the layout is grid + position:sticky.
+
              Every drawing is inline SVG rather than <use> off a sprite: CSS
              cannot reach into a <use> shadow tree, so a sprite would lose the
-             hairline styling and the non-scaling stroke that make the drawings
-             one weight at every size. Each drawing is used once anyway.
+             hairline styling and the non-scaling stroke that keep the drawings
+             one weight at every size.
 
-             Notes are real prose in the page. schematic.js hides them and
-             moves them into the plate on tap, so the page reads without it.
+             Nothing is asserted here that has not been said out loud. A plate
+             with no caption is a drawing that needs no naming.
         -->
-        <section class="sch" aria-labelledby="sch-title">
+        <section class="sch">
+        <div class="chapters">
 
-        <header class="sch-head">
-            <h2 id="sch-title">One brand, every surface.</h2>
-            <p class="sch-hint">Tap any part of the drawing.</p>
-        </header>
+            <!-- 1 · brand setup ------------------------------------------- -->
+            <article class="chapter">
+                <div class="chapter-head"><h2>Brand setup</h2></div>
+                <div class="chapter-body">
+                    <p class="chapter-desc">Tools to import your brand to the SDK.</p>
 
-        <div class="stage-mark"><span class="n">01</span> &nbsp;Where you start</div>
-
-        <ul class="rack cols-3">
-            <li class="cell">
-                <button class="node" type="button" data-title="No brand yet">
-                    <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                        <rect x="10" y="10" width="280" height="180"/>
-                        <rect class="q" x="32" y="34" width="70" height="70"/>
-                        <rect class="q" x="118" y="34" width="150" height="30"/>
-                        <rect class="q" x="118" y="74" width="150" height="30"/>
-                        <rect class="q" x="32" y="128" width="44" height="42"/>
-                        <rect class="q" x="88" y="128" width="44" height="42"/>
-                        <rect class="q" x="144" y="128" width="44" height="42"/>
-                    </svg>
-                    <span class="node-label">No brand yet</span>
-                </button>
-                <div class="node-note"><p>A restaurant, not a look. There is nothing to extend, so brand setup is where the brand gets made — the mark, the type, the colour — before a single surface is built.</p></div>
-            </li>
-            <li class="cell">
-                <button class="node" type="button" data-title="A brand, part-formed">
-                    <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                        <rect x="10" y="10" width="280" height="180"/>
-                        <rect x="32" y="34" width="70" height="70"/>
-                        <circle cx="67" cy="69" r="22"/>
-                        <rect x="118" y="34" width="150" height="30"/>
-                        <line x1="130" y1="45" x2="242" y2="45"/>
-                        <line x1="130" y1="55" x2="204" y2="55"/>
-                        <rect class="q" x="118" y="74" width="150" height="30"/>
-                        <rect class="f" x="32" y="128" width="44" height="42"/>
-                        <rect class="q" x="88" y="128" width="44" height="42"/>
-                        <rect class="q" x="144" y="128" width="44" height="42"/>
-                    </svg>
-                    <span class="node-label">A brand, part-formed</span>
-                </button>
-                <div class="node-note"><p>There is something already: a name, a mark, a colour that half works. This door develops what exists rather than starting the argument over.</p></div>
-            </li>
-            <li class="cell">
-                <button class="node" type="button" data-title="A brand they love">
-                    <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                        <rect x="10" y="10" width="280" height="180"/>
-                        <rect x="32" y="34" width="70" height="70"/>
-                        <circle class="f" cx="67" cy="62" r="15"/>
-                        <rect class="f" x="46" y="84" width="42" height="6"/>
-                        <rect x="118" y="34" width="150" height="30"/>
-                        <line x1="130" y1="45" x2="256" y2="45"/>
-                        <line x1="130" y1="55" x2="228" y2="55"/>
-                        <rect x="118" y="74" width="150" height="30"/>
-                        <line x1="130" y1="85" x2="248" y2="85"/>
-                        <line x1="130" y1="95" x2="210" y2="95"/>
-                        <rect class="f" x="32" y="128" width="44" height="42"/>
-                        <rect x="88" y="128" width="44" height="42"/>
-                        <line x1="88" y1="150" x2="110" y2="128"/>
-                        <line x1="88" y1="161" x2="121" y2="128"/>
-                        <line x1="99" y1="170" x2="132" y2="137"/>
-                        <line x1="110" y1="170" x2="132" y2="148"/>
-                        <rect x="144" y="128" width="44" height="42"/>
-                    </svg>
-                    <span class="node-label">A brand they love</span>
-                </button>
-                <div class="node-note"><p>Fully formed and valued, and ready to be extended. Nothing here gets redesigned. It gets carried into every surface intact, which is the whole reason to make it infrastructure.</p></div>
-            </li>
-        </ul>
-
-        <div class="spinal">
-            <div class="wire join cols-3" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i></div>
-
-            <div class="stage-mark"><span class="n">02</span> &nbsp;Brand setup</div>
-
-            <div class="loopspan">
-                <ul class="rack cols-1">
-                    <li class="cell">
-                        <button class="node" type="button" data-title="Brand setup">
-                            <svg class="wf sheet" viewBox="0 0 380 200" aria-hidden="true" focusable="false">
+                    <figure class="plate">
+                        <div class="plate-frame">
+                            <svg class="wf" viewBox="0 0 380 200" aria-hidden="true" focusable="false">
                             <rect x="10" y="10" width="360" height="180"/>
                             <line x1="120" y1="10" x2="120" y2="190"/>
                             <line x1="10" y1="46" x2="370" y2="46"/>
@@ -147,238 +92,248 @@
                             <line x1="138" y1="167" x2="320" y2="167"/>
                             <line x1="138" y1="178" x2="250" y2="178"/>
                             </svg>
-                            <span class="node-label">Brand setup — the brand becomes infrastructure</span>
-                        </button>
-                        <div class="node-note"><p>The mark, the typeface, the colour, the spacing and the voice stop being a PDF a designer sends over and become the thing every surface is built from. It is the only place the brand is defined, which is what makes it the only place it has to change.</p></div>
-                    </li>
-                </ul>
+                        </div>
+                    </figure>
+                </div>
+            </article>
 
-                <div class="stage-mark"><span class="n">03</span> &nbsp;Customer experiences</div>
+            <!-- 2 · customer experiences ---------------------------------- -->
+            <article class="chapter">
+                <div class="chapter-head"><h2>Customer experiences</h2></div>
+                <div class="chapter-body">
+                    <p class="chapter-desc">It powers every customer-facing experience.</p>
 
-                <ul class="rack cols-2">
-                    <li class="cell">
-                        <button class="node" type="button" data-title="An experience you already love">
-                            <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                                <rect class="q" x="22" y="24" width="84" height="152" rx="10"/>
-                                <line class="q" x1="22" y1="50" x2="106" y2="50"/>
-                                <rect class="q" x="34" y="62" width="60" height="34"/>
-                                <rect class="q" x="34" y="104" width="60" height="34"/>
-                                <line class="q" x1="22" y1="150" x2="106" y2="150"/>
-                                <line x1="122" y1="100" x2="172" y2="100"/>
-                                <polyline points="164,93 172,100 164,107"/>
-                                <rect x="188" y="24" width="84" height="152" rx="10"/>
-                                <line x1="188" y1="50" x2="272" y2="50"/>
-                                <rect x="200" y="62" width="60" height="34"/>
-                                <rect x="200" y="104" width="60" height="34"/>
-                                <line x1="188" y1="150" x2="272" y2="150"/>
-                                <rect class="f" x="200" y="158" width="14" height="10"/>
-                                <rect x="222" y="158" width="14" height="10"/>
-                                <rect x="244" y="158" width="14" height="10"/>
-                            </svg>
-                            <span class="node-label">An experience you already love</span>
-                        </button>
-                        <div class="node-note"><p>If there is an app or a site the restaurant already loves, the SDK rebuilds it from scratch in a couple of hours. From then on it can be updated as much or as little as the repo it replaced.</p></div>
-                    </li>
-                </ul>
+                    <div class="plates">
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <line x1="10" y1="40" x2="290" y2="40"/>
+                                    <circle cx="26" cy="25" r="3.5"/>
+                                    <circle cx="40" cy="25" r="3.5"/>
+                                    <circle cx="54" cy="25" r="3.5"/>
+                                    <rect x="72" y="19" width="130" height="13" rx="6.5"/>
+                                    <rect x="28" y="54" width="244" height="66"/>
+                                    <line x1="44" y1="78" x2="150" y2="78"/>
+                                    <line x1="44" y1="92" x2="112" y2="92"/>
+                                    <rect x="28" y="132" width="74" height="46"/>
+                                    <rect x="113" y="132" width="74" height="46"/>
+                                    <rect x="198" y="132" width="74" height="46"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">Marketing website</span></figcaption>
+                        </figure>
 
-                <ul class="rack cols-2">
-                    <li class="cell">
-                        <button class="node" type="button" data-title="Marketing website">
-                            <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                                <rect x="10" y="10" width="280" height="180"/>
-                                <line x1="10" y1="40" x2="290" y2="40"/>
-                                <circle cx="26" cy="25" r="3.5"/>
-                                <circle cx="40" cy="25" r="3.5"/>
-                                <circle cx="54" cy="25" r="3.5"/>
-                                <rect x="72" y="19" width="130" height="13" rx="6.5"/>
-                                <rect x="28" y="54" width="244" height="66"/>
-                                <line x1="44" y1="78" x2="150" y2="78"/>
-                                <line x1="44" y1="92" x2="112" y2="92"/>
-                                <rect x="28" y="132" width="74" height="46"/>
-                                <rect x="113" y="132" width="74" height="46"/>
-                                <rect x="198" y="132" width="74" height="46"/>
-                            </svg>
-                            <span class="node-label">Marketing website</span>
-                        </button>
-                        <div class="node-note"><p>The site people find before they ever order. Built from the brand rather than from a template with a logo dropped into it.</p></div>
-                    </li>
-                    <li class="cell">
-                        <button class="node" type="button" data-title="Ordering website">
-                            <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                                <rect x="10" y="10" width="280" height="180"/>
-                                <line x1="10" y1="40" x2="290" y2="40"/>
-                                <circle cx="26" cy="25" r="3.5"/>
-                                <circle cx="40" cy="25" r="3.5"/>
-                                <circle cx="54" cy="25" r="3.5"/>
-                                <rect x="72" y="19" width="130" height="13" rx="6.5"/>
-                                <rect x="28" y="54" width="62" height="52"/>
-                                <rect x="98" y="54" width="62" height="52"/>
-                                <rect x="28" y="116" width="62" height="52"/>
-                                <rect x="98" y="116" width="62" height="52"/>
-                                <rect x="176" y="54" width="96" height="114"/>
-                                <line x1="188" y1="72" x2="260" y2="72"/>
-                                <line x1="188" y1="84" x2="240" y2="84"/>
-                                <line x1="188" y1="100" x2="260" y2="100"/>
-                                <line x1="188" y1="112" x2="232" y2="112"/>
-                                <rect class="f" x="188" y="134" width="72" height="20"/>
-                            </svg>
-                            <span class="node-label">Ordering website</span>
-                        </button>
-                        <div class="node-note"><p>Ordering on the restaurant’s own site, with Open’s ordering primitives underneath and none of the seams a bolted-on ordering page leaves behind.</p></div>
-                    </li>
-                </ul>
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <line x1="10" y1="40" x2="290" y2="40"/>
+                                    <circle cx="26" cy="25" r="3.5"/>
+                                    <circle cx="40" cy="25" r="3.5"/>
+                                    <circle cx="54" cy="25" r="3.5"/>
+                                    <rect x="72" y="19" width="130" height="13" rx="6.5"/>
+                                    <rect x="28" y="54" width="62" height="52"/>
+                                    <rect x="98" y="54" width="62" height="52"/>
+                                    <rect x="28" y="116" width="62" height="52"/>
+                                    <rect x="98" y="116" width="62" height="52"/>
+                                    <rect x="176" y="54" width="96" height="114"/>
+                                    <line x1="188" y1="72" x2="260" y2="72"/>
+                                    <line x1="188" y1="84" x2="240" y2="84"/>
+                                    <line x1="188" y1="100" x2="260" y2="100"/>
+                                    <line x1="188" y1="112" x2="232" y2="112"/>
+                                    <rect class="f" x="188" y="134" width="72" height="20"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">Ordering website</span></figcaption>
+                        </figure>
 
-                <ul class="rack cols-2">
-                    <li class="cell">
-                        <button class="node" type="button" data-title="Catering">
-                            <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                                <rect x="10" y="10" width="280" height="180"/>
-                                <line x1="30" y1="36" x2="140" y2="36"/>
-                                <rect x="30" y="54" width="240" height="26"/>
-                                <rect x="30" y="90" width="114" height="26"/>
-                                <rect x="30" y="126" width="114" height="26"/>
-                                <rect x="156" y="90" width="114" height="62"/>
-                                <line x1="156" y1="106" x2="270" y2="106"/>
-                                <rect x="166" y="114" width="16" height="12"/>
-                                <rect x="190" y="114" width="16" height="12"/>
-                                <rect x="214" y="114" width="16" height="12"/>
-                                <rect x="238" y="114" width="16" height="12"/>
-                                <rect x="166" y="132" width="16" height="12"/>
-                                <rect x="190" y="132" width="16" height="12"/>
-                                <rect x="214" y="132" width="16" height="12"/>
-                                <rect class="f" x="238" y="132" width="16" height="12"/>
-                                <rect class="f" x="30" y="160" width="96" height="20"/>
-                            </svg>
-                            <span class="node-label">Catering</span>
-                        </button>
-                        <div class="node-note"><p>Large orders, lead times and quotes. Same brand, a different job — and usually the surface that gets left on a form nobody has touched in years.</p></div>
-                    </li>
-                    <li class="cell">
-                        <button class="node" type="button" data-title="Mobile app">
-                            <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                                <rect x="104" y="10" width="92" height="180" rx="12"/>
-                                <rect class="f" x="138" y="18" width="24" height="5" rx="2.5"/>
-                                <line x1="104" y1="44" x2="196" y2="44"/>
-                                <rect x="116" y="56" width="68" height="36"/>
-                                <rect x="116" y="100" width="68" height="36"/>
-                                <rect x="116" y="146" width="68" height="12"/>
-                                <line x1="104" y1="166" x2="196" y2="166"/>
-                                <rect class="f" x="118" y="173" width="14" height="10"/>
-                                <rect x="143" y="173" width="14" height="10"/>
-                                <rect x="168" y="173" width="14" height="10"/>
-                            </svg>
-                            <span class="node-label">Mobile app</span>
-                        </button>
-                        <div class="node-note"><p>The app and the site are built from the same brand, so a customer moving between them never notices the join.</p></div>
-                    </li>
-                </ul>
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <line x1="30" y1="36" x2="140" y2="36"/>
+                                    <rect x="30" y="54" width="240" height="26"/>
+                                    <rect x="30" y="90" width="114" height="26"/>
+                                    <rect x="30" y="126" width="114" height="26"/>
+                                    <rect x="156" y="90" width="114" height="62"/>
+                                    <line x1="156" y1="106" x2="270" y2="106"/>
+                                    <rect x="166" y="114" width="16" height="12"/>
+                                    <rect x="190" y="114" width="16" height="12"/>
+                                    <rect x="214" y="114" width="16" height="12"/>
+                                    <rect x="238" y="114" width="16" height="12"/>
+                                    <rect x="166" y="132" width="16" height="12"/>
+                                    <rect x="190" y="132" width="16" height="12"/>
+                                    <rect x="214" y="132" width="16" height="12"/>
+                                    <rect class="f" x="238" y="132" width="16" height="12"/>
+                                    <rect class="f" x="30" y="160" width="96" height="20"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">Catering</span></figcaption>
+                        </figure>
 
-                <ul class="rack cols-2">
-                    <li class="cell">
-                        <button class="node" type="button" data-title="Receipts">
-                            <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                                <path d="M116 14 H184 V168 l-8.5 7 l-8.5 -7 l-8.5 7 l-8.5 -7 l-8.5 7 l-8.5 -7 l-8.5 7 l-8.5 -7 Z"/>
-                                <circle class="f" cx="150" cy="34" r="7"/>
-                                <line x1="128" y1="52" x2="172" y2="52"/>
-                                <line x1="128" y1="70" x2="172" y2="70"/>
-                                <line x1="128" y1="80" x2="160" y2="80"/>
-                                <line x1="128" y1="90" x2="166" y2="90"/>
-                                <line x1="128" y1="100" x2="154" y2="100"/>
-                                <line class="q" x1="126" y1="116" x2="174" y2="116"/>
-                                <line class="b" x1="128" y1="132" x2="172" y2="132"/>
-                                <line x1="128" y1="150" x2="150" y2="150"/>
-                            </svg>
-                            <span class="node-label">Receipts</span>
-                        </button>
-                        <div class="node-note"><p>The last thing a customer reads, and on most systems the one surface nobody owns. It is a brand surface too.</p></div>
-                    </li>
-                    <li class="cell">
-                        <button class="node" type="button" data-title="Email, SMS and ads">
-                            <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                                <rect x="14" y="46" width="122" height="108"/>
-                                <line x1="14" y1="70" x2="136" y2="70"/>
-                                <line x1="26" y1="86" x2="112" y2="86"/>
-                                <line x1="26" y1="98" x2="124" y2="98"/>
-                                <line x1="26" y1="110" x2="96" y2="110"/>
-                                <rect class="f" x="26" y="124" width="52" height="16"/>
-                                <rect x="150" y="26" width="52" height="148" rx="8"/>
-                                <rect x="158" y="46" width="30" height="16" rx="6"/>
-                                <rect class="f" x="164" y="70" width="30" height="16" rx="6"/>
-                                <rect x="158" y="94" width="26" height="16" rx="6"/>
-                                <rect x="216" y="60" width="70" height="80"/>
-                                <rect class="f" x="226" y="70" width="24" height="24"/>
-                                <line x1="226" y1="106" x2="276" y2="106"/>
-                                <line x1="226" y1="118" x2="258" y2="118"/>
-                            </svg>
-                            <span class="node-label">Email, SMS and ads</span>
-                        </button>
-                        <div class="node-note"><p>Marketing drawn from the same set, so a campaign looks like the restaurant and not like the tool that sent it.</p></div>
-                    </li>
-                </ul>
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <rect x="104" y="10" width="92" height="180" rx="12"/>
+                                    <rect class="f" x="138" y="18" width="24" height="5" rx="2.5"/>
+                                    <line x1="104" y1="44" x2="196" y2="44"/>
+                                    <rect x="116" y="56" width="68" height="36"/>
+                                    <rect x="116" y="100" width="68" height="36"/>
+                                    <rect x="116" y="146" width="68" height="12"/>
+                                    <line x1="104" y1="166" x2="196" y2="166"/>
+                                    <rect class="f" x="118" y="173" width="14" height="10"/>
+                                    <rect x="143" y="173" width="14" height="10"/>
+                                    <rect x="168" y="173" width="14" height="10"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">Mobile app</span></figcaption>
+                        </figure>
 
-                <div class="stage-mark"><span class="n">04</span> &nbsp;Your tools</div>
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <path d="M116 14 H184 V168 l-8.5 7 l-8.5 -7 l-8.5 7 l-8.5 -7 l-8.5 7 l-8.5 -7 l-8.5 7 l-8.5 -7 Z"/>
+                                    <circle class="f" cx="150" cy="34" r="7"/>
+                                    <line x1="128" y1="52" x2="172" y2="52"/>
+                                    <line x1="128" y1="70" x2="172" y2="70"/>
+                                    <line x1="128" y1="80" x2="160" y2="80"/>
+                                    <line x1="128" y1="90" x2="166" y2="90"/>
+                                    <line x1="128" y1="100" x2="154" y2="100"/>
+                                    <line class="q" x1="126" y1="116" x2="174" y2="116"/>
+                                    <line class="b" x1="128" y1="132" x2="172" y2="132"/>
+                                    <line x1="128" y1="150" x2="150" y2="150"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">Receipts</span></figcaption>
+                        </figure>
 
-                <ul class="rack cols-2">
-                    <li class="cell">
-                        <button class="node" type="button" data-title="Out of the box">
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <rect x="14" y="46" width="122" height="108"/>
+                                    <line x1="14" y1="70" x2="136" y2="70"/>
+                                    <line x1="26" y1="86" x2="112" y2="86"/>
+                                    <line x1="26" y1="98" x2="124" y2="98"/>
+                                    <line x1="26" y1="110" x2="96" y2="110"/>
+                                    <rect class="f" x="26" y="124" width="52" height="16"/>
+                                    <rect x="150" y="26" width="52" height="148" rx="8"/>
+                                    <rect x="158" y="46" width="30" height="16" rx="6"/>
+                                    <rect class="f" x="164" y="70" width="30" height="16" rx="6"/>
+                                    <rect x="158" y="94" width="26" height="16" rx="6"/>
+                                    <rect x="216" y="60" width="70" height="80"/>
+                                    <rect class="f" x="226" y="70" width="24" height="24"/>
+                                    <line x1="226" y1="106" x2="276" y2="106"/>
+                                    <line x1="226" y1="118" x2="258" y2="118"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">Email, SMS and ads</span></figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 3 · three ways to build and edit them --------------------- -->
+            <article class="chapter">
+                <div class="chapter-head"><h2>Three ways to build and edit them</h2></div>
+                <div class="chapter-body">
+                    <div class="plates">
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <line x1="96" y1="10" x2="96" y2="190"/>
+                                    <line x1="24" y1="32" x2="80" y2="32"/>
+                                    <line x1="34" y1="48" x2="82" y2="48"/>
+                                    <line x1="34" y1="64" x2="72" y2="64"/>
+                                    <line x1="44" y1="80" x2="84" y2="80"/>
+                                    <rect class="f" x="24" y="92" width="58" height="10"/>
+                                    <line x1="34" y1="118" x2="78" y2="118"/>
+                                    <line x1="24" y1="134" x2="80" y2="134"/>
+                                    <line x1="112" y1="32" x2="200" y2="32"/>
+                                    <line x1="124" y1="48" x2="230" y2="48"/>
+                                    <line x1="124" y1="64" x2="196" y2="64"/>
+                                    <line x1="136" y1="80" x2="248" y2="80"/>
+                                    <line x1="124" y1="96" x2="210" y2="96"/>
+                                    <line x1="112" y1="112" x2="180" y2="112"/>
+                                    <rect x="112" y="128" width="164" height="48"/>
+                                    <rect class="f" x="124" y="140" width="30" height="24"/>
+                                    <line x1="164" y1="146" x2="256" y2="146"/>
+                                    <line x1="164" y1="158" x2="222" y2="158"/>
+                                </svg>
+                            </div>
+                            <figcaption>
+                                <span class="plate-name">Developer platform</span>
+                                <span class="plate-note">For designers and engineers to build in their own repos.</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <rect x="28" y="30" width="54" height="54"/>
+                                    <rect class="f" x="42" y="52" width="26" height="10"/>
+                                    <rect x="90" y="30" width="54" height="54"/>
+                                    <line x1="104" y1="47" x2="130" y2="47"/>
+                                    <line x1="104" y1="57" x2="130" y2="57"/>
+                                    <line x1="104" y1="67" x2="118" y2="67"/>
+                                    <rect x="152" y="30" width="54" height="54"/>
+                                    <circle cx="179" cy="57" r="13"/>
+                                    <rect x="214" y="30" width="54" height="54"/>
+                                    <rect x="228" y="44" width="26" height="26"/>
+                                    <rect x="28" y="102" width="240" height="68"/>
+                                    <line x1="44" y1="122" x2="150" y2="122"/>
+                                    <line x1="44" y1="136" x2="200" y2="136"/>
+                                    <line x1="44" y1="150" x2="126" y2="150"/>
+                                </svg>
+                            </div>
+                            <figcaption>
+                                <span class="plate-name">Self-service edits</span>
+                                <span class="plate-note">For anyone on the team.</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <line x1="10" y1="46" x2="290" y2="46"/>
+                                    <circle class="f" cx="34" cy="28" r="8"/>
+                                    <line x1="52" y1="24" x2="150" y2="24"/>
+                                    <line x1="52" y1="34" x2="120" y2="34"/>
+                                    <rect x="28" y="66" width="110" height="104"/>
+                                    <line x1="40" y1="86" x2="126" y2="86"/>
+                                    <rect class="f" x="40" y="98" width="40" height="30"/>
+                                    <rect x="88" y="98" width="38" height="30"/>
+                                    <line x1="40" y1="142" x2="126" y2="142"/>
+                                    <line x1="152" y1="118" x2="192" y2="118"/>
+                                    <polyline points="184,111 192,118 184,125"/>
+                                    <rect x="206" y="66" width="64" height="104"/>
+                                    <circle class="f" cx="222" cy="86" r="7"/>
+                                    <line x1="218" y1="106" x2="258" y2="106"/>
+                                    <line x1="218" y1="118" x2="248" y2="118"/>
+                                    <rect class="f" x="218" y="136" width="44" height="14"/>
+                                </svg>
+                            </div>
+                            <figcaption>
+                                <span class="plate-name">Design as a service</span>
+                                <span class="plate-note">From Open.</span>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 4 · tools to develop the brand ---------------------------- -->
+            <article class="chapter">
+                <div class="chapter-head"><h2>Tools to develop the brand</h2></div>
+                <div class="chapter-body">
+                    <p class="chapter-desc">Edit the brand, and every experience follows.</p>
+
+                    <figure class="plate">
+                        <div class="plate-frame">
                             <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                                <rect x="10" y="10" width="280" height="180"/>
-                                <rect x="28" y="30" width="54" height="54"/>
-                                <rect class="f" x="42" y="52" width="26" height="10"/>
-                                <rect x="90" y="30" width="54" height="54"/>
-                                <line x1="104" y1="47" x2="130" y2="47"/>
-                                <line x1="104" y1="57" x2="130" y2="57"/>
-                                <line x1="104" y1="67" x2="118" y2="67"/>
-                                <rect x="152" y="30" width="54" height="54"/>
-                                <circle cx="179" cy="57" r="13"/>
-                                <rect x="214" y="30" width="54" height="54"/>
-                                <rect x="228" y="44" width="26" height="26"/>
-                                <rect x="28" y="102" width="240" height="68"/>
-                                <line x1="44" y1="122" x2="150" y2="122"/>
-                                <line x1="44" y1="136" x2="200" y2="136"/>
-                                <line x1="44" y1="150" x2="126" y2="150"/>
-                            </svg>
-                            <span class="node-label">Out of the box</span>
-                        </button>
-                        <div class="node-note"><p>A small business gets the same tools as the restaurants with the best technology in the world: build custom features, improve conversion, fix what is broken, and maintain the thing without filing a ticket and waiting.</p></div>
-                    </li>
-                    <li class="cell">
-                        <button class="node" type="button" data-title="A developer platform">
-                            <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
-                                <rect x="10" y="10" width="280" height="180"/>
-                                <line x1="96" y1="10" x2="96" y2="190"/>
-                                <line x1="24" y1="32" x2="80" y2="32"/>
-                                <line x1="34" y1="48" x2="82" y2="48"/>
-                                <line x1="34" y1="64" x2="72" y2="64"/>
-                                <line x1="44" y1="80" x2="84" y2="80"/>
-                                <rect class="f" x="24" y="92" width="58" height="10"/>
-                                <line x1="34" y1="118" x2="78" y2="118"/>
-                                <line x1="24" y1="134" x2="80" y2="134"/>
-                                <line x1="112" y1="32" x2="200" y2="32"/>
-                                <line x1="124" y1="48" x2="230" y2="48"/>
-                                <line x1="124" y1="64" x2="196" y2="64"/>
-                                <line x1="136" y1="80" x2="248" y2="80"/>
-                                <line x1="124" y1="96" x2="210" y2="96"/>
-                                <line x1="112" y1="112" x2="180" y2="112"/>
-                                <rect x="112" y="128" width="164" height="48"/>
-                                <rect class="f" x="124" y="140" width="30" height="24"/>
-                                <line x1="164" y1="146" x2="256" y2="146"/>
-                                <line x1="164" y1="158" x2="222" y2="158"/>
-                            </svg>
-                            <span class="node-label">A developer platform</span>
-                        </button>
-                        <div class="node-note"><p>Upmarket, the same thing runs the other way: complete customization, developer tools and infrastructure, so a small team ships personalized customer-facing experiences. Better products at less cost.</p></div>
-                    </li>
-                </ul>
-
-                <div class="stage-mark"><span class="n">05</span> &nbsp;The brand keeps developing</div>
-
-                <!-- data-plate: this rack's note lives OUTSIDE .loopspan, so opening
-                     it does not stretch the return line past the part it comes from. -->
-                <ul class="rack cols-1" data-plate="plate-evolve">
-                    <li class="cell">
-                        <button class="node" type="button" data-title="The brand keeps developing">
-                            <svg class="wf mid" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
                             <rect class="q" x="12" y="34" width="104" height="132"/>
                             <circle class="q" cx="36" cy="60" r="10"/>
                             <line class="q" x1="54" y1="55" x2="104" y2="55"/>
@@ -399,36 +354,177 @@
                             <rect x="256" y="88" width="24" height="20"/>
                             <line x1="196" y1="128" x2="276" y2="128"/>
                             </svg>
-                            <span class="node-label">The brand keeps developing — and every surface follows</span>
-                        </button>
-                        <div class="node-note"><p>Restaurants pay agencies five, six and seven figures to develop a brand over years. The work is rewarding; the waiting is not — rounds of feedback, scheduling, things passed back and forth.</p><p>These are the same tools, self-serve. A team can develop the brand and the way it reaches customers without leaving a loop open for a month, and every surface follows from the one place it is defined.</p></div>
-                    </li>
-                </ul>
-
-                <!-- the return line: up the right margin, then left into the
-                     spine just above brand setup -->
-                <div class="loop" aria-hidden="true">
-                    <span class="stem"></span>
-                    <span class="arrow"></span>
-                    <span class="loop-label">back to brand setup</span>
+                        </div>
+                    </figure>
                 </div>
-            </div>
+            </article>
 
-            <div class="plate" id="plate-evolve"></div>
+            <!-- 5 · scale ------------------------------------------------ -->
+            <!-- Each field is one <pattern> tile repeated over a 240 × 132
+                 region, and the tile sizes are chosen so the count is exact:
+                 48×33 → 5×4 = 20.  12×13.2 → 20×10 = 200.
+                 4.8×3.3 → 50×40 = 2000.  The drawing is not approximating. -->
+            <article class="chapter">
+                <div class="chapter-head"><h2>Two stores, or two thousand</h2></div>
+                <div class="chapter-body">
+                    <p class="chapter-desc">From SMB to enterprise.</p>
+
+                    <div class="plates">
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <rect x="40" y="52" width="96" height="96"/>
+                                    <line x1="40" y1="78" x2="136" y2="78"/>
+                                    <rect x="52" y="90" width="18" height="16"/>
+                                    <rect x="106" y="90" width="18" height="16"/>
+                                    <rect x="76" y="112" width="24" height="36"/>
+                                    <rect x="164" y="52" width="96" height="96"/>
+                                    <line x1="164" y1="78" x2="260" y2="78"/>
+                                    <rect x="176" y="90" width="18" height="16"/>
+                                    <rect x="230" y="90" width="18" height="16"/>
+                                    <rect x="200" y="112" width="24" height="36"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">2 stores</span></figcaption>
+                        </figure>
+
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <defs>
+                                        <pattern id="u20" x="30" y="34" width="48" height="33" patternUnits="userSpaceOnUse">
+                                            <rect x="6" y="4" width="36" height="21"/>
+                                            <line x1="6" y1="29" x2="42" y2="29"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <rect class="field" x="30" y="34" width="240" height="132" style="fill:url(#u20)"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">20 stores</span></figcaption>
+                        </figure>
+
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <defs>
+                                        <pattern id="u200" x="30" y="34" width="12" height="13.2" patternUnits="userSpaceOnUse">
+                                            <rect x="1.5" y="1.5" width="9" height="7"/>
+                                            <line x1="1.5" y1="11" x2="10.5" y2="11"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <rect class="field" x="30" y="34" width="240" height="132" style="fill:url(#u200)"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">200 stores</span></figcaption>
+                        </figure>
+
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <defs>
+                                        <pattern id="u2000" x="30" y="34" width="4.8" height="3.3" patternUnits="userSpaceOnUse">
+                                            <rect class="f" x="1" y="0.9" width="2.4" height="1.5"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <rect class="field" x="30" y="34" width="240" height="132" style="fill:url(#u2000)"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">2000 stores</span></figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 6 · setup ------------------------------------------------- -->
+            <article class="chapter">
+                <div class="chapter-head"><h2>Setup</h2></div>
+                <div class="chapter-body">
+                    <div class="plates">
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <line x1="10" y1="56" x2="290" y2="56"/>
+                                    <circle class="f" cx="60" cy="33" r="7"/>
+                                    <line x1="67" y1="33" x2="133" y2="33"/>
+                                    <circle class="f" cx="140" cy="33" r="7"/>
+                                    <line x1="147" y1="33" x2="213" y2="33"/>
+                                    <circle cx="220" cy="33" r="7"/>
+                                    <rect x="32" y="76" width="236" height="26"/>
+                                    <line x1="44" y1="89" x2="140" y2="89"/>
+                                    <rect x="32" y="110" width="236" height="26"/>
+                                    <line x1="44" y1="123" x2="116" y2="123"/>
+                                    <rect class="f" x="32" y="150" width="96" height="24"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">Same-day self setup</span></figcaption>
+                        </figure>
+
+                        <figure class="plate">
+                            <div class="plate-frame">
+                                <svg class="wf" viewBox="0 0 300 200" aria-hidden="true" focusable="false">
+                                    <rect x="10" y="10" width="280" height="180"/>
+                                    <line x1="10" y1="50" x2="290" y2="50"/>
+                                    <circle class="f" cx="34" cy="30" r="9"/>
+                                    <circle cx="56" cy="30" r="9"/>
+                                    <line x1="76" y1="26" x2="154" y2="26"/>
+                                    <line x1="76" y1="36" x2="126" y2="36"/>
+                                    <rect x="32" y="70" width="146" height="100"/>
+                                    <line x1="32" y1="94" x2="178" y2="94"/>
+                                    <rect class="f" x="44" y="106" width="50" height="32"/>
+                                    <rect x="104" y="106" width="50" height="32"/>
+                                    <line x1="44" y1="152" x2="154" y2="152"/>
+                                    <rect x="198" y="70" width="70" height="26" rx="8"/>
+                                    <rect class="f" x="198" y="106" width="70" height="26" rx="8"/>
+                                    <rect x="198" y="142" width="52" height="26" rx="8"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="plate-name">Or have the Open team help with setup</span></figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 7 · the closing statement --------------------------------- -->
+            <article class="chapter statement">
+                <p>The Open SDK helps restaurants sell online in a more personalized way than ever before.</p>
+                <p>Open helps all types of restaurants build and maintain their online experiences to better control the customer experience, and offer their guests the best online ordering experience specifically for that restaurant.</p>
+                <p>Restaurants using the Open SDK will have the best<sup class="fn-ref"><a href="#fn-best" aria-describedby="fn-best">1</a></sup> restaurant ordering experiences, but customers will never know it’s powered by the Open SDK, and that’s how it should be.</p>
+                <p>The Open SDK powers restaurants all over the United States, in places like New York, San Francisco, Los Angeles, Chicago and Austin.</p>
+                <p class="statement-close">Designed to give restaurants ownership over their technology.</p>
+
+                <ol class="footnotes">
+                    <li class="footnote" id="fn-best">
+                        <span class="footnote-n" aria-hidden="true">1</span>
+                        <p>Best, in this case, means most personalized branding, most personalized feature set, highest converting in category, and tools to improve over time.</p>
+                    </li>
+                </ol>
+            </article>
+
         </div>
-
-        <p class="sch-close">So a restaurant can spend its time on its customers, its food and its brand.</p>
         </section>
 
         <!-- The story grows here. Copy a .project-figure for a picture and a
              .project-section for prose. Give a section an <h2> only when the
              heading names the fact in it. -->
 
-        <div class="project-links">
-            <a href="https://getopen.com" target="_blank">Open</a>
-            <a href="/projects#2026-open-sdk">In the timeline</a>
+        <!-- the end: left goes home, up goes to the top -->
+        <div class="project-end">
+            <a class="end-btn" href="/" aria-label="Back to lucaspfeiffer.earth">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M15 18L9 12L15 6"/>
+                </svg>
+            </a>
+            <a class="end-btn" href="#top" aria-label="Back to top">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M6 15L12 9L18 15"/>
+                </svg>
+            </a>
         </div>
     </div>
-    <script src="../assets/js/schematic.js" defer></script>
 </body>
 </html>

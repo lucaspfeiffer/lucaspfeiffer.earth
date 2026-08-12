@@ -1,236 +1,136 @@
-/* schematic.css — the wireframe schematic module.
+/* schematic.css — the chapters.
 
-   One drawing, black and white, running down several screens. A hairline
-   spine carries the whole thing; every part hangs off it. Tapping a part
-   opens a note beneath its row.
+   Four chapters, each one heading and its illustrations. The heading sits in
+   the left column and sticks while its own chapter scrolls past; when the
+   chapter ends the heading goes with it and the next one takes the spot. That
+   handoff is `position: sticky` inside each chapter's own grid — the chapter
+   is the containing block, so a heading can never outlive its section. No
+   scroll listeners, nothing measured.
+
+   Sticky breaks if any ancestor scrolls or clips; project.css sets no
+   overflow on body or .project-page, and this file must not add one.
+
+   Narrow: one column, and the heading sticks to the top of the viewport
+   instead, with the illustrations running underneath it.
 
    Rules the module holds:
-     - Nothing in here is coloured. Weight is the only signal: a part you
-       have tapped goes to full ink, everything else stays hairline.
-     - The spine is drawn once, behind everything. Parts sit on white, so
-       the line disappears behind them and shows in the gaps. There are no
-       per-gap connector elements to keep in sync.
+     - Nothing in here is coloured. Weight is the only signal.
      - Every drawing is a wireframe in the same language — frames, rules,
        placeholder blocks. Nothing is an icon.
+     - A caption only exists where the drawing needs naming.
 
    Blocks:
-     .sch         module
-     .stage-mark  the numbered marker that interrupts the spine
-     .rack        a row of parts (.cols-3 / .cols-2 / .cols-1)
-     .wire.join   risers + bus, where several parts converge onto the spine
-     .spinal      everything the spine runs through
-     .loopspan    the span the return line brackets
-     .plate       the note that opens under a rack
+     .chapter       one heading + its body
+     .chapter-head  the sticky left column
+     .chapter-body  the right column: description, then illustrations
+     .plate         one illustration, framed, optionally captioned
 */
 
 .sch {
     --ink: #000;
     --label: #494949;
-    --edge: #e0e0e0;      /* a part at rest */
-    --edge-hover: #9a9a9a;
-    --line: #cfcfcf;      /* wires */
-    --draw: #b8b8b8;      /* wireframe strokes at rest */
-    --gap-2: 88px;
-    --branch: 44px;
-    --stage-gap: 104px;
+    --edge: #e4e4e4;
+    --draw: #232323;      /* wireframe strokes: line work, not grey filler */
+    --sw: 1.5;            /* one stroke weight, everywhere, at every size */
+    --stick: 40px;        /* how far below the top edge a heading parks */
 
-    padding: 0 40px;
     color: var(--ink);
 }
 
-/* ---- head ---------------------------------------------------------- */
+/* ---- chapters ------------------------------------------------------- */
 
-.sch-head {
+.chapters {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-bottom: 72px;
+    gap: 140px;
 }
 
-.sch-head h2 {
-    font-size: 48px;
+.chapter {
+    display: grid;
+    grid-template-columns: minmax(200px, 1fr) minmax(0, 1.55fr);
+    gap: 0 64px;
+    align-items: start;
+}
+
+.chapter-head {
+    position: sticky;
+    top: var(--stick);
+    align-self: start;   /* a stretched item cannot stick */
+}
+
+.chapter-head h2 {
+    font-size: clamp(34px, 4.6vw, 56px);
     font-weight: 600;
     line-height: 1;
+    letter-spacing: -0.03em;
     color: var(--ink);
 }
 
-.sch-hint {
-    font-size: 17px;
+.chapter-body {
+    min-width: 0;
+}
+
+.chapter-desc {
+    font-size: 21px;
     font-weight: 500;
+    line-height: 1.45;
     color: var(--label);
+    max-width: 40ch;
 }
 
-.sch-close {
-    font-size: 24px;
-    font-weight: 500;
-    line-height: 1.4;
-    color: var(--label);
-    max-width: 640px;
-    margin: 48px auto 0;
-    text-align: center;
-}
+.chapter-desc + .plate,
+.chapter-desc + .plates { margin-top: 44px; }
 
-/* ---- spine --------------------------------------------------------- */
+/* ---- illustrations -------------------------------------------------- */
 
-.spinal {
-    position: relative;
-}
-
-.spinal::before {          /* the spine */
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: var(--line);
-    z-index: 0;
-}
-
-.spinal::after {           /* terminator */
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    width: 56px;
-    height: 1px;
-    margin-left: -28px;
-    background: var(--line);
-    z-index: 0;
-}
-
-/* ---- stage marker -------------------------------------------------- */
-
-.stage-mark {
-    position: relative;
-    z-index: 1;
-    width: fit-content;
-    margin: var(--stage-gap) auto 40px;
-    padding: 0 18px;
-    background: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--ink);
-    white-space: nowrap;
-}
-
-.stage-mark .n {
-    color: var(--label);
-    font-weight: 500;
-}
-
-.spinal > .stage-mark:first-child,
-.loopspan > .stage-mark:first-child {
-    margin-top: 0;
-}
-
-/* ---- racks --------------------------------------------------------- */
-
-.rack {
-    position: relative;
-    z-index: 1;
-    list-style: none;
-    display: grid;
-    margin: 0;
-    padding: 0;
-}
-
-.rack.cols-3 {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-}
-
-.rack.cols-2 {
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: var(--gap-2);
-    row-gap: 56px;
-}
-
-.rack.cols-1 {
-    grid-template-columns: 1fr;
-}
-
-/* a plate is inserted after every rack, so racks are never adjacent once
-   the script has run — both selectors are the same gap */
-.rack + .rack,
-.plate + .rack {
-    margin-top: 56px;
-}
-
-.cell {
-    position: relative;
+.plates {
     display: flex;
     flex-direction: column;
+    gap: 48px;
 }
 
-/* ---- a part -------------------------------------------------------- */
-
-.node {
-    position: relative;
-    z-index: 1;
+.plate {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    padding: 20px;
-    background: #fff;
+    gap: 18px;
+}
+
+.plate-frame {
+    padding: 28px;
     border: 1px solid var(--edge);
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
     color: var(--draw);
-    transition: border-color 160ms ease, color 160ms ease;
+    transition: border-color 200ms ease, color 200ms ease;
 }
 
-/* the branch into the spine */
-.rack.cols-2 .node::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: var(--branch);
-    height: 1px;
-    background: var(--line);
-    z-index: -1;
-}
-
-.rack.cols-2 .cell:nth-child(odd) .node::after {
-    right: calc(var(--branch) * -1);
-}
-
-.rack.cols-2 .cell:nth-child(even) .node::after {
-    left: calc(var(--branch) * -1);
-}
-
-.node:hover {
-    border-color: var(--edge-hover);
-    color: #8f8f8f;
-}
-
-.node.is-on {
+/* Hover is drawn, not lit: the frame closes to ink and the line work puts on
+   a little weight. Nothing moves, nothing shadows. */
+.plate:hover .plate-frame {
+    --sw: 2;
     border-color: var(--ink);
     color: var(--ink);
 }
 
-.node:focus-visible {
-    outline: 2px solid var(--ink);
-    outline-offset: 3px;
+.plate figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.node-label {
+.plate-name {
     font-size: 17px;
     font-weight: 600;
     line-height: 1.3;
-    color: var(--label);
-    transition: color 160ms ease;
-}
-
-.node.is-on .node-label {
     color: var(--ink);
 }
 
-/* ---- the drawings -------------------------------------------------- */
+.plate-note {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--label);
+}
+
+/* ---- the drawings --------------------------------------------------- */
 
 .wf {
     display: block;
@@ -238,11 +138,9 @@
     height: auto;
 }
 
-/* A part that spans the column still draws at a readable size rather than
-   stretching to a strip. Both caps are no-ops on a phone. */
-.wf.sheet { max-width: 620px; margin: 0 auto; }
-.wf.mid   { max-width: 500px; margin: 0 auto; }
-
+/* One weight for every shape, including the ones inside a <pattern> — the
+   dense store fields are a pattern tile, so they pick this up too, and
+   non-scaling-stroke keeps them a hairline however small the tile is. */
 .wf path,
 .wf rect,
 .wf circle,
@@ -251,310 +149,133 @@
 .wf polygon {
     fill: none;
     stroke: currentColor;
-    stroke-width: 1.25;
+    stroke-width: var(--sw);
     vector-effect: non-scaling-stroke;
+    transition: stroke-width 200ms ease;
 }
 
-.wf .f {
-    fill: currentColor;
-    stroke: none;
+.wf .f { fill: currentColor; stroke: none; }
+.wf .q { stroke-dasharray: 4 4; }
+.wf .b { stroke-width: calc(var(--sw) * 2); }
+
+/* a rect filled with a pattern of store units; the inline fill beats the
+   `fill: none` above, which is why it is inline and not a class */
+.wf .field { stroke: none; }
+
+/* ---- the closing statement ------------------------------------------ */
+
+/* No heading and no drawing: the words are the whole module, so it drops the
+   two-column grid and takes the full measure. */
+.chapter.statement {
+    display: block;
 }
 
-.wf .q {
-    stroke-dasharray: 4 4;
-}
-
-.wf .b {
-    stroke-width: 3;
-}
-
-.sch-sprite {
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-}
-
-/* ---- wire: risers onto a bus, bus onto the spine -------------------- */
-
-.wire {
-    position: relative;
-    z-index: 0;
-    height: 76px;
-}
-
-.wire i {
-    position: absolute;
-    top: 0;
-    bottom: 38px;
-    width: 1px;
-    background: var(--line);
-    left: calc(var(--i) * (var(--colw) + var(--wgap)) + var(--colw) / 2);
-}
-
-.wire::before {
-    content: "";
-    position: absolute;
-    bottom: 38px;
-    height: 1px;
-    background: var(--line);
-    left: calc(var(--colw) / 2);
-    right: calc(var(--colw) / 2);
-}
-
-.wire.cols-3 {
-    --wgap: 40px;
-    --colw: calc((100% - 2 * var(--wgap)) / 3);
-}
-
-/* ---- the return line ----------------------------------------------- */
-
-.loopspan {
-    position: relative;
-}
-
-/* The return line leaves the last part, runs up the right margin and turns
-   left into the spine above brand setup — it rejoins the pipeline, it does
-   not point at a box corner. `--out` is how far outside the column it runs. */
-.loop {
-    --out: 28px;
-    position: absolute;
-    inset: -20px 0 0 0;
-    pointer-events: none;
-    z-index: 0;
-}
-
-.loop .stem {          /* the long vertical */
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: calc(var(--out) * -1);
-    width: 1px;
-    background: var(--line);
-}
-
-.loop::before {        /* top leg, spine → margin */
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    right: calc(var(--out) * -1);
-    height: 1px;
-    background: var(--line);
-}
-
-.loop::after {         /* bottom leg, last part → margin */
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: calc(var(--out) * -1);
-    width: var(--out);
-    height: 1px;
-    background: var(--line);
-}
-
-.loop .arrow {
-    position: absolute;
-    top: -4.5px;
-    left: 50%;
-    width: 9px;
-    height: 9px;
-    border-left: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    transform: rotate(45deg);
-}
-
-.loop-label {
-    position: absolute;
-    top: 50%;
-    right: calc(var(--out) * -1);
-    transform: translate(50%, -50%) rotate(180deg);
-    writing-mode: vertical-rl;
-    background: #fff;
-    padding: 12px 3px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--label);
-    white-space: nowrap;
-}
-
-/* ---- the note ------------------------------------------------------ */
-
-.plate {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-rows: 0fr;
-    background: #fff;
-    transition: grid-template-rows 280ms cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-.plate.is-open {
-    grid-template-rows: 1fr;
-}
-
-.plate-clip {
-    overflow: hidden;
-    min-height: 0;
-}
-
-.plate-box {
-    position: relative;
-    margin-top: 36px;
-    padding: 36px 40px 40px;
-    border: 1px solid var(--ink);
-    background: #fff;
-    opacity: 0;
-    transform: translateY(-6px);
-    transition: opacity 200ms ease 60ms, transform 200ms ease 60ms;
-}
-
-.plate.is-open .plate-box {
-    opacity: 1;
-    transform: none;
-}
-
-.plate-box::before,
-.plate-box::after {   /* the caret, an outlined notch on the top edge */
-    content: "";
-    position: absolute;
-    top: -7px;
-    left: var(--caret, 50%);
-    width: 13px;
-    height: 13px;
-    margin-left: -7px;
-    background: #fff;
-    transform: rotate(45deg);
-    transition: left 260ms cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-.plate-box::before {
-    border-left: 1px solid var(--ink);
-    border-top: 1px solid var(--ink);
-}
-
-.plate-box::after {   /* white cap that hides the box's own top border */
-    top: -5px;
-    background: #fff;
-    border: 0;
-}
-
-.plate-title {
-    font-size: 24px;
+.statement p {
+    font-size: clamp(24px, 3.3vw, 38px);
     font-weight: 600;
     line-height: 1.2;
+    letter-spacing: -0.025em;
     color: var(--ink);
-    margin-bottom: 20px;
-    padding-right: 48px;
 }
 
-.plate-body {
-    font-size: 19px;
-    font-weight: 500;
-    line-height: 1.5;
-    color: var(--label);
-    max-width: 640px;
+/* One rhythm all the way down. The close is the last line — it does not need
+   extra air to be read as the close, and a bigger gap with no rule in it
+   reads as a mistake rather than a pause. */
+.statement p + p { margin-top: 32px; }
+
+/* the marker rides the display type, so it is sized in em and takes no line
+   height of its own — the paragraph's leading must not open up around it */
+.fn-ref {
+    font-size: 0.4em;
+    font-weight: 600;
+    vertical-align: super;
+    line-height: 0;
 }
 
-.plate-body p + p {
-    margin-top: 16px;
+.fn-ref a {
+    color: inherit;
+    text-decoration: none;
 }
 
-.plate-shut {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 44px;
-    height: 44px;
+.fn-ref a:hover { text-decoration: underline; }
+.fn-ref a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.footnotes {
+    list-style: none;
+    margin: 48px 0 0;
+    padding: 0;
+}
+
+.footnote {
     display: grid;
-    place-items: center;
-    background: none;
-    border: 0;
-    cursor: pointer;
-    color: var(--label);
-    font: inherit;
-    font-size: 22px;
-    line-height: 1;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0 10px;
+    max-width: 62ch;
+    scroll-margin-top: 80px;
 }
 
-.plate-shut:hover { color: var(--ink); }
-.plate-shut:focus-visible { outline: 2px solid var(--ink); outline-offset: -6px; }
-
-.plate-swap .plate-title,
-.plate-swap .plate-body {
-    opacity: 0;
-    transition: opacity 110ms ease;
+.footnote-n {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--ink);
 }
 
-/* the notes as they exist without javascript: plain prose under each part */
-.node-note {
+.statement .footnote p {
     font-size: 17px;
     font-weight: 500;
     line-height: 1.5;
+    letter-spacing: 0;
     color: var(--label);
-    margin-top: 16px;
 }
 
-.js .node-note { display: none; }
-.js .plate-fallback { display: none; }
+/* ---- narrow --------------------------------------------------------- */
 
-/* ---- narrow -------------------------------------------------------- */
+@media (max-width: 860px) {
+    .chapters { gap: 88px; }
 
-@media (max-width: 760px) {
-    .sch {
-        --stage-gap: 64px;
-        padding: 0 24px;
-    }
-
-    .sch-head { margin-bottom: 48px; }
-    .sch-head h2 { font-size: 28px; }
-    .sch-hint { font-size: 15px; }
-    .sch-close { font-size: 17px; margin-top: 32px; }
-
-    .rack.cols-3,
-    .rack.cols-2 {
+    .chapter {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 0;
     }
 
-    .rack + .rack { margin-top: 40px; }
-
-    .rack.cols-2 .node::after { display: none; }
-
-    .stage-mark {
-        margin-bottom: 28px;
-        font-size: 11px;
-        letter-spacing: 0.14em;
-        white-space: normal;
-        text-align: center;
+    /* the heading parks at the top edge and the chapter runs under it */
+    .chapter-head {
+        top: 0;
+        z-index: 2;
+        padding: 18px 0 14px;
+        margin-bottom: 24px;
+        background: #fff;
+        border-bottom: 1px solid var(--edge);
     }
 
-    .node { padding: 16px; gap: 12px; }
-    .node-label { font-size: 15px; }
+    .chapter-head h2 { font-size: 26px; letter-spacing: -0.02em; }
 
-    /* one column, so the risers and the bus collapse onto the spine */
-    .wire { height: 48px; }
-    .wire i { left: 50%; bottom: 0; }
-    .wire::before { display: none; }
+    .chapter-desc { font-size: 17px; max-width: none; }
+    .chapter-desc + .plate,
+    .chapter-desc + .plates { margin-top: 28px; }
 
-    .loop { --out: 20px; inset: -14px 0 0 0; }
-    .loop-label { font-size: 10px; letter-spacing: 0.1em; padding: 8px 2px; }
+    .plates { gap: 32px; }
+    .plate { gap: 14px; }
+    .plate-frame { padding: 16px; }
+    .plate-name,
+    .plate-note { font-size: 15px; }
 
-    .plate-box { margin-top: 24px; padding: 24px 20px 28px; }
-    .plate-title { font-size: 19px; margin-bottom: 14px; padding-right: 36px; }
-    .plate-body { font-size: 16px; }
-    .plate-shut { top: 4px; right: 4px; }
+    .statement p + p { margin-top: 24px; }
+
+    .footnotes { margin-top: 32px; }
+    .statement .footnote p { font-size: 15px; }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .plate,
-    .plate-box,
-    .plate-box::before,
-    .plate-box::after,
-    .node,
-    .node-label {
+    .plate-frame,
+    .wf path,
+    .wf rect,
+    .wf circle,
+    .wf line,
+    .wf polyline,
+    .wf polygon {
         transition: none;
     }
 }

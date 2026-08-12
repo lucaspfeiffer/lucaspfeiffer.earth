@@ -4,18 +4,28 @@
    Blocks available to a page, in the order they normally appear:
      .back            — one door home, top left
      .project-head    — h1 + .project-meta
-     .project-lede    — one sentence, display size, ink. Never more than one.
+     .project-lede    — what the thing is, display size, ink. A sentence, and
+                        at most one more naming who made it. Never a paragraph.
      .project-figure  — a picture at full column width, optional <figcaption>
      .project-figure.pair — two pictures side by side, stacks under 700px
      .project-section — optional <h2> + .project-prose. A heading names the
                         fact in the section, or the section has no heading.
-     .project-links   — the doors out, at the foot of the page
+     .project-end     — the two ways out: back to the top, and back to the site
 */
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+/* the chevron and the footnote marker both jump; neither should teleport */
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
 }
 
 body {
@@ -35,13 +45,45 @@ body {
     margin-bottom: 56px;
 }
 
+/* The way back, top left. Same control as the modal nav buttons on
+   /projects: no frame, a 52px target, a 28px chevron at 2.5 with round
+   caps, and a small scale on press. */
 .back {
-    font-size: 24px;
-    color: #494949;
-    font-weight: 500;
-    text-decoration: underline;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    padding: 8px;
+    color: #000;
+    background: transparent;
+    border-radius: 50%;
     align-self: flex-start;
     margin-bottom: -16px;
+    transition: transform 0.1s ease-out;
+}
+
+.back:active {
+    transform: scale(0.95);
+}
+
+.back:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+}
+
+.back svg {
+    display: block;
+    width: 28px;
+    height: 28px;
+}
+
+.back path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 /* Title, date and lede are one group: the name, then the answer to it. */
@@ -125,18 +167,70 @@ body {
     line-height: 1.4;
 }
 
-.project-links {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
+/* The end: two squares, left goes home, up goes to the top of the page.
+   Chevrons are drawn in the same hairline language as the wireframes and
+   hover the same way — the stroke puts on weight, nothing moves.
+
+   Hover thickens the frame with an inset shadow rather than a fatter border,
+   because growing a border by a pixel would reflow the square. */
+.project-end {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding-top: 24px;
 }
 
-.project-links a {
-    font-size: 24px;
+/* These keep their frame — they are big, singular buttons, not a nav row.
+   The chevron is the site's, with round caps and joins; the weight is held
+   in px by non-scaling-stroke so the square can grow without the line
+   growing with it. */
+.end-btn {
+    --sw: 5;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border: 1px solid #000;
     color: #000;
-    font-weight: 500;
-    text-decoration: underline;
-    align-self: flex-start;
+    transition: box-shadow 200ms ease, transform 0.1s ease-out;
+}
+
+.end-btn:hover {
+    --sw: 6.5;
+    box-shadow: inset 0 0 0 1px currentColor;
+}
+
+.end-btn:active {
+    transform: scale(0.99);
+}
+
+.end-btn:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 4px;
+}
+
+.end-btn svg {
+    display: block;
+    width: 50%;
+    height: auto;
+}
+
+.end-btn path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--sw);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    transition: stroke-width 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .back,
+    .end-btn,
+    .end-btn path { transition: none; }
 }
 
 @media (max-width: 700px) {
@@ -145,16 +239,18 @@ body {
         margin-bottom: 40px;
     }
 
-    .back,
     .project-meta,
-    .project-prose p,
-    .project-links a {
+    .project-prose p {
         font-size: 17px;
     }
 
     .back {
+        width: 44px;
+        height: 44px;
         margin-bottom: -8px;
     }
+
+    .back svg { width: 24px; height: 24px; }
 
     .project-head {
         gap: 16px;
@@ -193,7 +289,8 @@ body {
         gap: 20px;
     }
 
-    .project-links {
-        gap: 20px;
+    .project-end {
+        gap: 12px;
+        padding-top: 8px;
     }
 }
