@@ -1,0 +1,199 @@
+/* Shared styles for featured project pages (/open-sdk, and the next ones).
+   Type and colour match index.html and projects.html.
+
+   Blocks available to a page, in the order they normally appear:
+     .back            — one door home, top left
+     .project-head    — h1 + .project-meta
+     .project-lede    — one sentence, display size, ink. Never more than one.
+     .project-figure  — a picture at full column width, optional <figcaption>
+     .project-figure.pair — two pictures side by side, stacks under 700px
+     .project-section — optional <h2> + .project-prose. A heading names the
+                        fact in the section, or the section has no heading.
+     .project-links   — the doors out, at the foot of the page
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 32px;
+    background: #fff;
+}
+
+.project-page {
+    width: 100%;
+    max-width: 890px;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    margin-bottom: 56px;
+}
+
+.back {
+    font-size: 24px;
+    color: #494949;
+    font-weight: 500;
+    text-decoration: underline;
+    align-self: flex-start;
+    margin-bottom: -16px;
+}
+
+/* Title, date and lede are one group: the name, then the answer to it. */
+.project-head {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.project-head h1 {
+    font-size: 64px;
+    color: #000;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.project-meta {
+    font-size: 24px;
+    color: #494949;
+    font-weight: 500;
+}
+
+.project-lede {
+    font-size: 33px;
+    color: #000;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-top: 16px;
+}
+
+.project-figure {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.project-figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+}
+
+.project-figure.pair {
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.project-figure figcaption {
+    font-size: 17px;
+    color: #494949;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.project-section {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.project-section h2 {
+    font-size: 48px;
+    color: #000;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.project-prose {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 720px;
+}
+
+.project-prose p {
+    font-size: 24px;
+    color: #494949;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.project-links {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.project-links a {
+    font-size: 24px;
+    color: #000;
+    font-weight: 500;
+    text-decoration: underline;
+    align-self: flex-start;
+}
+
+@media (max-width: 700px) {
+    .project-page {
+        gap: 56px;
+        margin-bottom: 40px;
+    }
+
+    .back,
+    .project-meta,
+    .project-prose p,
+    .project-links a {
+        font-size: 17px;
+    }
+
+    .back {
+        margin-bottom: -8px;
+    }
+
+    .project-head {
+        gap: 16px;
+    }
+
+    .project-head h1 {
+        font-size: 32px;
+    }
+
+    .project-lede {
+        font-size: 22px;
+        margin-top: 8px;
+    }
+
+    .project-figure {
+        gap: 16px;
+    }
+
+    .project-figure.pair {
+        flex-direction: column;
+    }
+
+    .project-figure figcaption {
+        font-size: 15px;
+    }
+
+    .project-section {
+        gap: 24px;
+    }
+
+    .project-section h2 {
+        font-size: 24px;
+    }
+
+    .project-prose {
+        gap: 20px;
+    }
+
+    .project-links {
+        gap: 20px;
+    }
+}
