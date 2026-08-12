@@ -78,6 +78,10 @@ const projects = [
         image: './images/open sdk.webp',
         links: [
             {
+                text: 'Learn more',
+                url: '/open-sdk'
+            },
+            {
                 text: 'Open',
                 url: 'https://getopen.com'
             }
